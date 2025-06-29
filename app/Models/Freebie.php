@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,8 @@ class Freebie extends Model
 
     public function getContentsAttribute()
     {
-        return Storage::disk('local')->get($this->md_file);
+        $markdown = Storage::disk('local')->get($this->md_file);
+        return Markdown::convert($markdown)->getContent();
     }
 
     public static function today()

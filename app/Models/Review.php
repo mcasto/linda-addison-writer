@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,6 +14,7 @@ class Review extends Model
 
     public function getContentsAttribute()
     {
-        return Storage::disk('local')->get($this->md_file);
+        $markdown = Storage::disk('local')->get($this->md_file);
+        return Markdown::convert($markdown)->getContent();
     }
 }

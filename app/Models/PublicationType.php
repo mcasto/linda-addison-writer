@@ -11,6 +11,6 @@ class PublicationType extends Model
 
     public function publications(): HasMany
     {
-        return $this->hasMany(Publication::class);
+        return $this->hasMany(Publication::class)->orderBy('year', 'desc');
     }
 }

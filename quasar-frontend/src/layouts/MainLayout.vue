@@ -19,6 +19,9 @@
         <header-contents></header-contents>
         <router-view />
       </q-page>
+      <q-footer class="bg-accent">
+        Footer
+      </q-footer>
     </q-page-container>
   </q-layout>
 </template>

@@ -4,9 +4,10 @@
       <div class="text-h6">
         Today's Life Poem
       </div>
-      <div class="text-subtitle2 q-mt-md">
-        {{ store.life_poem.contents }}
-      </div>
+      <div
+        v-html="store.life_poem.contents"
+        class="text-subtitle2 q-mt-md"
+      ></div>
     </q-card-section>
   </q-card>
 </template>

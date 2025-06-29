@@ -34,7 +34,7 @@ class SiteData extends Controller
                 'shortest' => Storage::disk('local')->get('bio/shortest.md'),
             ],
             'covers' => Cover::orderBy('sort_order')->get(),
-            'events' => Event::orderBy('start_date')->get(),
+            'events' => Event::orderBy('start_date', 'desc')->get(),
             'freebie' => Freebie::today(),
             'honors' => Honor::orderBy('year', 'desc')->get(),
             'latest_news' => LatestNews::orderBy('date', 'desc')->get(),

@@ -1,8 +1,8 @@
 <template>
-  <div class="q-px-xl q-ml-xl q-mt-md">
+  <page-container>
     <div class="row q-gutter-y-md">
       <div
-        class="col-12 col-md-4 cursor-pointer"
+        class="col-12 col-sm-6 col-md-4 cursor-pointer"
         v-for="cover of store.covers"
         :key="`cover-${cover.id}`"
         @click="coverDialog = { show: true, cover }"
@@ -17,13 +17,14 @@
       v-model="coverDialog.show"
       :cover="coverDialog.cover"
     ></cover-dialog>
-  </div>
+  </page-container>
 </template>
 
 <script setup>
 import { useStore } from "src/stores/store";
 import { ref } from "vue";
 
+import PageContainer from "src/components/PageContainer.vue";
 import CoverDialog from "src/components/CoverDialog.vue";
 
 const store = useStore();
