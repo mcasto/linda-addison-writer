@@ -140,8 +140,7 @@ const columns = [
     required: true,
     label: "Title",
     align: "left",
-    field: (row) => row.title,
-    format: (val) => `${val}`,
+    field: "title",
     sortable: true,
   },
   {
