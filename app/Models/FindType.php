@@ -11,6 +11,6 @@ class FindType extends Model
 
     public function finds(): HasMany
     {
-        return $this->hasMany(Find::class);
+        return $this->hasMany(Find::class)->orderBy('date', 'desc');
     }
 }
