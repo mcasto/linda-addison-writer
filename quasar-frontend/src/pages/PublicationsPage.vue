@@ -48,7 +48,10 @@
               {{ filteredRows.length }} entries
               <span v-if="filter" class="text-italic">(filtered)</span>
             </div>
-            <div class="row items-center q-gutter-x-sm">
+            <div
+              class="row items-center q-gutter-x-sm"
+              :class="Screen.xs ? 'justify-center column' : ''"
+            >
               <q-select
                 dense
                 outlined
@@ -59,15 +62,17 @@
                 @update:model-value="pagination.page = 1"
                 hint="Rows Per Page"
               />
+              <q-separator v-if="Screen.xs" class="q-my-sm"></q-separator>
               <q-pagination
                 v-model="pagination.page"
                 :max="maxPaginationPages"
-                :max-pages="6"
+                :max-pages="4"
                 direction-links
                 boundary-links
                 color="grey-8"
                 active-color="primary"
                 active-text-color="white"
+                :class="Screen.xs ? 'q-pb-xs' : ''"
               />
             </div>
           </div>
@@ -84,14 +89,20 @@
                 size="sm"
               />
             </q-td>
-            <q-td key="title" :props="props">
-              <a
-                :href="props.row.url"
-                target="_blank"
-                class="text-primary text-subtitle1"
-              >
-                {{ props.row.title }}
-              </a>
+            <q-td
+              key="title"
+              :props="props"
+              style="width: 70vw; max-width: 70vw;"
+            >
+              <div class="ellipsis" style="width: 100%;">
+                <a
+                  :href="props.row.url"
+                  target="_blank"
+                  class="text-primary text-subtitle1"
+                >
+                  {{ props.row.title }}
+                </a>
+              </div>
             </q-td>
             <q-td key="year" :props="props" class="text-subtitle1">
               {{ props.row.year }}
@@ -111,6 +122,7 @@
 </template>
 
 <script setup>
+import { Screen } from "quasar";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";

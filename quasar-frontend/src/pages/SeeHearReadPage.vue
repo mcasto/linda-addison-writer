@@ -49,7 +49,10 @@
                 {{ filteredRows.length }} entries
                 <span v-if="filter" class="text-italic">(filtered)</span>
               </div>
-              <div class="row items-center q-gutter-x-sm">
+              <div
+                class="row items-center q-gutter-x-sm"
+                :class="Screen.xs ? 'justify-center column' : ''"
+              >
                 <q-select
                   dense
                   outlined
@@ -60,15 +63,17 @@
                   @update:model-value="pagination.page = 1"
                   hint="Rows Per Page"
                 />
+                <q-separator v-if="Screen.xs" class="q-my-sm"></q-separator>
                 <q-pagination
                   v-model="pagination.page"
                   :max="maxPaginationPages"
-                  :max-pages="6"
+                  :max-pages="4"
                   direction-links
                   boundary-links
                   color="grey-8"
                   active-color="primary"
                   active-text-color="white"
+                  :class="Screen.xs ? 'q-pb-xs' : ''"
                 />
               </div>
             </div>
@@ -84,6 +89,7 @@
 </template>
 
 <script setup>
+import { Screen } from "quasar";
 import PageContainer from "src/components/PageContainer.vue";
 import SeeHearReadCard from "src/components/SeeHearReadCard.vue";
 
