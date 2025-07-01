@@ -3,11 +3,13 @@
     <q-toolbar>
       <q-tabs align="left">
         <template v-for="item of navList" :key="item.id">
-          <q-route-tab :to="item.path" :label="item.label"></q-route-tab>
+          <q-route-tab :to="item.path" :label="item.label" exact></q-route-tab>
         </template>
       </q-tabs>
+
       <q-space></q-space>
-      <q-btn label="More">
+
+      <q-btn label="More" :outline="moreActive">
         <q-menu square dark>
           <q-list dark separator>
             <template v-for="item of moreList" :key="item.id">
@@ -79,7 +81,7 @@
 <script setup>
 import { Screen, uid } from "quasar";
 import { useStore } from "src/stores/store";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 const store = useStore();
 
@@ -109,9 +111,23 @@ const moreList = computed(() => {
     });
 });
 
+const moreActive = ref(null);
+
 const drawer = ref(false);
 
 const pageName = computed(() => {
   return store.router.currentRoute.value.name;
+});
+
+watch(store.router.currentRoute, () => {
+  moreActive.value = moreList.value
+    .map(({ path }) => path)
+    .includes(store.router.currentRoute.value.path);
+});
+
+onMounted(() => {
+  moreActive.value = moreList.value
+    .map(({ path }) => path)
+    .includes(store.router.currentRoute.value.path);
 });
 </script>

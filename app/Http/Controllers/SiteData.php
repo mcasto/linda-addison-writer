@@ -39,7 +39,7 @@ class SiteData extends Controller
             'freebie' => Freebie::today(),
             'honors' => Honor::orderBy('year', 'desc')->get(),
             'latest_news' => LatestNews::orderBy('date', 'desc')->get(),
-            'lessons_blessings' => LessonsBlessing::all(),
+            'lessons_blessings' => LessonsBlessing::first(),
             'life_poem' => LifePoem::today(),
             'online_resources' => OnlineResource::with('online_resource_links')->get(),
             'publications' => PublicationType::with('publications')->get(),
