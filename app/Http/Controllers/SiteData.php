@@ -17,6 +17,7 @@ use App\Models\OnlineResource;
 use App\Models\PublicationType;
 use App\Models\Review;
 use App\Models\Social;
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,9 +30,9 @@ class SiteData extends Controller
             'awards' => Award::orderBy('year', 'desc')->get(),
             'biblio' => BiblioType::with('biblios')->with('biblios.biblio_pubs')->get(),
             'bio' => [
-                'longer' => Storage::disk('local')->get('bio/longer.md'),
-                'short' => Storage::disk('local')->get('bio/short.md'),
-                'shortest' => Storage::disk('local')->get('bio/shortest.md'),
+                'longer' => Markdown::convert(Storage::disk('local')->get('bio/longer.md'))->getContent(),
+                'short' => Markdown::convert(Storage::disk('local')->get('bio/short.md'))->getContent(),
+                'shortest' => Markdown::convert(Storage::disk('local')->get('bio/shortest.md'))->getContent(),
             ],
             'covers' => Cover::orderBy('sort_order')->get(),
             'events' => Event::orderBy('start_date', 'desc')->get(),

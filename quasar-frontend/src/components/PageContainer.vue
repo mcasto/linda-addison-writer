@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="Screen.gt.sm ? 'q-px-xl q-ml-xl q-mt-md' : ''"
-    style="max-height: 300px;"
-  >
+  <div :class="Screen.gt.sm ? 'q-px-xl q-ml-xl q-mt-md' : ''" class="q-pb-xl">
     <slot></slot>
   </div>
 </template>
