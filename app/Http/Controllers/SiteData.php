@@ -47,6 +47,7 @@ class SiteData extends Controller
             'finds' => FindType::with('finds')->get(),
             'socials' => Social::all()
         ];
+
         return response()->json($data);
     }
 }

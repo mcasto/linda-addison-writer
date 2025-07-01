@@ -17,6 +17,8 @@
                 clickable
                 :to="item.path"
                 class="text-white text-uppercase"
+                :active="item.path == store.router.currentRoute.value.path"
+                active-class="bg-grey-5 text-black"
               >
                 <q-item-section>
                   <q-item-label>
