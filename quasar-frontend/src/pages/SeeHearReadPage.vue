@@ -1,6 +1,6 @@
 <template>
   <page-container>
-    <div class="q-pb-xl">
+    <q-card class="q-pb-xl">
       <q-table
         :rows="filteredAndPaginatedRows"
         row-key="id"
@@ -10,7 +10,7 @@
         grid
       >
         <template #top>
-          <div class="bg-white shadow-1 full-width">
+          <div class="bg-white full-width">
             <div class="row items-center q-px-xs full-width">
               <div class="col-12 col-md-4 text-h6 text-center q-px-xs">
                 See / Hear / Read
@@ -84,7 +84,7 @@
           <see-hear-read-card :row="props.row"></see-hear-read-card>
         </template>
       </q-table>
-    </div>
+    </q-card>
   </page-container>
 </template>
 

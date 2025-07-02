@@ -6,6 +6,7 @@
           Lessons & Blessings
         </q-toolbar-title>
       </q-toolbar>
+      <q-separator></q-separator>
       <q-card-section>
         <div v-html="store.lessons_blessings.header"></div>
       </q-card-section>

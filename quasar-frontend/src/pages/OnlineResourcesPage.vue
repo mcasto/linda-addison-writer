@@ -17,7 +17,7 @@
 
       <q-separator></q-separator>
 
-      <q-card-section>
+      <div>
         <q-list separator>
           <q-item v-for="resource of resources">
             <q-item-section>
@@ -29,7 +29,7 @@
             </q-item-section>
           </q-item>
         </q-list>
-      </q-card-section>
+      </div>
     </q-card>
   </page-container>
 </template>

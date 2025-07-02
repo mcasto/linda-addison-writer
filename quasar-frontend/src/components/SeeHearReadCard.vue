@@ -1,5 +1,5 @@
 <template>
-  <q-card style="width: 100%;" class="q-my-xs">
+  <q-card style="width: 100%;" class="q-my-xs q-mx-md">
     <q-toolbar>
       <q-toolbar-title
         v-html="row.title"

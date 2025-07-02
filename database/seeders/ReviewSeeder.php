@@ -27,7 +27,7 @@ class ReviewSeeder extends Seeder
             $review->md_file = $mdFile;
             $review->save();
 
-            $md = $rec['text'] . "\n---\n&mdash;" . $rec['attribution'];
+            $md = $rec['text'] . "\n\n&mdash; " . $rec['attribution'];
 
             Storage::disk('local')->put($mdFile, $md);
         }
