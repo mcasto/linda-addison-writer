@@ -23,10 +23,7 @@
         <div v-html="store.freebie.contents"></div>
       </q-card-section>
       <q-separator></q-separator>
-      <div
-        class="flex justify-end q-mt-md q-mr-md"
-        v-html="store.freebie.sub"
-      ></div>
+      <div class="flex justify-end q-pa-md" v-html="store.freebie.sub"></div>
     </q-card>
   </page-container>
 </template>
