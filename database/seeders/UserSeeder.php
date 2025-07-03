@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = json_decode(env('DEFAULT_USERS'), true);
+        $users = config('database.default_users');
         foreach ($users as $user) {
             User::create($user);
         }
