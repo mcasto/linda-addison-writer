@@ -3,8 +3,18 @@
 use Illuminate\Support\Str;
 
 return [
-
-    'default_users' => json_decode(env('DEFAULT_USERS'), true),
+    'default_users' => [
+        [
+            'name' => env('DEFAULT_USER_1_NAME'),
+            'email' => env('DEFAULT_USER_1_EMAIL'),
+            'password' => env('DEFAULT_USER_1_PASSWORD')
+        ],
+        [
+            'name' => env('DEFAULT_USER_2_NAME'),
+            'email' => env('DEFAULT_USER_2_EMAIL'),
+            'password' => env('DEFAULT_USER_2_PASSWORD')
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $users = config('database.default_users');
+
         foreach ($users as $user) {
             User::create($user);
         }
