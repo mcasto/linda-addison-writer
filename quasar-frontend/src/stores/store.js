@@ -29,6 +29,8 @@ export const useStore = defineStore(
       life_poem: ref(null),
       online_resources: ref(null),
       publications: ref(null),
+      pubTypes: ref(null),
+      pubs: ref(null),
       reviews: ref(null),
       socials: ref(null),
     };

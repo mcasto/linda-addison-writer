@@ -20,7 +20,7 @@
                 stack-label
                 dense
                 v-model="pubType"
-                :options="pubTypes"
+                :options="store.pubTypes"
                 outlined
                 option-label="name"
               />
@@ -44,7 +44,7 @@
             class="flex justify-between items-center full-width q-mt-md q-px-sm"
           >
             <div class="text-caption text-grey-7">
-              Showing {{ firstItemIndex }} to {{ lastItemIndex }} of
+              Showing {{ store.pubs.current_page }} to {{ store.pubs.total }} of
               {{ filteredRows.length }} entries
               <span v-if="filter" class="text-italic">(filtered)</span>
             </div>
@@ -128,8 +128,7 @@ import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";
 
 const store = useStore();
-const tab = ref(0);
-const pubType = ref(null);
+const pubType = ref(store.pubType[0]);
 const filter = ref(null);
 const loading = ref(false);
 
@@ -232,10 +231,6 @@ watch(
   },
   { deep: true }
 );
-
-onMounted(() => {
-  pubType.value = pubTypes.value[0];
-});
 </script>
 
 <style lang="scss">

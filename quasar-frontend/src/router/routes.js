@@ -13,6 +13,11 @@ const routes = [
         meta: {
           visible: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+          const response = await callApi({ path: "/home", method: "get" });
+          store.covers = response;
+        },
       },
       {
         path: "publications",
@@ -20,6 +25,25 @@ const routes = [
         component: () => import("pages/PublicationsPage.vue"),
         meta: {
           visible: true,
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+          const pubTypes = await callApi({
+            path: "/publications",
+            method: "get",
+          });
+
+          const defaultType = pubTypes[0].id;
+
+          const pubs = await callApi({
+            path: `/publications/${defaultType}`,
+            method: "get",
+          });
+
+          console.log({ pubs });
+
+          store.pubTypes = pubTypes;
+          store.pubs = pubs;
         },
       },
       {
@@ -114,6 +138,12 @@ const routes = [
         meta: {
           visible: true,
           more: true,
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+          const response = await callApi({ path: "/awards", method: "get" });
+          console.log({ awards: response });
+          store.awards = response;
         },
       },
       {

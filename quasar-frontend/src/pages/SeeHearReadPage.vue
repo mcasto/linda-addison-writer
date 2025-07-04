@@ -102,7 +102,7 @@ const filter = ref(null);
 const loading = ref(false);
 
 const pagination = ref({
-  sortBy: "year",
+  sortBy: "date",
   descending: true,
   page: 1,
   rowsPerPage: 10,

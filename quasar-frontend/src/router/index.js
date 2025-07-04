@@ -35,13 +35,11 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach(() => {
+  Router.beforeEach(async () => {
     const store = useStore();
-    callApi({ path: "/site-data", method: "get" }).then((response) => {
-      for (let key of Object.keys(response)) {
-        store[key] = response[key];
-      }
-    });
+
+    store.life_poem = await callApi({ path: "/life-poem", method: "get" });
+    store.socials = await callApi({ path: "/socials", method: "get" });
   });
 
   return Router;

@@ -34,7 +34,6 @@ class SiteData extends Controller
                 'short' => Markdown::convert(Storage::disk('local')->get('bio/short.md'))->getContent(),
                 'shortest' => Markdown::convert(Storage::disk('local')->get('bio/shortest.md'))->getContent(),
             ],
-            'covers' => Cover::orderBy('sort_order')->get(),
             'events' => Event::orderBy('start_date', 'desc')->get(),
             'freebie' => Freebie::today(),
             'honors' => Honor::orderBy('year', 'desc')->get(),

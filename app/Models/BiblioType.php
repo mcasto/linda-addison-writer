@@ -11,6 +11,6 @@ class BiblioType extends Model
 
     public function biblios(): HasMany
     {
-        return $this->hasMany(Biblio::class);
+        return $this->hasMany(Biblio::class)->orderBy('sort_date', 'desc');
     }
 }
