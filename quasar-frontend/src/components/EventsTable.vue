@@ -154,8 +154,6 @@ watch(
       method: "get",
     });
 
-    console.log({ response });
-
     store.events[key.value] = response;
   },
   { deep: true }
