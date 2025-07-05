@@ -2,40 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Publication;
-use App\Models\PublicationType;
+use App\Models\LatestNews;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class PublicationsController extends Controller
+class NewsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        // First get all publication types without publications
-        $publicationTypes = PublicationType::all();
-
-        return response()->json($publicationTypes);
-    }
-
-    public function getPublicationsByType($typeId, Request $request)
-    {
-        $perPage = $request->input('per_page', 10);
-        $searchTerm = $request->input('search', '');
-
-        $query = Publication::where('publication_type_id', $typeId)
-            ->orderBy('year', 'desc');
-
-        // Add search filter if search term exists
-        if ($searchTerm) {
-            $query->where('title', 'like', '%' . $searchTerm . '%');
-        }
-
-        $publications = $query->paginate($perPage);
-
-        return response()->json($publications);
+        return response()->json(LatestNews::orderBy('date', 'desc')->get());
     }
 
     /**

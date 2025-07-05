@@ -1,56 +1,76 @@
 <template>
   <page-container>
-    <events-table
-      title="Happening Now!"
-      :events="current"
-      v-if="current.length > 0"
-    ></events-table>
-    <events-table
-      title="Don't Miss These Upcoming Events!"
-      :events="future"
-      v-if="future.length > 0"
-    ></events-table>
-    <events-table
-      title="We Missed You!"
-      :events="past"
-      v-if="past.length > 0"
-    ></events-table>
+    <q-card>
+      <q-toolbar>
+        <q-toolbar-title v-if="Screen.gt.xs">
+          <div v-html="title"></div>
+        </q-toolbar-title>
+
+        <q-tabs v-model="tab">
+          <q-tab
+            v-for="tab of tabList"
+            :key="`event-tab-${tab.name}`"
+            :disable="tab.disable"
+            :name="tab.name"
+          >
+            <div>
+              {{ tab.name }}
+              <q-badge class="q-ml-xs" color="primary">{{ tab.count }}</q-badge>
+            </div>
+          </q-tab>
+        </q-tabs>
+      </q-toolbar>
+
+      <q-card-section v-if="tab">
+        <events-table :meta="store.events[tab]"></events-table>
+      </q-card-section>
+    </q-card>
   </page-container>
 </template>
 
 <script setup>
-import { isWithinInterval, parseISO } from "date-fns";
 import { useStore } from "src/stores/store";
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import PageContainer from "src/components/PageContainer.vue";
 import EventsTable from "src/components/EventsTable.vue";
+import { Screen } from "quasar";
 
 const store = useStore();
 
-const past = computed(() => {
-  return store.events.filter(({ start_date }) => {
-    return parseISO(start_date) < new Date();
-  });
+const tab = ref(null);
+
+const tabList = computed(() => {
+  const list = [];
+  for (let key of ["current", "future", "past"]) {
+    list.push({
+      name: key,
+      label: key.toUpperCase(),
+      disable: store.events[key] === null,
+      count: store.events[key] === null ? 0 : store.events[key].total,
+    });
+  }
+
+  return list;
 });
 
-const future = computed(() => {
-  return store.events.filter(({ start_date }) => {
-    return parseISO(start_date) > new Date();
-  });
+const title = computed(() => {
+  switch (tab.value) {
+    case "past":
+      return "Past Events &mdash; We missed you!";
+      break;
+
+    case "future":
+      return "Future Events &mdash; Hope to see you there!";
+      break;
+
+    default:
+      return "Current Events &mdash; Welcome!";
+  }
 });
 
-const current = computed(() => {
-  return store.events.filter(({ id, start_date, end_date }) => {
-    const start = parseISO(start_date);
-
-    if (!end_date) {
-      return false;
-    }
-
-    const end = parseISO(end_date);
-
-    return isWithinInterval(start_date, end_date);
-  });
+onMounted(() => {
+  const firstIndex = tabList.value.findIndex(({ disable }) => !disable);
+  tab.value = tabList.value[firstIndex].name;
 });
 </script>

@@ -20,7 +20,7 @@ class EventSeeder extends Seeder
         foreach ($recs as $rec) {
             $rec['startDate'] = $rec['startDate'] == '' ? null : $rec['startDate'];
             $rec['startTime'] = $rec['startTime'] == '' ? null : $rec['startTime'];
-            $rec['endDate'] = $rec['endDate'] == '' ? null : $rec['endDate'];
+            $rec['endDate'] = $rec['endDate'] == '' ? $rec['startDate'] : $rec['endDate'];
             $rec['endTime'] = $rec['endTime'] == '' ? null : $rec['endTime'];
 
             $event = Event::create([

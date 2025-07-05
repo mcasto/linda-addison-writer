@@ -2,12 +2,13 @@
   <page-container>
     <div class="q-pb-xl">
       <q-table
-        :rows="filteredAndPaginatedRows"
+        :rows="store.pubs.data"
         :columns="columns"
         row-key="id"
         :pagination="pagination"
         :loading="loading"
         hide-pagination
+        dense
       >
         <template #top>
           <div class="row items-center q-px-xs full-width">
@@ -20,9 +21,10 @@
                 stack-label
                 dense
                 v-model="pubType"
-                :options="store.pubTypes"
+                :options="pubTypes"
                 outlined
                 option-label="name"
+                class="text-uppercase"
               />
             </div>
             <div class="col-12 col-sm-6 col-md-4 q-px-xs">
@@ -33,6 +35,7 @@
                 dense
                 outlined
                 clearable
+                debounce="300"
               >
                 <template v-slot:append>
                   <q-icon name="search" />
@@ -44,8 +47,8 @@
             class="flex justify-between items-center full-width q-mt-md q-px-sm"
           >
             <div class="text-caption text-grey-7">
-              Showing {{ store.pubs.current_page }} to {{ store.pubs.total }} of
-              {{ filteredRows.length }} entries
+              Showing {{ store.pubs.current_page }} to
+              {{ store.pubs.per_page }} of {{ store.pubs.total }} entries
               <span v-if="filter" class="text-italic">(filtered)</span>
             </div>
             <div
@@ -65,7 +68,7 @@
               <q-separator v-if="Screen.xs" class="q-my-sm"></q-separator>
               <q-pagination
                 v-model="pagination.page"
-                :max="maxPaginationPages"
+                :max="store.pubs.last_page"
                 :max-pages="4"
                 direction-links
                 boundary-links
@@ -110,9 +113,11 @@
           </q-tr>
           <q-tr v-show="props.expand" :props="props">
             <q-td colspan="100%">
-              <div class="expanded-content">
-                <div v-html="props.row.contents"></div>
-              </div>
+              <div
+                v-html="props.row.contents"
+                class="text-wrap overflow-hidden"
+                style="white-space: normal; word-break: break-word;"
+              ></div>
             </q-td>
           </q-tr>
         </template>
@@ -123,20 +128,28 @@
 
 <script setup>
 import { Screen } from "quasar";
+import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";
 
 const store = useStore();
-const pubType = ref(store.pubType[0]);
+const pubType = ref(store.pubTypes[0]);
 const filter = ref(null);
 const loading = ref(false);
+
+const pubTypes = computed(() => {
+  return store.pubTypes.map((item) => {
+    return { ...item, name: item.name.toUpperCase() };
+  });
+});
 
 const pagination = ref({
   sortBy: "year",
   descending: true,
   page: 1,
   rowsPerPage: 10,
+  rowsNumber: store.pubs.total,
 });
 
 const columns = [
@@ -163,133 +176,36 @@ const columns = [
   },
 ];
 
-const pubTypes = computed(() => {
-  return store.publications.map(({ id, name }) => ({
-    id,
-    name: name.toUpperCase(),
-  }));
+const pubPath = computed(() => {
+  let path = `/publications/${pubType.value.id}?per_page=${pagination.value.rowsPerPage}&page=${pagination.value.page}`;
+  if (filter.value) {
+    path += `&search=${filter.value}`;
+  }
+
+  return path;
 });
 
-const currentPublicationRows = computed(() => {
-  if (!pubType.value) return [];
-  const pub = store.publications.find(({ id }) => id == pubType.value.id);
-  return pub?.publications || [];
-});
-
-const filteredRows = computed(() => {
-  if (!filter.value) return currentPublicationRows.value;
-
-  const searchTerm = filter.value.toLowerCase();
-  const isYearSearch = /^\d{4}$/.test(filter.value);
-
-  return currentPublicationRows.value.filter((row) => {
-    if (isYearSearch) {
-      return String(row.year).includes(searchTerm);
-    }
-    return (
-      row.title.toLowerCase().includes(searchTerm) ||
-      (row.contents && row.contents.toLowerCase().includes(searchTerm))
-    );
-  });
-});
-
-const filteredAndPaginatedRows = computed(() => {
-  const start = (pagination.value.page - 1) * pagination.value.rowsPerPage;
-  const end = start + pagination.value.rowsPerPage;
-  return filteredRows.value.slice(start, end);
-});
-
-const firstItemIndex = computed(() => {
-  return Math.min(
-    (pagination.value.page - 1) * pagination.value.rowsPerPage + 1,
-    filteredRows.value.length
-  );
-});
-
-const lastItemIndex = computed(() => {
-  const end = pagination.value.page * pagination.value.rowsPerPage;
-  return Math.min(end, filteredRows.value.length);
-});
-
-const maxPaginationPages = computed(() => {
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / pagination.value.rowsPerPage)
-  );
-});
-
-watch([pubType, filter], () => {
+watch([pubType, filter], async () => {
   pagination.value.page = 1;
+
+  store.pubs = await callApi({
+    path: pubPath.value,
+    method: "get",
+  });
 });
 
 watch(
   pagination,
-  (newVal, oldVal) => {
+  async (newVal, oldVal) => {
     if (newVal.rowsPerPage !== oldVal?.rowsPerPage) {
       pagination.value.page = 1;
     }
+
+    store.pubs = await callApi({
+      path: pubPath.value,
+      method: "get",
+    });
   },
   { deep: true }
 );
 </script>
-
-<style lang="scss">
-.my-sticky-header-table {
-  .expanded-content {
-    padding: 16px;
-    width: 100%;
-    overflow-x: auto;
-    max-width: 100%;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-
-    p,
-    div,
-    span {
-      white-space: normal;
-      word-break: break-word;
-    }
-
-    table {
-      width: 100%;
-      max-width: 100%;
-      border-collapse: collapse;
-
-      td,
-      th {
-        word-break: break-word;
-      }
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-  }
-
-  .q-table__expanded-item {
-    padding: 0;
-  }
-
-  .per-page-select {
-    .q-field__control {
-      height: 32px;
-    }
-    .q-field__native {
-      min-height: auto;
-      padding: 0;
-    }
-  }
-
-  .q-pagination {
-    .q-btn {
-      width: 32px;
-      height: 32px;
-      margin: 0 2px;
-      &.q-btn--actionable {
-        border-radius: 4px;
-      }
-    }
-  }
-}
-</style>

@@ -40,8 +40,6 @@ const routes = [
             method: "get",
           });
 
-          console.log({ pubs });
-
           store.pubTypes = pubTypes;
           store.pubs = pubs;
         },
@@ -53,6 +51,13 @@ const routes = [
         meta: {
           visible: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+          store.news = await callApi({
+            path: "/news",
+            method: "get",
+          });
+        },
       },
       {
         path: "events",
@@ -60,6 +65,30 @@ const routes = [
         component: () => import("pages/EventsPage.vue"),
         meta: {
           visible: true,
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          const past = await callApi({
+            path: "/events/past?per_page=10",
+            method: "get",
+          });
+
+          const future = await callApi({
+            path: "/events/future?per_page=10",
+            method: "get",
+          });
+
+          const current = await callApi({
+            path: "/events/current?per_page=10",
+            method: "get",
+          });
+
+          store.events = {
+            past: past.data.length > 0 ? past : null,
+            future: future.data.length > 0 ? future : null,
+            current: current.data.length > 0 ? current : null,
+          };
         },
       },
       {
