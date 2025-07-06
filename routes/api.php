@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AwardsController;
+use App\Http\Controllers\BioController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LifePoemsController;
@@ -70,6 +71,11 @@ Route::controller(SeeHearReadController::class)
             ->name('finds-by-type');
     });
 
+Route::controller(BioController::class)
+    ->group(function () {
+        Route::get('/bio', 'index')
+            ->name('bio-index');
+    });
 
 Route::controller(LifePoemsController::class)
     ->group(function () {

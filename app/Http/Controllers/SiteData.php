@@ -29,11 +29,6 @@ class SiteData extends Controller
         $data = [
             'awards' => Award::orderBy('year', 'desc')->get(),
             'biblio' => BiblioType::with('biblios')->with('biblios.biblio_pubs')->get(),
-            'bio' => [
-                'longer' => Markdown::convert(Storage::disk('local')->get('bio/longer.md'))->getContent(),
-                'short' => Markdown::convert(Storage::disk('local')->get('bio/short.md'))->getContent(),
-                'shortest' => Markdown::convert(Storage::disk('local')->get('bio/shortest.md'))->getContent(),
-            ],
             'freebie' => Freebie::today(),
             'honors' => Honor::orderBy('year', 'desc')->get(),
             'lessons_blessings' => LessonsBlessing::first(),

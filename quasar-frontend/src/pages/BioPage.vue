@@ -1,11 +1,12 @@
 <template>
   <page-container>
-    <div class="bg-white shadow-1">
+    <div class="bg-white">
       <q-toolbar>
         <q-toolbar-title>
           Biography
         </q-toolbar-title>
       </q-toolbar>
+      <q-separator></q-separator>
       <q-tabs v-model="tab">
         <q-tab name="shortest">
           Shortest

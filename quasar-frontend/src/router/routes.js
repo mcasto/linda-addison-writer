@@ -126,6 +126,14 @@ const routes = [
         meta: {
           visible: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.bio = await callApi({
+            path: "/bio",
+            method: "get",
+          });
+        },
       },
       {
         path: "contact",
