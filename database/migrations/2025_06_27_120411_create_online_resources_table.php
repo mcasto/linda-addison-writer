@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('online_resources', function (Blueprint $table) {
             $table->id();
             $table->string('header');
+            $table->integer('sort_order');
             $table->timestamps();
         });
     }

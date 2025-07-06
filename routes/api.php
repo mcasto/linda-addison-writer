@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LessonsBlessingsController;
 use App\Http\Controllers\LifePoemsController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\OnlineResourcesController;
 use App\Http\Controllers\PublicationsController;
 use App\Http\Controllers\SeeHearReadController;
 use App\Http\Controllers\SiteData;
@@ -89,6 +90,15 @@ Route::controller(FreebiesController::class)
     ->group(function () {
         Route::get('/freebies', 'index')
             ->name('freebies-index');
+    });
+
+Route::controller(OnlineResourcesController::class)
+    ->group(function () {
+        Route::get('/online-resources', 'index')
+            ->name('online-resources-index');
+
+        Route::get('/online-resources/{typeId}', 'getResourceLinksByType')
+            ->name('online-resources-by-type');
     });
 
 Route::controller(LifePoemsController::class)

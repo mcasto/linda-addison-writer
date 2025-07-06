@@ -185,6 +185,26 @@ const routes = [
           visible: true,
           more: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          const types = await callApi({
+            path: "/online-resources",
+            method: "get",
+          });
+
+          const defaultType = types[0].id;
+
+          const links = await callApi({
+            path: `/online-resources/${defaultType}`,
+            method: "get",
+          });
+
+          console.log({ types, defaultType, links });
+
+          store.resourceTypes = types;
+          store.resourceLinks = links;
+        },
       },
       {
         path: "reviews-and-quotes",

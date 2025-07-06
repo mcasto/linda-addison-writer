@@ -16,11 +16,12 @@ class OnlineResourceSeeder extends Seeder
     {
         $recs = AppServiceProvider::getSeedData('onlineResources');
 
-        foreach ($recs as $rec) {
+        foreach ($recs as $key => $rec) {
             OnlineResource::create(
                 [
                     'id' => $rec['id'],
-                    'header' => $rec['header']
+                    'header' => $rec['header'],
+                    'sort_order' => $key + 1
                 ]
             );
         }

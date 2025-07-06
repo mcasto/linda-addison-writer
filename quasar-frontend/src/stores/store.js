@@ -31,6 +31,8 @@ export const useStore = defineStore(
       online_resources: ref(null),
       pubTypes: ref(null),
       pubs: ref(null),
+      resourceTypes: ref(null),
+      resourceLinks: ref(null),
       reviews: ref(null),
       socials: ref(null),
     };
