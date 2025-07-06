@@ -151,6 +151,14 @@ const routes = [
           visible: true,
           more: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.lessons_blessings = await callApi({
+            path: "/lessons-and-blessings",
+            method: "get",
+          });
+        },
       },
       {
         path: "freebies",

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,6 +19,7 @@ class LessonsBlessing extends Model
 
     public function getPoemAttribute()
     {
-        return Storage::disk('local')->get($this->poem_file);
+        $poem = Storage::disk('local')->get($this->poem_file);
+        return Markdown::convert($poem)->getContent();
     }
 }

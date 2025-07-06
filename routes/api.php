@@ -4,6 +4,7 @@ use App\Http\Controllers\AwardsController;
 use App\Http\Controllers\BioController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LessonsBlessingsController;
 use App\Http\Controllers\LifePoemsController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PublicationsController;
@@ -75,6 +76,12 @@ Route::controller(BioController::class)
     ->group(function () {
         Route::get('/bio', 'index')
             ->name('bio-index');
+    });
+
+Route::controller(LessonsBlessingsController::class)
+    ->group(function () {
+        Route::get('/lessons-and-blessings', 'index')
+            ->name('lessons-and-blessings-index');
     });
 
 Route::controller(LifePoemsController::class)

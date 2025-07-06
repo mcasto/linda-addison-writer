@@ -10,6 +10,7 @@
       <q-card-section>
         <div v-html="store.lessons_blessings.header"></div>
       </q-card-section>
+      <q-separator></q-separator>
       <q-card-section>
         <div v-html="store.lessons_blessings.poem" class="text-center"></div>
       </q-card-section>
