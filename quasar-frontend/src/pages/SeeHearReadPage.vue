@@ -2,12 +2,12 @@
   <page-container>
     <q-card class="q-pb-xl">
       <q-table
-        :rows="filteredAndPaginatedRows"
+        :rows="store.finds.data"
         row-key="id"
         :pagination="pagination"
         :loading="loading"
         hide-pagination
-        grid
+        :columns="columns"
       >
         <template #top>
           <div class="bg-white full-width">
@@ -45,8 +45,8 @@
               class="flex justify-between items-center full-width q-mt-md q-px-sm"
             >
               <div class="text-caption text-grey-7">
-                Showing {{ firstItemIndex }} to {{ lastItemIndex }} of
-                {{ filteredRows.length }} entries
+                Showing {{ store.finds.from }} to {{ store.finds.to }} of
+                {{ store.finds.total }} entries
                 <span v-if="filter" class="text-italic">(filtered)</span>
               </div>
               <div
@@ -66,7 +66,7 @@
                 <q-separator v-if="Screen.xs" class="q-my-sm"></q-separator>
                 <q-pagination
                   v-model="pagination.page"
-                  :max="maxPaginationPages"
+                  :max="store.finds.last_page"
                   :max-pages="4"
                   direction-links
                   boundary-links
@@ -80,8 +80,45 @@
           </div>
         </template>
 
-        <template #item="props">
-          <see-hear-read-card :row="props.row"></see-hear-read-card>
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td auto-width>
+              <q-btn
+                color="primary"
+                dense
+                @click="props.expand = !props.expand"
+                :icon="props.expand ? 'remove' : 'add'"
+                size="sm"
+              />
+            </q-td>
+            <q-td
+              key="title"
+              :props="props"
+              style="width: 70vw; max-width: 70vw;"
+            >
+              <div class="ellipsis" style="width: 100%;">
+                <a
+                  :href="props.row.url"
+                  target="_blank"
+                  class="text-primary text-subtitle1"
+                >
+                  {{ props.row.title }}
+                </a>
+              </div>
+            </q-td>
+            <q-td key="date" :props="props" class="text-subtitle1">
+              {{ format(parseISO(props.row.date), "PP") }}
+            </q-td>
+          </q-tr>
+          <q-tr v-show="props.expand" :props="props">
+            <q-td colspan="100%">
+              <div
+                v-html="props.row.contents"
+                class="text-wrap overflow-hidden"
+                style="white-space: normal; word-break: break-word;"
+              ></div>
+            </q-td>
+          </q-tr>
         </template>
       </q-table>
     </q-card>
@@ -89,7 +126,9 @@
 </template>
 
 <script setup>
+import { format, parseISO } from "date-fns";
 import { Screen } from "quasar";
+import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
 import SeeHearReadCard from "src/components/SeeHearReadCard.vue";
 
@@ -108,89 +147,73 @@ const pagination = ref({
   rowsPerPage: 10,
 });
 
-const see = computed(() => {
-  return store.finds.find(({ name }) => name == "see");
-});
-const hear = computed(() => {
-  return store.finds.find(({ name }) => name == "hear");
-});
-const read = computed(() => {
-  return store.finds.find(({ name }) => name == "read");
-});
+const columns = [
+  {
+    name: "expand",
+    label: "",
+    field: "",
+    align: "left",
+  },
+  {
+    name: "title",
+    required: true,
+    label: "Title",
+    align: "left",
+    field: "title",
+    sortable: true,
+  },
+  {
+    name: "date",
+    align: "center",
+    label: "Date",
+    field: "date",
+    sortable: true,
+  },
+];
 
 const sectionType = ref(null);
 
 const sectionTypes = computed(() => {
-  return [
-    {
-      id: see.value.id,
-      name: "SEE",
-      finds: see.value.finds,
-    },
-    {
-      id: hear.value.id,
-      name: "HEAR",
-      finds: hear.value.finds,
-    },
-    {
-      id: read.value.id,
-      name: "READ",
-      finds: read.value.finds,
-    },
-  ];
-});
-
-const currentFindRows = computed(() => {
-  if (!sectionType.value) return [];
-  const section = store.finds.find(({ id }) => id == sectionType.value.id);
-  return section?.finds || [];
-});
-
-const filteredRows = computed(() => {
-  if (!filter.value) return currentFindRows.value;
-
-  const searchTerm = filter.value.toLowerCase();
-  const isYearSearch = /^\d{4}$/.test(filter.value);
-
-  return currentFindRows.value.filter((row) => {
-    if (isYearSearch) {
-      return String(row.year).includes(searchTerm);
-    }
-    return (
-      row.title.toLowerCase().includes(searchTerm) ||
-      (row.contents && row.contents.toLowerCase().includes(searchTerm))
-    );
+  return store.findTypes.map((type) => {
+    return {
+      ...type,
+      name: type.name.toUpperCase(),
+    };
   });
 });
 
-const filteredAndPaginatedRows = computed(() => {
-  const start = (pagination.value.page - 1) * pagination.value.rowsPerPage;
-  const end = start + pagination.value.rowsPerPage;
-  return filteredRows.value.slice(start, end);
+const findPath = computed(() => {
+  let path = `/finds/${sectionType.value.id}?per_page=${pagination.value.rowsPerPage}&page=${pagination.value.page}`;
+  if (filter.value) {
+    path += `&search=${filter.value}`;
+  }
+
+  return path;
 });
 
-const firstItemIndex = computed(() => {
-  return Math.min(
-    (pagination.value.page - 1) * pagination.value.rowsPerPage + 1,
-    filteredRows.value.length
-  );
-});
-
-const lastItemIndex = computed(() => {
-  const end = pagination.value.page * pagination.value.rowsPerPage;
-  return Math.min(end, filteredRows.value.length);
-});
-
-const maxPaginationPages = computed(() => {
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / pagination.value.rowsPerPage)
-  );
-});
-
-watch([sectionType, filter], () => {
+watch([sectionType, filter], async () => {
   pagination.value.page = 1;
+
+  store.finds = await callApi({
+    path: findPath.value,
+    method: "get",
+  });
 });
+
+watch(
+  pagination,
+  async (newVal, oldVal) => {
+    if (newVal.rowsPerPage !== oldVal?.rowsPerPage) {
+      pagination.value.page = 1;
+    }
+
+    store.finds = await callApi({
+      path: findPath.value,
+      method: "get",
+    });
+  },
+  { deep: true }
+);
 
 onMounted(() => {
   sectionType.value = sectionTypes.value[0];

@@ -98,6 +98,26 @@ const routes = [
         meta: {
           visible: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          const findTypes = await callApi({
+            path: "/finds",
+            method: "get",
+          });
+
+          const defaultType = findTypes[0].id;
+
+          const finds = await callApi({
+            path: `/finds/${defaultType}`,
+            method: "get",
+          });
+
+          console.log({ finds });
+
+          store.findTypes = findTypes;
+          store.finds = finds;
+        },
       },
       {
         path: "biography",

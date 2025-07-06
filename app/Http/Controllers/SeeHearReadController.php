@@ -2,40 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Publication;
-use App\Models\PublicationType;
+use App\Models\Find;
+use App\Models\FindType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class PublicationsController extends Controller
+class SeeHearReadController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        // First get all publication types without publications
-        $publicationTypes = PublicationType::all();
+        // get all find types without finds
+        $publicationTypes = FindType::orderBy('sort_order')->get();
 
         return response()->json($publicationTypes);
     }
 
-    public function getPublicationsByType($typeId, Request $request): JsonResponse
+    public function getFindsByType($typeId, Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 10);
         $searchTerm = $request->input('search', '');
 
-        $query = Publication::where('publication_type_id', $typeId)
-            ->orderBy('year', 'desc');
+        $query = Find::where('find_type_id', $typeId)
+            ->orderBy('date', 'desc');
 
         // Add search filter if search term exists
         if ($searchTerm) {
             $query->where('title', 'like', '%' . $searchTerm . '%');
         }
 
-        $publications = $query->paginate($perPage);
+        $finds = $query->paginate($perPage);
 
-        return response()->json($publications);
+        return response()->json($finds);
     }
 
     /**

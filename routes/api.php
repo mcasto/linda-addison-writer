@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LifePoemsController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PublicationsController;
+use App\Http\Controllers\SeeHearReadController;
 use App\Http\Controllers\SiteData;
 use App\Http\Controllers\SocialsController;
 use Illuminate\Http\Request;
@@ -59,6 +60,16 @@ Route::controller(EventsController::class)
         Route::get('/events/current', 'getCurrent')
             ->name('events-current');
     });
+
+Route::controller(SeeHearReadController::class)
+    ->group(function () {
+        Route::get('/finds', 'index')
+            ->name('finds-index');
+
+        Route::get('/finds/{typeId}', 'getFindsByType')
+            ->name('finds-by-type');
+    });
+
 
 Route::controller(LifePoemsController::class)
     ->group(function () {

@@ -47,8 +47,8 @@
             class="flex justify-between items-center full-width q-mt-md q-px-sm"
           >
             <div class="text-caption text-grey-7">
-              Showing {{ store.pubs.current_page }} to
-              {{ store.pubs.per_page }} of {{ store.pubs.total }} entries
+              Showing {{ store.pubs.from }} to {{ store.pubs.to }} of
+              {{ store.pubs.total }} entries
               <span v-if="filter" class="text-italic">(filtered)</span>
             </div>
             <div

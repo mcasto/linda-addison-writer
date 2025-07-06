@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('find_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('sort_order');
             $table->timestamps();
         });
     }

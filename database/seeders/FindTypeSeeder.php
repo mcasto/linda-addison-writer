@@ -16,11 +16,12 @@ class FindTypeSeeder extends Seeder
     {
         $recs = AppServiceProvider::getSeedData('seeHearRead');
 
-        $types = collect($recs)->map(fn($rec) => $rec['type'])->unique()->toArray();
+        $types = ['see', 'hear', 'read'];
 
-        foreach ($types as $type) {
+        foreach ($types as $key => $type) {
             FindType::create([
-                'name' => $type
+                'name' => $type,
+                'sort_order' => $key + 1
             ]);
         }
     }

@@ -15,7 +15,7 @@
           class="flex justify-between items-center full-width q-mt-md q-px-sm"
         >
           <div class="text-caption text-grey-7">
-            Showing {{ meta.current_page }} to {{ meta.per_page }} of
+            Showing {{ meta.from }} to {{ meta.to }} of
             {{ meta.total }} entries
           </div>
           <div
