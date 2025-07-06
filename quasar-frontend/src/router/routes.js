@@ -168,6 +168,14 @@ const routes = [
           visible: true,
           more: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.freebie = await callApi({
+            path: "/freebies",
+            method: "get",
+          });
+        },
       },
       {
         path: "online-resources",
