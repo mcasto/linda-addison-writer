@@ -30,13 +30,6 @@ class SiteData extends Controller
             'awards' => Award::orderBy('year', 'desc')->get(),
             'biblio' => BiblioType::with('biblios')->with('biblios.biblio_pubs')->get(),
             'honors' => Honor::orderBy('year', 'desc')->get(),
-            'lessons_blessings' => LessonsBlessing::first(),
-            'life_poem' => LifePoem::today(),
-            'online_resources' => OnlineResource::with('online_resource_links')->get(),
-            'publications' => PublicationType::with('publications')->get(),
-            'reviews' => Review::all(),
-            'finds' => FindType::with('finds')->get(),
-            'socials' => Social::all()
         ];
 
         return response()->json($data);

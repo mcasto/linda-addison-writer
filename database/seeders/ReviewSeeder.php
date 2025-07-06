@@ -17,9 +17,10 @@ class ReviewSeeder extends Seeder
     {
         $recs = AppServiceProvider::getSeedData('reviewsQuotes');
 
-        foreach ($recs as $rec) {
+        foreach ($recs as $key => $rec) {
             $review = Review::create([
-                'md_file' => ''
+                'md_file' => '',
+                'sort_order' => $key + 1
             ]);
 
             $mdFile = 'reviews/' . $review->id . '.md';

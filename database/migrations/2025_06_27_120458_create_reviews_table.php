@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->string('md_file');
+            $table->integer('sort_order');
             $table->timestamps();
         });
     }

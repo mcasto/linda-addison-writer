@@ -10,6 +10,7 @@ use App\Http\Controllers\LifePoemsController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OnlineResourcesController;
 use App\Http\Controllers\PublicationsController;
+use App\Http\Controllers\ReviewsQuotesController;
 use App\Http\Controllers\SeeHearReadController;
 use App\Http\Controllers\SiteData;
 use App\Http\Controllers\SocialsController;
@@ -99,6 +100,12 @@ Route::controller(OnlineResourcesController::class)
 
         Route::get('/online-resources/{typeId}', 'getResourceLinksByType')
             ->name('online-resources-by-type');
+    });
+
+Route::controller(ReviewsQuotesController::class)
+    ->group(function () {
+        Route::get('/reviews-quotes', 'index')
+            ->name('reviews-quotes-index');
     });
 
 Route::controller(LifePoemsController::class)

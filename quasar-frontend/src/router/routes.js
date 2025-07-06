@@ -214,6 +214,14 @@ const routes = [
           visible: true,
           more: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.reviews = await callApi({
+            path: "/reviews-quotes",
+            method: "get",
+          });
+        },
       },
       {
         path: "biblio",

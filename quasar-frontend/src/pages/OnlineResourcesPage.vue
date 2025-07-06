@@ -46,6 +46,9 @@
       <div>
         <q-list separator>
           <q-item v-for="resource of store.resourceLinks.data">
+            <q-item-section side>
+              &nbsp;
+            </q-item-section>
             <q-item-section>
               <q-item-label>
                 <a :href="resource.url" target="_blank">
