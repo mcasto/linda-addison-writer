@@ -79,7 +79,7 @@ const pagination = ref({
   sortBy: "sort_order",
   page: 1,
   rowsPerPage: 10,
-  rowsNumber: store.pubs.total,
+  rowsNumber: store.resourceLinks.total,
 });
 
 const resourcePath = computed(() => {

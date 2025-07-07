@@ -6,6 +6,7 @@ use App\Http\Controllers\BioController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\FreebiesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HonorsController;
 use App\Http\Controllers\LessonsBlessingsController;
 use App\Http\Controllers\LifePoemsController;
 use App\Http\Controllers\NewsController;
@@ -32,13 +33,6 @@ Route::controller(HomeController::class)
         Route::get('/home', 'index')
             ->name('home-index');
     });
-
-Route::controller(AwardsController::class)
-    ->group(function () {
-        Route::get('/awards', 'index')
-            ->name('awards-index');
-    });
-
 
 Route::controller(PublicationsController::class)
     ->group(function () {
@@ -118,7 +112,20 @@ Route::controller(BiblioController::class)
             ->name('biblio-by-type');
     });
 
-// ---
+
+Route::controller(AwardsController::class)
+    ->group(function () {
+        Route::get('/awards', 'index')
+            ->name('awards-index');
+    });
+
+
+Route::controller(HonorsController::class)
+    ->group(function () {
+        Route::get('/honors', 'index')
+            ->name('honors-index');
+    });
+
 
 Route::controller(LifePoemsController::class)
     ->group(function () {

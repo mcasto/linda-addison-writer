@@ -42,13 +42,9 @@ import { computed, onMounted, ref } from "vue";
 
 const store = useStore();
 
-const slide = ref(null);
+const slide = ref(store.reviews[0].id);
 
 const curItem = computed(() => {
   return store.reviews.findIndex(({ id }) => id == slide.value) + 1;
-});
-
-onMounted(() => {
-  slide.value = store.reviews[0].id;
 });
 </script>

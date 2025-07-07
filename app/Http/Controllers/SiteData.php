@@ -27,8 +27,6 @@ class SiteData extends Controller
     public function pull(): JsonResponse
     {
         $data = [
-            'awards' => Award::orderBy('year', 'desc')->get(),
-            'biblio' => BiblioType::with('biblios')->with('biblios.biblio_pubs')->get(),
             'honors' => Honor::orderBy('year', 'desc')->get(),
         ];
 

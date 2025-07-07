@@ -53,7 +53,7 @@ const routes = [
         },
         beforeEnter: async () => {
           const store = useStore();
-          store.news = await callApi({
+          store.latest_news = await callApi({
             path: "/news",
             method: "get",
           });
@@ -267,6 +267,14 @@ const routes = [
         meta: {
           visible: true,
           more: true,
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+          const response = await callApi({ path: "/honors", method: "get" });
+
+          console.log({ honors: response });
+
+          store.honors = response;
         },
       },
     ],

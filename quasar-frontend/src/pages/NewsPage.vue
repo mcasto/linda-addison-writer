@@ -53,9 +53,5 @@ const slides = store.latest_news.map(({ id, date, contents }) => {
   };
 });
 
-const slide = ref(null);
-
-onMounted(() => {
-  slide.value = slides[0].id;
-});
+const slide = ref(slides[0].id);
 </script>

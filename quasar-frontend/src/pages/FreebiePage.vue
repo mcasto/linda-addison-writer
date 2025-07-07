@@ -37,8 +37,6 @@ import { computed } from "vue";
 
 const store = useStore();
 
-console.log({ freebie: store.freebie });
-
 const nextUpdate = computed(() => {
   return format(add(parseISO(store.freebie.end_date), { days: 1 }), "PP");
 });
