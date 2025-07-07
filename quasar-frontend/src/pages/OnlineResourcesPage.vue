@@ -76,8 +76,7 @@ const section = ref(store.resourceTypes[0]);
 const filter = ref(null);
 
 const pagination = ref({
-  sortBy: "year",
-  descending: true,
+  sortBy: "sort_order",
   page: 1,
   rowsPerPage: 10,
   rowsNumber: store.pubs.total,

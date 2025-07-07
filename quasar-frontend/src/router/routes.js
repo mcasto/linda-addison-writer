@@ -231,6 +231,26 @@ const routes = [
           visible: true,
           more: true,
         },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          const types = await callApi({
+            path: "/biblio",
+            method: "get",
+          });
+
+          const defaultType = types[0].id;
+
+          const biblios = await callApi({
+            path: `/biblio/${defaultType}`,
+            method: "get",
+          });
+
+          console.log({ types, defaultType, biblios });
+
+          store.biblioTypes = types;
+          store.biblio = biblios;
+        },
       },
       {
         path: "awards",

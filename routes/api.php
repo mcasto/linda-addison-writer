@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AwardsController;
+use App\Http\Controllers\BiblioController;
 use App\Http\Controllers\BioController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\FreebiesController;
@@ -107,6 +108,17 @@ Route::controller(ReviewsQuotesController::class)
         Route::get('/reviews-quotes', 'index')
             ->name('reviews-quotes-index');
     });
+
+Route::controller(BiblioController::class)
+    ->group(function () {
+        Route::get('/biblio', 'index')
+            ->name('biblio-index');
+
+        Route::get('/biblio/{typeId}', 'getBiblioByType')
+            ->name('biblio-by-type');
+    });
+
+// ---
 
 Route::controller(LifePoemsController::class)
     ->group(function () {

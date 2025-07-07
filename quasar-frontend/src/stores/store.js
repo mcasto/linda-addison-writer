@@ -18,6 +18,7 @@ export const useStore = defineStore(
     const state = {
       awards: ref(null),
       biblio: ref(null),
+      biblioTypes: ref(null),
       bio: ref(null),
       covers: ref(null),
       events: ref(null),

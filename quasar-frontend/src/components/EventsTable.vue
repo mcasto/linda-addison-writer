@@ -15,8 +15,7 @@
           class="flex justify-between items-center full-width q-mt-md q-px-sm"
         >
           <div class="text-caption text-grey-7">
-            Showing {{ meta.from }} to {{ meta.to }} of
-            {{ meta.total }} entries
+            Showing {{ meta.from }} to {{ meta.to }} of {{ meta.total }} entries
           </div>
           <div
             class="row items-center q-gutter-x-sm"
@@ -109,7 +108,7 @@ const key = computed(() => {
 const loading = ref(false);
 
 const pagination = ref({
-  sortBy: "year",
+  sortBy: "start_date",
   descending: true,
   page: 1,
   rowsPerPage: 10,
