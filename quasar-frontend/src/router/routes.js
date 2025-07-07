@@ -113,8 +113,6 @@ const routes = [
             method: "get",
           });
 
-          console.log({ finds });
-
           store.findTypes = findTypes;
           store.finds = finds;
         },
@@ -200,8 +198,6 @@ const routes = [
             method: "get",
           });
 
-          console.log({ types, defaultType, links });
-
           store.resourceTypes = types;
           store.resourceLinks = links;
         },
@@ -246,8 +242,6 @@ const routes = [
             method: "get",
           });
 
-          console.log({ types, defaultType, biblios });
-
           store.biblioTypes = types;
           store.biblio = biblios;
         },
@@ -263,7 +257,6 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
           const response = await callApi({ path: "/awards", method: "get" });
-          console.log({ awards: response });
           store.awards = response;
         },
       },
