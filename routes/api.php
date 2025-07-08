@@ -167,6 +167,10 @@ Route::controller(AuthController::class)
         Route::post('/admin/login', 'login')
             ->name('admin-login');
 
+        Route::post('/admin/logout', 'logout')
+            ->middleware('auth:admin')
+            ->name('admin-logout');
+
         Route::post('/admin/validate-token', 'validate')
             ->middleware('auth:admin')
             ->name('admin-validate');
