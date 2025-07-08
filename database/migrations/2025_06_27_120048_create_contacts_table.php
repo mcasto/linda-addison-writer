@@ -16,9 +16,10 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
-            $table->text('message');
-            $table->string('status');
+            $table->text('message')->nullable();
+            $table->string('status')->default('unread');
             $table->boolean('replied')->nullable();
+            $table->json('sendgrid_response')->nullable();
             $table->timestamps();
         });
     }

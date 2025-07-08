@@ -3,6 +3,7 @@
 use App\Http\Controllers\AwardsController;
 use App\Http\Controllers\BiblioController;
 use App\Http\Controllers\BioController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\FreebiesController;
 use App\Http\Controllers\HomeController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\SiteData;
 use App\Http\Controllers\SocialsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -74,6 +76,12 @@ Route::controller(BioController::class)
     ->group(function () {
         Route::get('/bio', 'index')
             ->name('bio-index');
+    });
+
+Route::controller(ContactController::class)
+    ->group(function () {
+        Route::post('/contact', 'store')
+            ->name('contact-store');
     });
 
 Route::controller(LessonsBlessingsController::class)
@@ -138,3 +146,12 @@ Route::controller(SocialsController::class)
         Route::get('/socials', 'index')
             ->name('socials-index');
     });
+
+
+Route::get('/download/press-kit', function () {
+    $storagePath = 'press-kit.zip';
+    $downloadName = "author-press-kit-" . now()->format('Y-m-d') . ".zip";
+
+    return Storage::disk('local')
+        ->download($storagePath, $downloadName);
+});

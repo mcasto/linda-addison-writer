@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import sendContact from "./actions/send-contact";
 
 export const useStore = defineStore(
   "store",
@@ -27,7 +28,9 @@ export const useStore = defineStore(
       socials: ref(null),
     };
     const getters = {};
-    const actions = {};
+    const actions = {
+      sendContact,
+    };
 
     return { ...state, ...getters, ...actions };
   }

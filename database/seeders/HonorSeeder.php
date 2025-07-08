@@ -29,7 +29,9 @@ class HonorSeeder extends Seeder
             $honor->md_file = $mdFile;
             $honor->save();
 
-            Storage::disk('local')->put($mdFile, $rec['text']);
+            if (!Storage::disk('local')->exists($mdFile)) {
+                Storage::disk('local')->put($mdFile, $rec['text']);
+            }
         }
     }
 }
