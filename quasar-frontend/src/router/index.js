@@ -38,6 +38,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
   Router.beforeEach(async () => {
     const store = useStore();
 
+    store.design = await callApi({ path: "/design-credits", method: "get" });
     store.life_poem = await callApi({ path: "/life-poem", method: "get" });
     store.socials = await callApi({ path: "/socials", method: "get" });
   });

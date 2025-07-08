@@ -20,8 +20,34 @@
         <router-view />
       </q-page>
       <q-footer class="bg-accent">
-        Footer
+        <div class="flex justify-between items-center">
+          <div>
+            <q-btn
+              :icon="store.design.icon"
+              flat
+              round
+              @click="showDesignCredits = true"
+            >
+              <q-tooltip>
+                Design Credits
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div>
+            <a
+              v-for="social of store.socials"
+              :key="`social-${social.id}`"
+              :href="social.url"
+              target="_blank"
+              class="text-white"
+            >
+              <q-btn :icon="social.icon" flat round></q-btn>
+            </a>
+          </div>
+        </div>
       </q-footer>
+
+      <design-credits v-model="showDesignCredits"></design-credits>
     </q-page-container>
   </q-layout>
 </template>
@@ -31,4 +57,14 @@ import { Screen } from "quasar";
 
 import HeaderContents from "src/components/HeaderContents.vue";
 import NavigationHandler from "src/components/NavigationHandler.vue";
+import DesignCredits from "src/components/DesignCredits.vue";
+
+import { useStore } from "src/stores/store";
+import { ref } from "vue";
+
+const store = useStore();
+
+const showDesignCredits = ref(false);
+
+console.log(store.socials);
 </script>

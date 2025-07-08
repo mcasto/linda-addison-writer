@@ -4,6 +4,7 @@ use App\Http\Controllers\AwardsController;
 use App\Http\Controllers\BiblioController;
 use App\Http\Controllers\BioController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DesignCreditsController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\FreebiesController;
 use App\Http\Controllers\HomeController;
@@ -147,6 +148,11 @@ Route::controller(SocialsController::class)
             ->name('socials-index');
     });
 
+Route::controller(DesignCreditsController::class)
+    ->group(function () {
+        Route::get('/design-credits', 'index')
+            ->name('design-credits-index');
+    });
 
 Route::get('/download/press-kit', function () {
     $storagePath = 'press-kit.zip';

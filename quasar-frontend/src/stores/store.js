@@ -11,6 +11,7 @@ export const useStore = defineStore(
       biblioTypes: ref(null),
       bio: ref(null),
       covers: ref(null),
+      design: ref(null),
       events: ref(null),
       finds: ref(null),
       findTypes: ref(null),
