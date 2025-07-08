@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AwardsController;
 use App\Http\Controllers\BiblioController;
 use App\Http\Controllers\BioController;
@@ -22,11 +23,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})
-    ->middleware('auth:sanctum')
-    ->name('user');
+Route::get('/login', function () {
+    // this is just to catch Sanctum's autoredirect to [login]
+    return response()->json('Invalid token', 401);
+})->name('login');
 
 Route::get('/site-data', [SiteData::class, 'pull'])
     ->name('site-data');
@@ -161,3 +161,13 @@ Route::get('/download/press-kit', function () {
     return Storage::disk('local')
         ->download($storagePath, $downloadName);
 });
+
+Route::controller(AuthController::class)
+    ->group(function () {
+        Route::post('/admin/login', 'login')
+            ->name('admin-login');
+
+        Route::post('/admin/validate-token', 'validate')
+            ->middleware('auth:admin')
+            ->name('admin-validate');
+    });

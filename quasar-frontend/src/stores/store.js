@@ -27,6 +27,7 @@ export const useStore = defineStore(
       resourceLinks: ref(null),
       reviews: ref(null),
       socials: ref(null),
+      token: ref(null),
     };
     const getters = {};
     const actions = {
@@ -34,10 +35,11 @@ export const useStore = defineStore(
     };
 
     return { ...state, ...getters, ...actions };
+  },
+  {
+    persist: {
+      key: "lindaaddisonwriter.com",
+      path: ["token"],
+    },
   }
-  // {
-  //   persist: {
-  //     key: "lindaaddisonwriter.com",
-  //   },
-  // }
 );

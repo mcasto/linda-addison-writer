@@ -35,8 +35,29 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach(async () => {
+  Router.beforeEach(async (to) => {
     const store = useStore();
+
+    const isAdmin = to.matched.find(({ name }) => name == "admin-section");
+    const isPublic = to.meta.public;
+
+    if (isAdmin && !isPublic) {
+      if (!store.token) {
+        return { name: "admin-login" };
+      }
+
+      const valid = await callApi({
+        path: "/admin/validate-token",
+        method: "post",
+        useAuth: true,
+      }).catch(() => {
+        return false;
+      });
+
+      if (!valid) {
+        return { name: "admin-login" };
+      }
+    }
 
     store.design = await callApi({ path: "/design-credits", method: "get" });
     store.life_poem = await callApi({ path: "/life-poem", method: "get" });

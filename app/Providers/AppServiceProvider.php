@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Exception;
+use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Support\ServiceProvider;
 
 date_default_timezone_set('America/Phoenix');
@@ -22,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // 
     }
 
     public static function getSeedData($table)

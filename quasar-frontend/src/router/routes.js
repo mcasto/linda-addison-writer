@@ -280,6 +280,25 @@ const routes = [
     ],
   },
 
+  {
+    path: "/admin",
+    component: () => import("layouts/AdminLayout.vue"),
+    name: "admin-section",
+    children: [
+      {
+        path: "login",
+        component: () => import("pages/admin/LoginPage.vue"),
+        name: "admin-login",
+        meta: { public: true },
+      },
+      {
+        path: "",
+        component: () => import("pages/admin/DashboardPage.vue"),
+        name: "admin-dashboard",
+      },
+    ],
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
