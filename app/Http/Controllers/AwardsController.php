@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Award;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AwardsController extends Controller
 {
@@ -17,33 +18,9 @@ class AwardsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }
@@ -53,7 +30,15 @@ class AwardsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // update award rec
+        $award = Award::find($id);
+        $award->year = $request->input('year');
+        $award->save();
+
+        // update contents
+        Storage::disk('local')->put($award->md_file, $request->input('raw'));
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**

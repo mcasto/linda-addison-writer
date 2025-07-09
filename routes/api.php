@@ -19,6 +19,7 @@ use App\Http\Controllers\ReviewsQuotesController;
 use App\Http\Controllers\SeeHearReadController;
 use App\Http\Controllers\SiteData;
 use App\Http\Controllers\SocialsController;
+use App\Models\Award;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -126,6 +127,16 @@ Route::controller(AwardsController::class)
     ->group(function () {
         Route::get('/awards', 'index')
             ->name('awards-index');
+
+        Route::get('/admin/awards', function () {
+            return Award::orderBy('year', 'desc')->get();
+        })
+            ->middleware('auth:admin')
+            ->name('admin-awards-index');
+
+        Route::put('/admin/awards/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-awards-update');
     });
 
 

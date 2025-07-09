@@ -19,6 +19,7 @@
     "@quasar/extras": "^1.16.4",
     "date-fns": "^4.1.0",
     "lodash-es": "^4.17.21",
+    "markdown-it": "^14.1.0",
     "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.4.0",
     "quasar": "^2.16.0",

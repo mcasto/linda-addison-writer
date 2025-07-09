@@ -295,6 +295,21 @@ const routes = [
         path: "",
         component: () => import("pages/admin/DashboardPage.vue"),
         name: "admin-dashboard",
+        meta: { order: 1, icon: "fa-solid fa-gauge", tip: "Dashboard" },
+      },
+      {
+        path: "awards",
+        component: () => import("pages/admin/AdminAwards.vue"),
+        name: "admin-awards",
+        meta: { order: 2, icon: "fa-solid fa-award", tip: "Awards" },
+        beforeEnter: async () => {
+          const store = useStore();
+          store.admin.awards = await callApi({
+            path: "/admin/awards",
+            method: "get",
+            useAuth: true,
+          });
+        },
       },
     ],
   },

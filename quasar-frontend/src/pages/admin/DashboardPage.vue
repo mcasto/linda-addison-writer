@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <page-container>
     Dashboard
-  </div>
+  </page-container>
 </template>
 
 <script setup>
-//
+import PageContainer from "src/components/PageContainer.vue";
 </script>

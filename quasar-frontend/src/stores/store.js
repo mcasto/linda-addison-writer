@@ -6,6 +6,9 @@ export const useStore = defineStore(
   "store",
   () => {
     const state = {
+      admin: ref({
+        awards: null,
+      }),
       awards: ref(null),
       biblio: ref(null),
       biblioTypes: ref(null),
