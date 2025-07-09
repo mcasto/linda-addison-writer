@@ -22,7 +22,21 @@ class AwardsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // create award rec
+        $rec = Award::create([
+            'year' => $request->input('year'),
+            'md_file' => ''
+        ]);
+
+        $mdFile = 'awards/' . $rec->id . '.md';
+
+        $rec->md_file = $mdFile;
+        $rec->save();
+
+        // create contents file
+        Storage::disk('local')->put($mdFile, $request->input('raw'));
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -46,6 +60,14 @@ class AwardsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $award = Award::find($id);
+
+        // remove contents
+        Storage::disk('local')->delete($award->md_file);
+
+        // delete DB record
+        $award->delete();
+
+        return response()->json(['status' => 'ok']);
     }
 }

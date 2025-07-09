@@ -91,6 +91,8 @@ import { useStore } from "src/stores/store";
 import { computed, ref, watch } from "vue";
 import BiblioDialog from "src/components/BiblioDialog.vue";
 import callApi from "src/assets/call-api";
+import { clone } from "lodash-es";
+import { cloneDeep } from "lodash-es";
 
 const store = useStore();
 const filter = ref(null);
@@ -100,7 +102,7 @@ const pagination = ref({
   descending: true,
   page: 1,
   rowsPerPage: 10,
-  rowsNumber: store.pubs.total,
+  rowsNumber: store.biblio.total,
 });
 
 const dialog = ref({
@@ -125,6 +127,8 @@ const biblioPath = computed(() => {
 
   return path;
 });
+
+console.log(cloneDeep(store.biblio.data));
 
 watch([type, filter], async () => {
   pagination.value.page = 1;

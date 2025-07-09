@@ -3,9 +3,7 @@
     <q-page-container>
       <q-header class="bg-accent">
         <q-toolbar>
-          <q-toolbar-title>
-            Admin
-          </q-toolbar-title>
+          <q-toolbar-title> Admin&mdash;{{ pageName }} </q-toolbar-title>
           <q-btn icon="logout" flat round @click="logout"></q-btn>
         </q-toolbar>
       </q-header>
@@ -48,6 +46,10 @@ const tabs = computed(() => {
     .filter(({ path }) => path.includes("/admin"))
     .filter(({ name }) => !["admin-section", "admin-login"].includes(name))
     .sort((a, b) => (a.meta.order > b.meta.order ? 1 : -1));
+});
+
+const pageName = computed(() => {
+  return store.router.currentRoute.value.meta.tip;
 });
 
 const logout = async () => {

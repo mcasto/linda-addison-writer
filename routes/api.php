@@ -137,6 +137,14 @@ Route::controller(AwardsController::class)
         Route::put('/admin/awards/{id}', 'update')
             ->middleware('auth:admin')
             ->name('admin-awards-update');
+
+        Route::post('/admin/awards', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-awards-update');
+
+        Route::delete('/admin/awards/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-awards-update');
     });
 
 

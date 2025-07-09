@@ -295,7 +295,7 @@ const routes = [
         path: "",
         component: () => import("pages/admin/DashboardPage.vue"),
         name: "admin-dashboard",
-        meta: { order: 1, icon: "fa-solid fa-gauge", tip: "Dashboard" },
+        meta: { order: 1, icon: "mdi-view-dashboard", tip: "Dashboard" },
       },
       {
         path: "awards",
