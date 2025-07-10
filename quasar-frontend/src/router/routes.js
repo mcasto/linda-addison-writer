@@ -319,14 +319,20 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          const response = await callApi({
-            path: "/admin/biblio-types",
+          const types = await callApi({
+            path: "/biblio",
             method: "get",
-            useAuth: true,
           });
 
-          store.admin.biblioTypes = response.types;
-          store.admin.biblio = response.entries;
+          const defaultType = types[0].id;
+
+          const biblios = await callApi({
+            path: `/biblio/${defaultType}`,
+            method: "get",
+          });
+
+          store.admin.biblioTypes = types;
+          store.admin.biblio = biblios;
         },
       },
     ],

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Biblio;
+use App\Models\BiblioPub;
 use App\Models\BiblioType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,34 +15,10 @@ class BiblioController extends Controller
      */
     public function index(): JsonResponse
     {
-        // First get all publication types without publications
         $biblioTypes = BiblioType::orderBy('order')
             ->get();
 
         return response()->json($biblioTypes);
-    }
-
-    public function adminTypes(): JsonResponse
-    {
-        $types = BiblioType::all();
-        $type = $types[0];
-        $entries = Biblio::where('biblio_type_id', $type->id)
-            ->paginate(10);
-
-        return response()->json(['types' => $types, 'entries' => $entries]);
-    }
-
-    public function adminEntries($typeId, Request $request): JsonResponse
-    {
-        return response()->json($entries = Biblio::where('biblio_type_id', $typeId)
-            ->paginate($request->input('per_page', 10)));
-    }
-
-    public function adminIndex(): JsonResponse
-    {
-        $types = BiblioType::all();
-        $entries = Biblio::orderBy('sort_date', 'desc')->get();
-        return response()->json(['types' => $types, 'entries' => $entries]);
     }
 
     public function getBiblioByType($typeId, Request $request): JsonResponse
@@ -65,35 +42,55 @@ class BiblioController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Save a biblio entry
      */
-    public function store(Request $request)
+    public function save(Request $request)
     {
-        //
-    }
+        $biblio = $request->all();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        // check if id is new or not
+        $isNew = substr($request->id, 0, 4) == 'new-';
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if ($isNew) {
+            unset($biblio['id']);
+            unset($biblio['biblio_pubs']);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+            $rec = Biblio::create($biblio);
+        } else {
+            unset($biblio['biblio_pubs']);
+
+            $rec = Biblio::find($biblio['id']);
+
+            $rec->update($biblio);
+            $rec->save();
+        }
+
+        // handle pubs
+        foreach ($request->biblio_pubs as $pub) {
+            // check for delete
+            $deleted = $pub['deleted'] ?? false;
+
+            if ($deleted) {
+                $pubRec = BiblioPub::find($pub['id']);
+                $pubRec->delete();
+                continue;
+            }
+
+            // is new
+            $isNew = substr($pub['id'], 0, 4) == 'new-';
+
+            if ($isNew) {
+                unset($pub['id']);
+                $pub['biblio_id'] = $rec->id;
+                $pubRec = BiblioPub::create($pub);
+            } else {
+                $pubRec = BiblioPub::find($pub['id']);
+                $pubRec->update($pub);
+                $pubRec->save();
+            }
+        }
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -101,6 +98,9 @@ class BiblioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $biblio = Biblio::find($id);
+        $biblio->delete();
+
+        return response()->json(['status' => 'ok']);
     }
 }

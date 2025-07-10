@@ -121,11 +121,21 @@ Route::controller(BiblioController::class)
         Route::get('/biblio/{typeId}', 'getBiblioByType')
             ->name('biblio-by-type');
 
-        Route::get('/admin/biblio-types', 'adminTypes')
+        Route::get('/admin/biblio', 'index')
+            ->middleware('auth:admin')
             ->name('admin-biblio-types-index');
 
-        Route::get('/admin/biblio-entries/{typeId}', 'adminEntries')
+        Route::get('/admin/biblio/{typeId}', 'getBiblioByType')
+            ->middleware('auth:admin')
             ->name('admin-biblio-entries-index');
+
+        Route::post('/admin/biblio', 'save')
+            ->middleware('auth:admin')
+            ->name('admin-biblio-save');
+
+        Route::delete('/admin/biblio/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-biblio-delete');
     });
 
 
