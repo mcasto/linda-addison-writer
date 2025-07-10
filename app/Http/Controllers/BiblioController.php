@@ -21,6 +21,29 @@ class BiblioController extends Controller
         return response()->json($biblioTypes);
     }
 
+    public function adminTypes(): JsonResponse
+    {
+        $types = BiblioType::all();
+        $type = $types[0];
+        $entries = Biblio::where('biblio_type_id', $type->id)
+            ->paginate(10);
+
+        return response()->json(['types' => $types, 'entries' => $entries]);
+    }
+
+    public function adminEntries($typeId, Request $request): JsonResponse
+    {
+        return response()->json($entries = Biblio::where('biblio_type_id', $typeId)
+            ->paginate($request->input('per_page', 10)));
+    }
+
+    public function adminIndex(): JsonResponse
+    {
+        $types = BiblioType::all();
+        $entries = Biblio::orderBy('sort_date', 'desc')->get();
+        return response()->json(['types' => $types, 'entries' => $entries]);
+    }
+
     public function getBiblioByType($typeId, Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 10);

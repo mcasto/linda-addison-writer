@@ -311,6 +311,24 @@ const routes = [
           });
         },
       },
+      {
+        path: "biblio",
+        component: () => import("pages/admin/AdminBiblio.vue"),
+        name: "admin-biblio",
+        meta: { order: 3, icon: "mdi-bookshelf", tip: "Bibliography" },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          const response = await callApi({
+            path: "/admin/biblio-types",
+            method: "get",
+            useAuth: true,
+          });
+
+          store.admin.biblioTypes = response.types;
+          store.admin.biblio = response.entries;
+        },
+      },
     ],
   },
 

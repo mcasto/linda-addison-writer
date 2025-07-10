@@ -8,6 +8,8 @@ export const useStore = defineStore(
     const state = {
       admin: ref({
         awards: null,
+        biblio: null,
+        biblioTypes: null,
       }),
       awards: ref(null),
       biblio: ref(null),

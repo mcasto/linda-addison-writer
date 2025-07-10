@@ -33,6 +33,13 @@
               </q-tooltip>
             </q-btn>
           </div>
+
+          <div>
+            <router-link to="admin" class="text-white" target="_blank"
+              >Admin</router-link
+            >
+          </div>
+
           <div>
             <a
               v-for="social of store.socials"

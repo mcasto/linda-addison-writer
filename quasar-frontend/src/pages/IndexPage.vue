@@ -2,13 +2,13 @@
   <page-container>
     <div class="row q-gutter-y-md">
       <div
-        class="col-12 col-sm-6 col-md-4 cursor-pointe"
+        class="col-12 col-sm-6 col-md-4 cursor-pointer q-px-md"
         v-for="cover of store.covers"
         :key="`cover-${cover.id}`"
         @click="coverDialog = { show: true, cover }"
       >
-        <q-img :src="cover.image_url" height="30vh" fit="contain"></q-img>
-        <div class="text-subtitle2 text-center bg-white">
+        <q-img :src="cover.image_url" height="50vh" fit="cover"> </q-img>
+        <div class="text-center bg-white">
           {{ cover.title }}
         </div>
       </div>

@@ -17,6 +17,11 @@ class AwardsController extends Controller
         return response()->json(Award::orderBy('year', 'desc')->get());
     }
 
+    public function adminIndex(): JsonResponse
+    {
+        return response()->json(Award::orderBy('year', 'desc')->get());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

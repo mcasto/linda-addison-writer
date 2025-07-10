@@ -120,6 +120,12 @@ Route::controller(BiblioController::class)
 
         Route::get('/biblio/{typeId}', 'getBiblioByType')
             ->name('biblio-by-type');
+
+        Route::get('/admin/biblio-types', 'adminTypes')
+            ->name('admin-biblio-types-index');
+
+        Route::get('/admin/biblio-entries/{typeId}', 'adminEntries')
+            ->name('admin-biblio-entries-index');
     });
 
 
@@ -128,9 +134,7 @@ Route::controller(AwardsController::class)
         Route::get('/awards', 'index')
             ->name('awards-index');
 
-        Route::get('/admin/awards', function () {
-            return Award::orderBy('year', 'desc')->get();
-        })
+        Route::get('/admin/awards', 'adminIndex')
             ->middleware('auth:admin')
             ->name('admin-awards-index');
 
