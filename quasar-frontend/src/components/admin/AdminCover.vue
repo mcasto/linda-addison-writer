@@ -14,7 +14,11 @@
                   @click="showUploader = true"
                 >
                   <q-tooltip class="bg-primary">
-                    Replace Cover Image
+                    {{
+                      startsWith(cover.id, "new-")
+                        ? "Cover Image"
+                        : "Replace Cover Image"
+                    }}
                   </q-tooltip>
                 </q-btn>
               </div>
@@ -37,6 +41,7 @@
                     round
                     dense
                     flat
+                    v-if="!startsWith(cover.id, 'new-')"
                   >
                     <q-tooltip>Cancel</q-tooltip>
                   </q-btn>
@@ -46,7 +51,13 @@
                     class="q-uploader__spinner"
                   />
                   <div class="col">
-                    <div class="q-uploader__title">Replace Cover Image</div>
+                    <div class="q-uploader__title">
+                      {{
+                        startsWith(cover.id, "new-")
+                          ? "Cover Image"
+                          : "Replace Cover Image"
+                      }}
+                    </div>
                     <div class="q-uploader__subtitle">
                       {{ scope.uploadSizeLabel }} /
                       {{ scope.uploadProgressLabel }}
@@ -107,6 +118,7 @@
                 stack-label
                 dense
                 outlined
+                class="q-mt-md"
               >
                 <template #after>
                   <q-btn
@@ -126,7 +138,13 @@
                 </q-card-section>
               </q-card>
 
-              <div class="flex justify-end q-mt-md">
+              <div class="flex justify-between q-mt-md">
+                <q-btn
+                  color="warning"
+                  class="text-black"
+                  @click="closePopup"
+                  label="Cancel"
+                ></q-btn>
                 <q-btn label="Save" color="primary" @click="saveCover"></q-btn>
               </div>
             </q-form>
@@ -139,11 +157,12 @@
 
 <script setup>
 import { useStore } from "src/stores/store";
-import { ref } from "vue";
+import { onUpdated, ref } from "vue";
 
 import MarkdownEditor from "../MarkdownEditor.vue";
 import callApi from "src/assets/call-api";
-import { Notify } from "quasar";
+import { Loading, Notify } from "quasar";
+import { startsWith } from "lodash-es";
 
 const model = defineModel();
 const props = defineProps(["cover"]);
@@ -159,20 +178,28 @@ const uploadHeaders = [
   },
 ];
 
+const closePopup = () => {
+  window.location.reload();
+};
+
 const openLink = (url) => {
   window.open(url);
 };
 
 const saveCover = async () => {
-  const { contents, purchase_url, sort_order, title, replaceImage } = {
+  Loading.show({ delay: 100 });
+
+  const { id, contents, purchase_url, sort_order, title, replaceImage } = {
     ...props.cover,
     replaceImage: showUploader.value,
   };
 
+  const method = startsWith(props.cover.id, "new-") ? "post" : "put";
+
   const response = await callApi({
     path: `/admin/covers/${props.cover.id}`,
-    method: "put",
-    payload: { contents, purchase_url, sort_order, title, replaceImage },
+    method,
+    payload: { id, contents, purchase_url, sort_order, title, replaceImage },
     useAuth: true,
   });
 
@@ -186,4 +213,8 @@ const saveCover = async () => {
     message: response.message,
   });
 };
+
+onUpdated(() => {
+  showUploader.value = startsWith(props.cover.id, "new-") ? true : false;
+});
 </script>

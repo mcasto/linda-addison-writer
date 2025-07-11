@@ -51,9 +51,45 @@ class HomeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $id)
     {
-        //
+        $rec = $request->only(['title', 'purchase_url', 'sort_order']);
+        $rec = [
+            'title' => $request->title ?? 'New Cover',
+            'purchase_url' => $request->purchase_url ?? '',
+            'sort_order' => $request->sort_order ?? 0
+        ];
+        $rec['image'] = '';
+        $rec['md_file'] = '';
+
+        $cover = Cover::create($rec);
+
+        $mdFile = 'covers/' . $cover->id . '.md';
+
+        // write contents to mdFile
+        Storage::disk('local')->put($mdFile, $request->contents ?? '');
+
+        $cover->md_file = $mdFile;
+        $cover->save();
+
+        $replaceImage = $request->replaceImage;
+
+        // replace image
+        if ($replaceImage) {
+            // move temp image
+            $newImagePath = $this->moveTempCover($id);
+            if (!$newImagePath) {
+                return response()->json(['status' => 'error', 'message' => 'Unable to replace image']);
+            }
+
+            if ($newImagePath != $cover->image) {
+                // update image in db
+                $cover->image = $newImagePath;
+                $cover->save();
+            }
+        }
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -121,6 +157,9 @@ class HomeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $cover = Cover::findOrFail($id);
+        $cover->delete();
+
+        return response()->json(['status' => 'ok']);
     }
 }

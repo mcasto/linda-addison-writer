@@ -43,6 +43,14 @@ Route::controller(HomeController::class)
             ->middleware('auth:admin')
             ->name('admin-cover-update');
 
+        Route::post('/admin/covers/{id}', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-cover-store');
+
+        Route::delete('/admin/covers/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-cover-update');
+
         Route::post('/admin/covers/upload/{id}', 'uploadImage')
             ->middleware('auth:admin')
             ->name('admin-cover-upload');

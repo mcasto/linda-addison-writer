@@ -6,6 +6,20 @@
       :pagination="{ rowsPerPage: 0 }"
       hide-bottom
     >
+      <template #top-right>
+        <div class="flex justify-end">
+          <q-btn
+            icon="add"
+            color="primary"
+            round
+            @click="editDialog = { visible: true, cover: newCoverTemplate() }"
+          >
+            <q-tooltip class="bg-primary">
+              New Cover
+            </q-tooltip>
+          </q-btn>
+        </div>
+      </template>
       <template #body-cell-image="props">
         <q-td width="20%">
           <q-img :src="props.row.image_url"></q-img>
@@ -54,7 +68,13 @@
               color="primary"
               @click="editDialog = { visible: true, cover: props.row }"
             ></q-btn>
-            <q-btn icon="delete" flat round color="negative"></q-btn>
+            <q-btn
+              icon="delete"
+              flat
+              round
+              color="negative"
+              @click="deleteCover(props.row)"
+            ></q-btn>
           </div>
         </q-td>
       </template>
@@ -72,7 +92,7 @@ import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import AdminCover from "src/components/admin/AdminCover.vue";
 import { ref } from "vue";
-import { uid } from "quasar";
+import { Notify, uid } from "quasar";
 import callApi from "src/assets/call-api";
 import { clone } from "lodash-es";
 
@@ -110,6 +130,30 @@ const newCoverTemplate = () => {
     contents: "",
     image_url: "http://linda-addison-writer.test/storage/new-cover.webp",
   };
+};
+
+const deleteCover = async (cover) => {
+  Notify.create({
+    type: "warning",
+    message: "Are you sure you want to delete this cover?",
+    actions: [
+      { label: "No" },
+      {
+        label: "Yes",
+        handler: async () => {
+          const response = await callApi({
+            path: `/admin/covers/${cover.id}`,
+            method: "delete",
+            useAuth: true,
+          });
+
+          if (response.status == "ok") {
+            window.location.reload();
+          }
+        },
+      },
+    ],
+  });
 };
 
 const reorder = async (cover, direction) => {
