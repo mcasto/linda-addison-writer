@@ -320,19 +320,36 @@ const routes = [
           const store = useStore();
 
           const types = await callApi({
-            path: "/biblio",
+            path: "/admin/biblio",
             method: "get",
+            useAuth: true,
           });
 
           const defaultType = types[0].id;
 
           const biblios = await callApi({
-            path: `/biblio/${defaultType}`,
+            path: `/admin/biblio/${defaultType}`,
             method: "get",
+            useAuth: true,
           });
 
           store.admin.biblioTypes = types;
           store.admin.biblio = biblios;
+        },
+      },
+      {
+        path: "contacts",
+        component: () => import("pages/admin/AdminContacts.vue"),
+        name: "admin-contacts",
+        meta: { order: 4, icon: "fa-solid fa-address-book", tip: "Contacts" },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.admin.contacts = await callApi({
+            path: "/admin/contacts",
+            method: "get",
+            useAuth: true,
+          });
         },
       },
     ],

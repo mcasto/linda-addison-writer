@@ -10,6 +10,7 @@ export const useStore = defineStore(
         awards: null,
         biblio: null,
         biblioTypes: null,
+        contacts: null,
       }),
       awards: ref(null),
       biblio: ref(null),

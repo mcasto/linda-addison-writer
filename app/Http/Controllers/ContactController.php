@@ -15,7 +15,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Contact::orderBy('created_at', 'desc')->get());
     }
 
     /**
@@ -51,19 +51,16 @@ class ContactController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): JsonResponse
     {
-        //
+        $rec = Contact::find($id);
+        $rec->replied = $request->replied;
+        $rec->status = $request->status;
+        $rec->save();
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -71,6 +68,8 @@ class ContactController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $rec = Contact::find($id);
+        $rec->delete();
+        return response()->json(['status' => 'ok']);
     }
 }

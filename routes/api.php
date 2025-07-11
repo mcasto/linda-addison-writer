@@ -84,6 +84,18 @@ Route::controller(ContactController::class)
     ->group(function () {
         Route::post('/contact', 'store')
             ->name('contact-store');
+
+        Route::get('/admin/contacts', 'index')
+            ->middleware('auth:admin')
+            ->name('admin-contacts-index');
+
+        Route::put('/admin/contact/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-contact-update');
+
+        Route::delete('/admin/contact/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-contact-delete');
     });
 
 Route::controller(LessonsBlessingsController::class)

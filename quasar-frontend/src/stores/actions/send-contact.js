@@ -1,16 +1,27 @@
 import { clone } from "lodash-es";
 import { useStore } from "../store";
-import { Notify } from "quasar";
+import { Loading, Notify } from "quasar";
 import callApi from "src/assets/call-api";
 
 const send = async (payload) => {
+  Loading.show();
+
   const response = await callApi({
     path: "/contact",
     method: "post",
     payload,
   });
 
-  console.log({ response });
+  if (response.status == 202) {
+    Notify.create({
+      type: "positive",
+      message: "Contact message sent",
+    });
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
+  }
 };
 
 export default async (contact) => {
