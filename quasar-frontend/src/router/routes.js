@@ -352,6 +352,21 @@ const routes = [
           });
         },
       },
+      {
+        path: "covers",
+        component: () => import("pages/admin/AdminCovers.vue"),
+        name: "admin-covers",
+        meta: { order: 5, icon: "fa-solid fa-images", tip: "Covers" },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.admin.covers = await callApi({
+            path: "/admin/covers",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
     ],
   },
 

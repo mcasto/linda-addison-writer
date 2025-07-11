@@ -19,8 +19,6 @@ use App\Http\Controllers\ReviewsQuotesController;
 use App\Http\Controllers\SeeHearReadController;
 use App\Http\Controllers\SiteData;
 use App\Http\Controllers\SocialsController;
-use App\Models\Award;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,6 +34,18 @@ Route::controller(HomeController::class)
     ->group(function () {
         Route::get('/home', 'index')
             ->name('home-index');
+
+        Route::get('/admin/covers', 'index')
+            ->middleware('auth:admin')
+            ->name('admin-covers-index');
+
+        Route::put('/admin/covers/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-cover-update');
+
+        Route::post('/admin/covers/upload/{id}', 'uploadImage')
+            ->middleware('auth:admin')
+            ->name('admin-cover-upload');
     });
 
 Route::controller(PublicationsController::class)
