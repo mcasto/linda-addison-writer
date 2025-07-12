@@ -1,7 +1,7 @@
 <template>
   <div
     class="flex flex-center column no-wrap"
-    :style="`height: ${headerHeight}; width: 100%`"
+    :style="`height: ${headerHeight}; width: 100vw`"
   >
     <div
       class="q-px-md q-uploader__overlay text-bold text-center q-mb-sm"
@@ -61,6 +61,8 @@ const headerHeight = computed(() => {
       height: "42vh",
     },
   ];
+
+  console.log({ height: Screen.height });
 
   return heights.find(
     ({ min, max }) => min <= Screen.width && Screen.width <= max

@@ -81,6 +81,10 @@ Route::controller(EventsController::class)
 
         Route::get('/events/current', 'getCurrent')
             ->name('events-current');
+
+        Route::get('/admin/events', 'index')
+            ->middleware('auth:admin')
+            ->name('admin-events-index');
     });
 
 Route::controller(SeeHearReadController::class)

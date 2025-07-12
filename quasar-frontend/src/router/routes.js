@@ -367,6 +367,21 @@ const routes = [
           });
         },
       },
+      {
+        path: "events",
+        component: () => import("pages/admin/AdminEvents.vue"),
+        name: "admin-events",
+        meta: { order: 6, icon: "fa-solid fa-calendar", tip: "Events" },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.admin.events = await callApi({
+            path: "/admin/events",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
     ],
   },
 

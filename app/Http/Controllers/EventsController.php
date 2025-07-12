@@ -45,6 +45,15 @@ class EventsController extends Controller
     }
 
     /**
+     * Get all events
+     */
+    public function index(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        return Event::orderby('start_date', 'desc')->paginate($perPage);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
