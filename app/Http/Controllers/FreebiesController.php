@@ -11,15 +11,7 @@ class FreebiesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
-    {
-        return response()->json(Freebie::today());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index()
     {
         //
     }
@@ -35,17 +27,9 @@ class FreebiesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json(Freebie::today());
     }
 
     /**

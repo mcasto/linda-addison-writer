@@ -158,8 +158,8 @@ Route::controller(LessonsBlessingsController::class)
 
 Route::controller(FreebiesController::class)
     ->group(function () {
-        Route::get('/freebies', 'index')
-            ->name('freebies-index');
+        Route::get('/freebies', 'show')
+            ->name('freebies-show');
     });
 
 Route::controller(OnlineResourcesController::class)
