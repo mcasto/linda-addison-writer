@@ -67,7 +67,7 @@ class HomeController extends Controller
         $mdFile = 'covers/' . $cover->id . '.md';
 
         // write contents to mdFile
-        Storage::disk('local')->put($mdFile, $request->contents ?? '');
+        Storage::disk('local')->put($mdFile, $request->raw ?? '');
 
         $cover->md_file = $mdFile;
         $cover->save();
@@ -97,19 +97,18 @@ class HomeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $update = $request->only(['title', 'purchase_url', 'sort_order', 'contents']);
-        $replaceImage = $request->input('replaceImage');
+        $replaceImage = $request->replaceImage;
 
         // update db rec
         $cover = Cover::find($id);
-        $cover->title = $update['title'];
-        $cover->purchase_url = $update['purchase_url'];
-        $cover->sort_order = $update['sort_order'];
+        $cover->title = $request->title;
+        $cover->purchase_url = $request->purchase_url;
+        $cover->sort_order = $request->sort_order;
         $cover->save();
 
         // update md file
         $mdFile = $cover->md_file;
-        Storage::disk('local')->put($mdFile, $request->input('contents'));
+        Storage::disk('local')->put($mdFile, $request->raw);
 
         // replace image
         if ($replaceImage) {

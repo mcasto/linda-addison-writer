@@ -8,13 +8,17 @@
       :loading="loading"
       hide-pagination
       dense
-      grid
     >
       <template #top>
         <div
           class="flex justify-between items-center full-width q-mt-md q-px-sm"
         >
-          <q-btn round color="primary" icon="add"></q-btn>
+          <q-btn
+            round
+            color="primary"
+            icon="add"
+            @click="editDialog = { visible: true, event: newEventTemplate() }"
+          ></q-btn>
           <div class="text-caption text-grey-7">
             Showing {{ meta.from }} to {{ meta.to }} of {{ meta.total }} entries
           </div>
@@ -48,36 +52,39 @@
         </div>
       </template>
 
-      <template #item="props">
-        <q-card class="q-ma-sm" style="width: 25vw;">
-          <q-card-section style="height: 200px;">
-            <div class="text-subtitle1">
-              {{ props.row.name }}
-            </div>
-            <div class="row">
-              <div class="text-caption col">
-                {{ props.row.start_date }}
-              </div>
-              <div class="text-caption col">
-                {{ props.row.end_date }}
-              </div>
-            </div>
-          </q-card-section>
-          <q-separator></q-separator>
-          <q-card-actions class="justify-between">
-            <q-btn icon="delete" flat round color="negative"></q-btn>
-            <q-btn icon="edit" flat round color="primary"></q-btn>
-          </q-card-actions>
-        </q-card>
+      <template #body-cell-tools="props">
+        <q-td class="text-right">
+          <q-btn
+            icon="delete"
+            flat
+            round
+            color="negative"
+            @click="deleteEvent(props.row)"
+          ></q-btn>
+          <q-btn
+            icon="edit"
+            flat
+            round
+            color="primary"
+            @click="editDialog = { visible: true, event: props.row }"
+          ></q-btn>
+        </q-td>
       </template>
     </q-table>
+
+    <admin-event
+      v-model="editDialog.visible"
+      :event="editDialog.event"
+    ></admin-event>
   </page-container>
 </template>
 
 <script setup>
-import { Screen } from "quasar";
+import { formatISO9075 } from "date-fns";
+import { Notify, Screen, uid } from "quasar";
 import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
+import AdminEvent from "src/components/admin/AdminEvent.vue";
 import { useStore } from "src/stores/store";
 import { computed, ref, watch } from "vue";
 
@@ -85,7 +92,10 @@ const store = useStore();
 
 const loading = ref(false);
 
-console.log(store.admin.events);
+const editDialog = ref({
+  visible: false,
+  event: null,
+});
 
 const meta = computed(() => {
   const { from, to, total, last_page } = store.admin.events;
@@ -100,13 +110,47 @@ const pagination = ref({
   rowsNumber: store.pubs.total,
 });
 
+const newEventTemplate = () => {
+  const today = formatISO9075(new Date(), { representation: "date" });
+  return {
+    id: `new-${uid()}`,
+    end_date: today,
+    end_time: null,
+    name: "New Event",
+    raw: "",
+    schedule: "",
+    start_date: today,
+    start_time: null,
+    tz: null,
+    url: null,
+  };
+};
+
+const deleteEvent = async (event) => {
+  Notify.create({
+    type: "warning",
+    message: "Are you sure you want to delete this event?",
+    actions: [
+      { label: "No" },
+      {
+        label: "Yes",
+        handler: async () => {
+          const response = await callApi({
+            path: `/admin/events/${event.id}`,
+            method: "delete",
+            useAuth: true,
+          });
+
+          if (response.status == "ok") {
+            window.location.reload();
+          }
+        },
+      },
+    ],
+  });
+};
+
 const columns = [
-  {
-    name: "expand",
-    label: "",
-    field: "",
-    align: "left",
-  },
   {
     name: "name",
     required: true,
@@ -116,11 +160,21 @@ const columns = [
     sortable: true,
   },
   {
-    name: "schedule",
+    name: "start_date",
     align: "left",
-    label: "Schedule",
-    field: "schedule",
+    label: "Start Date",
+    field: "start_date",
     sortable: true,
+  },
+  {
+    name: "end_date",
+    align: "left",
+    label: "End Date",
+    field: "end_date",
+    sortable: true,
+  },
+  {
+    name: "tools",
   },
 ];
 

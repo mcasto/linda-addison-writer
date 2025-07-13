@@ -85,6 +85,19 @@ Route::controller(EventsController::class)
         Route::get('/admin/events', 'index')
             ->middleware('auth:admin')
             ->name('admin-events-index');
+
+        Route::put('/admin/events/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-events-update');
+
+        Route::post('/admin/events/{id}', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-events-store');
+
+
+        Route::delete('/admin/events/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-events-destroy');
     });
 
 Route::controller(SeeHearReadController::class)

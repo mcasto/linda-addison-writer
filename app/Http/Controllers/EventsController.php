@@ -6,6 +6,7 @@ use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EventsController extends Controller
 {
@@ -54,35 +55,27 @@ class EventsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $id)
     {
-        //
-    }
+        $rec = $request->only(['name', 'schedule', 'start_date', 'start_time', 'end_date', 'end_time', 'tz']);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $rec['url'] = $request->url ?? '';
+        $contents = $request->raw ?? '';
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $rec['md_file'] = '';
+
+        $event = Event::create($rec);
+
+        $mdFile = 'events/' . $event->id . '.md';
+
+        $event->md_file = $mdFile;
+        $event->save();
+
+        Storage::disk('local')->put($mdFile, $contents);
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -90,7 +83,21 @@ class EventsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rec = Event::find($id);
+        $rec->name = $request->name ?? '';
+        $rec->schedule = $request->schedule ?? '';
+        $rec->start_date = $request->start_date;
+        $rec->start_time = $request->start_time;
+        $rec->end_date = $request->end_date;
+        $rec->end_time = $request->end_time;
+        $rec->url = $request->url ?? '';
+        $rec->tz = $request->tz;
+        $rec->md_file = 'events/' . $rec->id . '.md';
+        $rec->save();
+
+        Storage::disk('local')->put($rec->md_file, $request->raw ?? '');
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -98,6 +105,9 @@ class EventsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $event = Event::find($id);
+        $event->delete();
+
+        return response()->json(['status' => 'ok']);
     }
 }

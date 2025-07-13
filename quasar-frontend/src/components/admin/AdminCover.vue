@@ -134,7 +134,7 @@
               <q-card class="q-mt-lg" bordered>
                 <q-card-section>
                   <div class="text-h6">Description</div>
-                  <markdown-editor v-model="cover.contents"></markdown-editor>
+                  <markdown-editor v-model="cover.raw"></markdown-editor>
                 </q-card-section>
               </q-card>
 
@@ -189,7 +189,7 @@ const openLink = (url) => {
 const saveCover = async () => {
   Loading.show({ delay: 100 });
 
-  const { id, contents, purchase_url, sort_order, title, replaceImage } = {
+  const { id, raw, purchase_url, sort_order, title, replaceImage } = {
     ...props.cover,
     replaceImage: showUploader.value,
   };
@@ -199,7 +199,7 @@ const saveCover = async () => {
   const response = await callApi({
     path: `/admin/covers/${props.cover.id}`,
     method,
-    payload: { id, contents, purchase_url, sort_order, title, replaceImage },
+    payload: { id, raw, purchase_url, sort_order, title, replaceImage },
     useAuth: true,
   });
 

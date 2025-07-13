@@ -29,7 +29,7 @@ class AwardsController extends Controller
     {
         // create award rec
         $rec = Award::create([
-            'year' => $request->input('year'),
+            'year' => $request->year,
             'md_file' => ''
         ]);
 
@@ -39,7 +39,7 @@ class AwardsController extends Controller
         $rec->save();
 
         // create contents file
-        Storage::disk('local')->put($mdFile, $request->input('raw'));
+        Storage::disk('local')->put($mdFile, $request->raw);
 
         return response()->json(['status' => 'ok']);
     }
@@ -51,11 +51,11 @@ class AwardsController extends Controller
     {
         // update award rec
         $award = Award::find($id);
-        $award->year = $request->input('year');
+        $award->year = $request->year;
         $award->save();
 
         // update contents
-        Storage::disk('local')->put($award->md_file, $request->input('raw'));
+        Storage::disk('local')->put($award->md_file, $request->raw);
 
         return response()->json(['status' => 'ok']);
     }
