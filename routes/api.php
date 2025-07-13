@@ -107,6 +107,23 @@ Route::controller(SeeHearReadController::class)
 
         Route::get('/finds/{typeId}', 'getFindsByType')
             ->name('finds-by-type');
+
+        Route::get('/admin/finds', 'adminIndex')
+            ->middleware('auth:admin')
+            ->name('admin-finds-index');
+
+        Route::put('/admin/finds/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-finds-update');
+
+        Route::post('/admin/finds/{id}', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-finds-store');
+
+
+        Route::delete('/admin/finds/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-finds-destroy');
     });
 
 Route::controller(BioController::class)

@@ -6,6 +6,7 @@ use App\Models\Find;
 use App\Models\FindType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SeeHearReadController extends Controller
 {
@@ -38,36 +39,46 @@ class SeeHearReadController extends Controller
         return response()->json($finds);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function adminIndex(Request $request): JsonResponse
     {
-        //
+        $perPage = $request->input('per_page', 10);
+        $searchTerm = $request->input('search', '');
+
+        $query = Find::with('find_type')
+            ->orderBy('date', 'desc');
+
+        // Add search filter if search term exists
+        if ($searchTerm) {
+            $query->where('title', 'like', '%' . $searchTerm . '%');
+        }
+
+        $finds = $query->paginate($perPage);
+
+        return response()->json($finds);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $id)
     {
-        //
-    }
+        $defaultFindType = FindType::where('name', 'read')->first();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $find = Find::create([
+            'title' => $request->title ?? '',
+            'url' => $request->url ?? '',
+            'date' => $request->date ?? date("Y-m-d"),
+            'find_type_id' => $request->find_type['id'] ?? $defaultFindType,
+            'md_file' => ''
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $mdFile = 'finds/' . $find->id . '.md';
+        $find->md_file = $mdFile;
+        $find->save();
+
+        Storage::disk('local')->put($mdFile, $request->raw ?? '');
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -75,7 +86,17 @@ class SeeHearReadController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $find = Find::find($id);
+        $find->title = $request->title ?? '';
+        $find->url = $request->url ?? '';
+        $find->date = $request->date ?? '';
+        $find->find_type_id = $request->find_type['id'];
+        $find->save();
+
+        $mdFile = $find->md_file;
+        Storage::disk('local')->put($mdFile, $request->raw ?? '');
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -83,6 +104,9 @@ class SeeHearReadController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $find = Find::find($id);
+        $find->delete();
+
+        return response()->json(['status' => 'ok']);
     }
 }

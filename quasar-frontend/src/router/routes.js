@@ -382,6 +382,30 @@ const routes = [
           });
         },
       },
+      {
+        path: "finds",
+        component: () => import("pages/admin/AdminFinds.vue"),
+        name: "admin-finds",
+        meta: {
+          order: 7,
+          icon: "mdi-multimedia",
+          tip: "See / Hear / Read",
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.findTypes = await callApi({
+            path: "/finds",
+            method: "get",
+          });
+
+          store.admin.finds = await callApi({
+            path: "/admin/finds",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
     ],
   },
 

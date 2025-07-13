@@ -13,6 +13,7 @@ export const useStore = defineStore(
         contacts: null,
         covers: null,
         events: null,
+        finds: null,
       }),
       awards: ref(null),
       biblio: ref(null),
