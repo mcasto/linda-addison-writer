@@ -15,6 +15,7 @@
           label="Contents"
           stack-label
           v-model="contents"
+          :rows="rows || 6"
         >
         </q-input>
       </q-tab-panel>
@@ -33,6 +34,7 @@ const md = new MarkdownIt({ html: true, breaks: true });
 const tab = ref("editor");
 
 const contents = defineModel();
+const props = defineProps(["rows"]);
 
 const preview = computed(() => {
   return md.render(contents.value);

@@ -165,7 +165,11 @@ Route::controller(FreebiesController::class)
             ->middleware('auth:admin')
             ->name('admin-freebies-index');
 
-        Route::put('/admin/contact/{id}', 'update')
+        Route::post('/admin/freebies/{id}', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-freebies-store');
+
+        Route::put('/admin/freebies/{id}', 'update')
             ->middleware('auth:admin')
             ->name('admin-freebies-update');
 
