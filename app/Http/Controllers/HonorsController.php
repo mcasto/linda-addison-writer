@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Honor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HonorsController extends Controller
 {
@@ -17,35 +18,24 @@ class HonorsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $id)
     {
-        //
-    }
+        $rec = Honor::create([
+            'year' => $request->year ?? date("Y"),
+            'num' => $request->num ?? 0,
+            'md_file' => ''
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $rec->md_file = 'honors/' . $rec->id . '.md';
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $rec->save();
+
+        // update md file
+        Storage::disk('local')->put($rec->md_file, $request->raw ?? 'No honors detailed.');
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -53,7 +43,16 @@ class HonorsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rec = Honor::find($id);
+        $rec->num = $request->num ?? 0;
+        $rec->year = $request->year ?? date("Y");
+
+        $rec->save();
+
+
+        Storage::disk('local')->put($rec->md_file, $request->raw ?? 'No honors detailed.');
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -61,6 +60,8 @@ class HonorsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $rec = Honor::find($id);
+        $rec->delete();
+        return response()->json(['status' => 'ok']);
     }
 }

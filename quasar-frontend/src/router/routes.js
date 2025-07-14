@@ -426,6 +426,25 @@ const routes = [
           });
         },
       },
+      {
+        path: "honors",
+        component: () => import("pages/admin/AdminHonors.vue"),
+        name: "admin-honors",
+        meta: {
+          order: 9,
+          icon: "mdi-trophy",
+          tip: "Honors",
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.admin.honors = await callApi({
+            path: "/admin/honors",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
     ],
   },
 

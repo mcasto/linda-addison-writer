@@ -246,6 +246,22 @@ Route::controller(HonorsController::class)
     ->group(function () {
         Route::get('/honors', 'index')
             ->name('honors-index');
+
+        Route::get('/admin/honors', 'index')
+            ->middleware('auth:admin')
+            ->name('admin-honors-index');
+
+        Route::put('/admin/honors/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-honors-update');
+
+        Route::post('/admin/honors/{id}', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-honors-update');
+
+        Route::delete('/admin/honors/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-honors-update');
     });
 
 
