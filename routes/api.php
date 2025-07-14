@@ -160,6 +160,18 @@ Route::controller(FreebiesController::class)
     ->group(function () {
         Route::get('/freebies', 'show')
             ->name('freebies-show');
+
+        Route::get('/admin/freebies', 'index')
+            ->middleware('auth:admin')
+            ->name('admin-freebies-index');
+
+        Route::put('/admin/contact/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-freebies-update');
+
+        Route::delete('/admin/freebies/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-freebies-delete');
     });
 
 Route::controller(OnlineResourcesController::class)

@@ -13,7 +13,7 @@ class FreebiesController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Freebie::all());
     }
 
     /**
@@ -25,7 +25,7 @@ class FreebiesController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * retrieve today's freebie
      */
     public function show(): JsonResponse
     {

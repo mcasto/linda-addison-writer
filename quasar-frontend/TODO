@@ -1,4 +1,5 @@
 ☐ Admin section
 
-☐ new find
-☐ delete find
+☐ freebie admin
+
+☐ For events, specify set Event Model so it provides UTC to frontend, then javascript can display the event time in the user's local time. Also display original time & timezone [probably as UTC offset] in the event details

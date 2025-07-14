@@ -1,3 +1,4 @@
+import { get } from "lodash-es";
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 
@@ -401,6 +402,25 @@ const routes = [
 
           store.admin.finds = await callApi({
             path: "/admin/finds",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
+      {
+        path: "freebies",
+        component: () => import("pages/admin/AdminFreebies.vue"),
+        name: "admin-freebies",
+        meta: {
+          order: 8,
+          icon: "mdi-gift-open-outline",
+          tip: "Freebies",
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.admin.freebies = await callApi({
+            path: "/admin/freebies",
             method: "get",
             useAuth: true,
           });

@@ -119,8 +119,6 @@ import { computed, onMounted, ref, watch } from "vue";
 
 const store = useStore();
 
-console.log({ find: store.admin.finds.data[0] });
-
 const filter = ref(null);
 const loading = ref(false);
 
