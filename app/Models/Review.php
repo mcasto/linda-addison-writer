@@ -12,6 +12,15 @@ class Review extends Model
 
     protected $appends = ['contents'];
 
+    protected static function booted()
+    {
+        static::deleting(function ($model) {
+            if ($model->md_file && Storage::disk('local')->exists($model->md_file)) {
+                Storage::disk('local')->delete($model->md_file);
+            }
+        });
+    }
+
     public function getContentsAttribute()
     {
         $markdown = Storage::disk('local')->get($this->md_file);

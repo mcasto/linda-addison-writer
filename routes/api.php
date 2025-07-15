@@ -69,6 +69,22 @@ Route::controller(NewsController::class)
     ->group(function () {
         Route::get('/news', 'index')
             ->name('news-index');
+
+        Route::get('/admin/news', 'index')
+            ->middleware('auth:admin')
+            ->name('admin-news-index');
+
+        Route::put('/admin/news/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-news-update');
+
+        Route::post('/admin/news/{id}', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-news-update');
+
+        Route::delete('/admin/news/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-news-update');
     });
 
 Route::controller(EventsController::class)

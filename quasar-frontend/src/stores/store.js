@@ -15,6 +15,7 @@ export const useStore = defineStore(
         events: null,
         finds: null,
         freebies: null,
+        latest_news: null,
       }),
       awards: ref(null),
       biblio: ref(null),

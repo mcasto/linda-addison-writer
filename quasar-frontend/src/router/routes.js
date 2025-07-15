@@ -445,6 +445,25 @@ const routes = [
           });
         },
       },
+      {
+        path: "news",
+        component: () => import("pages/admin/Adminnews.vue"),
+        name: "admin-news",
+        meta: {
+          order: 10,
+          icon: "fa-solid fa-newspaper",
+          tip: "Latest News",
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.admin.latest_news = await callApi({
+            path: "/admin/news",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
     ],
   },
 

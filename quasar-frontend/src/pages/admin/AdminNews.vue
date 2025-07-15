@@ -5,121 +5,99 @@
         icon="add"
         round
         color="primary"
-        @click="editDialog = { visible: true, honor: newHonorTemplate() }"
+        @click="editDialog = { visible: true, news: newNewsTemplate() }"
       ></q-btn>
     </q-toolbar>
     <div class="row">
       <div
         class="col-4 q-pa-sm"
-        v-for="honor of store.admin.honors"
-        :key="`honor-${honor.id}`"
+        v-for="news of store.admin.latest_news"
+        :key="`news-${news.id}`"
       >
         <q-card class="full-height">
           <q-card-actions class="justify-between">
-            {{ honor.year }}
-            <div class="flex">
+            {{ news.date }}
+            <div>
               <q-btn
                 icon="delete"
                 flat
                 round
                 color="negative"
-                @click="deleteHonor(honor)"
+                @click="deleteNews(news)"
               ></q-btn>
               <q-btn
                 icon="edit"
                 flat
                 round
                 color="primary"
-                @click="editDialog = { visible: true, honor }"
+                @click="editDialog = { visible: true, news }"
               ></q-btn>
             </div>
           </q-card-actions>
           <q-separator></q-separator>
           <q-card-section>
-            <div v-html="honor.contents"></div>
+            <div v-html="news.contents"></div>
           </q-card-section>
         </q-card>
       </div>
     </div>
 
-    <admin-honor
+    <admin-news-dialog
       v-model="editDialog.visible"
-      :honor="editDialog.honor"
-    ></admin-honor>
+      :news="editDialog.news"
+    ></admin-news-dialog>
   </page-container>
 </template>
 
 <script setup>
-import { Loading, Notify, uid } from "quasar";
-import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
-import AdminHonor from "src/components/admin/AdminHonor.vue";
+import AdminNewsDialog from "src/components/admin/AdminNewsDialog.vue";
+
+import { formatISO9075 } from "date-fns";
+import { Notify, uid } from "quasar";
+import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 import { ref } from "vue";
 
 const store = useStore();
 
-const columns = [
-  {
-    label: "Year",
-    name: "year",
-    field: "year",
-    align: "left",
-    sortable: true,
-  },
-  {
-    label: "Contents",
-    name: "contents",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "tools",
-  },
-];
+console.log(store.admin.latest_news);
 
 const editDialog = ref({
   visible: false,
-  honor: null,
+  news: null,
 });
 
-const newHonorTemplate = () => {
+const newNewsTemplate = () => {
   return {
     id: `new-${uid()}`,
-    year: new Date().getFullYear(),
-    num: 1,
-    raw: "",
+    date: formatISO9075(new Date(), { representation: "date" }),
+    raw: "New News Item",
   };
 };
 
-const deleteHonor = async (honor) => {
+const deleteNews = async (news) => {
   Notify.create({
     type: "warning",
-    message: `Are you sure you want to delete ${honor.title} from the Honors?`,
+    message: "Are you sure you want to delete this item?",
     actions: [
-      { label: "No" },
+      {
+        label: "No",
+      },
       {
         label: "Yes",
         handler: async () => {
           const response = await callApi({
-            path: `/admin/honors/${honor.id}`,
+            path: `/admin/news/${news.id}`,
             method: "delete",
             useAuth: true,
           });
 
-          if (response.status == "ok") {
-            window.location.reload();
-            return;
-          }
-
           console.log({ response });
 
-          Loading.hide();
-
-          Notify.create({
-            type: "negative",
-            message: "Unable to delete record.",
-          });
+          if (response.status == "ok") {
+            window.location.reload();
+          }
         },
       },
     ],
