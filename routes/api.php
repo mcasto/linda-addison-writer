@@ -283,8 +283,24 @@ Route::controller(HonorsController::class)
 
 Route::controller(LifePoemsController::class)
     ->group(function () {
-        Route::get('/life-poem', 'index')
-            ->name('life-poem-index');
+        Route::get('/life-poem', 'show')
+            ->name('life-poem-show');
+
+        Route::get('/admin/life-poems', 'index')
+            ->middleware('auth:admin')
+            ->name('admin-life-poems-index');
+
+        Route::put('/admin/life-poems/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-life-poems-update');
+
+        Route::post('/admin/life-poems/{id}', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-life-poems-update');
+
+        Route::delete('/admin/life-poems/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-life-poems-update');
     });
 
 Route::controller(SocialsController::class)

@@ -11,7 +11,7 @@ class LifePoem extends Model
 {
     protected $guarded = [];
 
-    protected $appends = ['contents'];
+    protected $appends = ['contents', 'raw'];
 
     protected static function booted()
     {
@@ -26,6 +26,11 @@ class LifePoem extends Model
     {
         $markdown = Storage::disk('local')->get($this->md_file);
         return Markdown::convert($markdown)->getContent();
+    }
+
+    public function getRawAttribute()
+    {
+        return Storage::disk('local')->get($this->md_file);
     }
 
     public static function today()

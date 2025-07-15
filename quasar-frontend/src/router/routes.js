@@ -447,7 +447,7 @@ const routes = [
       },
       {
         path: "news",
-        component: () => import("pages/admin/Adminnews.vue"),
+        component: () => import("pages/admin/AdminNews.vue"),
         name: "admin-news",
         meta: {
           order: 10,
@@ -462,6 +462,114 @@ const routes = [
             method: "get",
             useAuth: true,
           });
+        },
+      },
+      {
+        path: "life-poems",
+        component: () => import("pages/admin/AdminLifePoems.vue"),
+        name: "admin-life-poems",
+        meta: {
+          order: 11,
+          icon: "mdi-feather",
+          tip: "Life Poems",
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+          store.admin.life_poems = await callApi({
+            path: "/admin/life-poems",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
+      {
+        path: "online-resources",
+        component: () => import("pages/admin/AdminOnlineResources.vue"),
+        name: "admin-online-resources",
+        meta: {
+          order: 12,
+          icon: "mdi-file-cabinet",
+          tip: "Online Resources",
+        },
+        beforeEnter: async () => {
+          // const store = useStore();
+          // store.admin.latest_news = await callApi({
+          //   path: "/admin/life-poems",
+          //   method: "get",
+          //   useAuth: true,
+          // });
+        },
+      },
+      {
+        path: "publications",
+        component: () => import("pages/admin/AdminPublications.vue"),
+        name: "admin-publications",
+        meta: {
+          order: 13,
+          icon: "fa-brands fa-leanpub",
+          tip: "Publications",
+        },
+        beforeEnter: async () => {
+          // const store = useStore();
+          // store.admin.latest_news = await callApi({
+          //   path: "/admin/life-poems",
+          //   method: "get",
+          //   useAuth: true,
+          // });
+        },
+      },
+      {
+        path: "reviews",
+        component: () => import("pages/admin/AdminReviews.vue"),
+        name: "admin-reviews",
+        meta: {
+          order: 14,
+          icon: "star",
+          tip: "Reviews",
+        },
+        beforeEnter: async () => {
+          // const store = useStore();
+          // store.admin.latest_news = await callApi({
+          //   path: "/admin/life-poems",
+          //   method: "get",
+          //   useAuth: true,
+          // });
+        },
+      },
+      {
+        path: "socials",
+        component: () => import("pages/admin/AdminSocials.vue"),
+        name: "admin-socials",
+        meta: {
+          order: 15,
+          icon: "fa-solid fa-comment",
+          tip: "Socials",
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+          // store.admin.life_poems = await callApi({
+          //   path: "/admin/life-poems",
+          //   method: "get",
+          //   useAuth: true,
+          // });
+        },
+      },
+      {
+        path: "users",
+        component: () => import("pages/admin/AdminUsers.vue"),
+        name: "admin-users",
+        meta: {
+          order: 16,
+          icon: "mdi-account-cog-outline",
+          tip: "Users",
+        },
+        beforeEnter: async () => {
+          // const store = useStore();
+          // store.admin.latest_news = await callApi({
+          //   path: "/admin/life-poems",
+          //   method: "get",
+          //   useAuth: true,
+          // });
         },
       },
     ],
