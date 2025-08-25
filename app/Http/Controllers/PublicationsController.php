@@ -6,6 +6,7 @@ use App\Models\Publication;
 use App\Models\PublicationType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PublicationsController extends Controller
 {
@@ -15,7 +16,7 @@ class PublicationsController extends Controller
     public function index(): JsonResponse
     {
         // First get all publication types without publications
-        $publicationTypes = PublicationType::orderBy('year', 'desc')
+        $publicationTypes = PublicationType::orderBy('name')
             ->get();
 
         return response()->json($publicationTypes);
@@ -23,10 +24,23 @@ class PublicationsController extends Controller
 
     public function adminIndex(): JsonResponse
     {
-        $pubs = Publication::with('publication_type')
+        $pubTypes = PublicationType::orderBy('name')
             ->get();
 
-        return response()->json($pubs);
+        $pubs = Publication::with('publication_type')
+            ->get()
+            ->map(function ($pub) {
+                return [
+                    'id' => $pub->id,
+                    'title' => $pub->title,
+                    'year' => $pub->year,
+                    'url' => $pub->url,
+                    'publication_type' => $pub->publication_type,
+                    'contents' => $pub->contents
+                ];
+            });
+
+        return response()->json(['pubTypes' => $pubTypes, 'publications' => $pubs]);
     }
 
     public function getPublicationsByType($typeId, Request $request): JsonResponse
@@ -42,17 +56,19 @@ class PublicationsController extends Controller
             $query->where('title', 'like', '%' . $searchTerm . '%');
         }
 
-        $publications = $query->paginate($perPage);
+        $publications = $query->paginate($perPage)
+            ->through(function ($pub) {
+                return [
+                    'id' => $pub->id,
+                    'title' => $pub->title,
+                    'year' => $pub->year,
+                    'url' => $pub->url,
+                    'publication_type' => $pub->publication_type,
+                    'contents' => $pub->contents
+                ];
+            });
 
         return response()->json($publications);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -60,23 +76,27 @@ class PublicationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $valid = $request->validate([
+            'year' => 'required|integer',
+            'title' => 'required|string|max:255',
+            'publication_type_id' => 'required|exists:publication_types,id',
+            'url' => 'required|string|max:255',
+            'md' => 'nullable|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $contents = $request->input('md');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $rec = $valid;
+        unset($rec['md']);
+        $rec['md_file'] = "";
+        $pub = Publication::create($rec);
+
+        Storage::disk('local')->put("publications/" . $pub->id . ".md", $contents);
+
+        $pub->md_file = "publications/" . $pub->id . ".md";
+        $pub->save();
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -84,7 +104,25 @@ class PublicationsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $valid = $request->validate([
+            'year' => 'required|integer',
+            'title' => 'required|string|max:255',
+            'publication_type_id' => 'required|exists:publication_types,id',
+            'url' => 'required|string|max:255',
+            'md' => 'nullable|string',
+        ]);
+
+        $contents = $request->input('md');
+        Storage::disk('local')->put("publications/" . $id . ".md", $contents);
+
+        $rec = $valid;
+        unset($rec['md']);
+        $rec['md_file'] = "publications/$id.md";
+
+        $pub = Publication::findOrFail($id);
+        $pub->update($rec);
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -92,6 +130,9 @@ class PublicationsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Publication::findOrFail($id)
+            ->delete();
+
+        return response()->json(['status' => 'ok']);
     }
 }

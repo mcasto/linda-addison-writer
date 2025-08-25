@@ -517,11 +517,14 @@ const routes = [
         },
         beforeEnter: async () => {
           const store = useStore();
-          store.admin.publications = await callApi({
+          const response = await callApi({
             path: "/admin/publications",
             method: "get",
             useAuth: true,
           });
+
+          store.admin.pubTypes = response.pubTypes;
+          store.admin.publications = response.publications;
         },
       },
       {

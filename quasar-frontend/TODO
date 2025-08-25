@@ -2,8 +2,9 @@ Admin section:
     ✔ online resources admin @done(25-08-24 07:52)
     publications admin:
         ✔ add search/sort functionality @done(25-08-24 22:58)
-        ☐ handle edit/delete functionality
-        ☐ add "new" functionality
+        ✔ handle edit/delete functionality @done(25-08-25 07:55)
+        ✔ add "new" functionality @done(25-08-25 07:55)
+        ☐ add ability to create a new publication type in PubForm
     ☐ reviews admin
     ☐ socials admin
     ☐ users admin

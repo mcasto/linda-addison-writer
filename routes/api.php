@@ -67,6 +67,18 @@ Route::controller(PublicationsController::class)
         Route::get('/admin/publications', 'adminIndex')
             ->middleware('auth:admin')
             ->name('admin-publications-index');
+
+        Route::post('/admin/publications', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-publications-store');
+
+        Route::put('/admin/publications/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-publications-update');
+
+        Route::delete('/admin/publications/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-publications-destroy');
     });
 
 Route::controller(NewsController::class)
@@ -339,8 +351,8 @@ Route::get('/download/press-kit', function () {
     $storagePath = 'press-kit.zip';
     $downloadName = "author-press-kit-" . now()->format('Y-m-d') . ".zip";
 
-    return Storage::disk('local')
-        ->download($storagePath, $downloadName);
+    $filePath = Storage::disk('local')->path($storagePath);
+    return response()->download($filePath, $downloadName);
 });
 
 Route::controller(AuthController::class)

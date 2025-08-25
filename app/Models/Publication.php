@@ -11,8 +11,6 @@ class Publication extends Model
 {
     protected $guarded = [];
 
-    protected $appends = ['contents'];
-
     protected static function booted()
     {
         static::deleting(function ($model) {
