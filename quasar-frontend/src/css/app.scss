@@ -1,1 +1,8 @@
 // app global css in SCSS form
+.zebra-table tbody tr:nth-child(odd) {
+    background-color: #e2e2e2;
+}
+
+.zebra-table tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}

@@ -8,20 +8,26 @@
         </q-toolbar>
       </q-header>
 
-      <q-drawer persistent :model-value="true" mini bordered>
-        <q-tabs vertical>
-          <template v-for="tab of tabs" :key="`tab-${tab.name}`">
-            <q-route-tab
-              :icon="tab.meta.icon"
-              :name="tab.name"
-              :to="{ name: tab.name }"
-            >
-              <q-tooltip anchor="center right" self="center left">
+      <q-drawer persistent :model-value="true" bordered>
+        <q-list separator>
+          <q-item
+            v-for="tab of tabs"
+            :key="`tab-${tab.name}`"
+            clickable
+            active-class="text-black bg-light-blue-2"
+            :active="isActive(tab)"
+            :to="{ name: tab.name }"
+          >
+            <q-item-section side>
+              <q-icon :name="tab.meta.icon" color="black" size="xs"></q-icon>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>
                 {{ tab.meta.tip }}
-              </q-tooltip>
-            </q-route-tab>
-          </template>
-        </q-tabs>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-drawer>
 
       <q-page>
@@ -32,6 +38,7 @@
 </template>
 
 <script setup>
+import { random } from "lodash-es";
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 import { computed, ref } from "vue";
@@ -61,5 +68,9 @@ const logout = async () => {
 
   store.token = null;
   store.router.push("/admin/login");
+};
+
+const isActive = (tab) => {
+  return store.router.currentRoute.value.name == tab.name;
 };
 </script>

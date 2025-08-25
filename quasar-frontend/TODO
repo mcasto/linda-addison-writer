@@ -1,5 +1,11 @@
-☐ Admin section
-
-☐ freebie admin
+Admin section:
+    ✔ online resources admin @done(25-08-24 07:52)
+    publications admin:
+        ✔ add search/sort functionality @done(25-08-24 22:58)
+        ☐ handle edit/delete functionality
+        ☐ add "new" functionality
+    ☐ reviews admin
+    ☐ socials admin
+    ☐ users admin
 
 ☐ For events, specify set Event Model so it provides UTC to frontend, then javascript can display the event time in the user's local time. Also display original time & timezone [probably as UTC offset] in the event details

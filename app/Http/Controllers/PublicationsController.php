@@ -15,9 +15,18 @@ class PublicationsController extends Controller
     public function index(): JsonResponse
     {
         // First get all publication types without publications
-        $publicationTypes = PublicationType::all();
+        $publicationTypes = PublicationType::orderBy('year', 'desc')
+            ->get();
 
         return response()->json($publicationTypes);
+    }
+
+    public function adminIndex(): JsonResponse
+    {
+        $pubs = Publication::with('publication_type')
+            ->get();
+
+        return response()->json($pubs);
     }
 
     public function getPublicationsByType($typeId, Request $request): JsonResponse

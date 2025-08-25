@@ -63,6 +63,10 @@ Route::controller(PublicationsController::class)
 
         Route::get('/publications/{typeId}', 'getPublicationsByType')
             ->name('publications-by-type');
+
+        Route::get('/admin/publications', 'adminIndex')
+            ->middleware('auth:admin')
+            ->name('admin-publications-index');
     });
 
 Route::controller(NewsController::class)
@@ -201,6 +205,22 @@ Route::controller(OnlineResourcesController::class)
 
         Route::get('/online-resources/{typeId}', 'getResourceLinksByType')
             ->name('online-resources-by-type');
+
+        Route::get('/admin/online-resources', 'adminIndex')
+            ->middleware('auth:admin')
+            ->name('admin-online-resources-index');
+
+        Route::post('/admin/online-resources', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-online-resources-store');
+
+        Route::put('/admin/online-resources', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-online-resources-update');
+
+        Route::delete('/admin/online-resources', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-online-resources-destroy');
     });
 
 Route::controller(ReviewsQuotesController::class)

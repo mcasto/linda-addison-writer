@@ -9,11 +9,7 @@
           background-image: url(/images/background-xl.webp);
           background-position: top top;
           background-repeat: no-repeat;
-        "
-        :style="
-          Screen.width < 1370
-            ? 'background-size:contain'
-            : 'background-size:cover'
+          background-size: contain;
         "
       >
         <header-contents></header-contents>

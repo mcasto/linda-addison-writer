@@ -492,12 +492,18 @@ const routes = [
           tip: "Online Resources",
         },
         beforeEnter: async () => {
-          // const store = useStore();
-          // store.admin.latest_news = await callApi({
-          //   path: "/admin/life-poems",
-          //   method: "get",
-          //   useAuth: true,
-          // });
+          const store = useStore();
+
+          store.resourceTypes = await callApi({
+            path: "/online-resources",
+            method: "get",
+          });
+
+          store.admin.online_resources = await callApi({
+            path: "/admin/online-resources",
+            method: "get",
+            useAuth: true,
+          });
         },
       },
       {
@@ -510,12 +516,12 @@ const routes = [
           tip: "Publications",
         },
         beforeEnter: async () => {
-          // const store = useStore();
-          // store.admin.latest_news = await callApi({
-          //   path: "/admin/life-poems",
-          //   method: "get",
-          //   useAuth: true,
-          // });
+          const store = useStore();
+          store.admin.publications = await callApi({
+            path: "/admin/publications",
+            method: "get",
+            useAuth: true,
+          });
         },
       },
       {

@@ -12,7 +12,7 @@
     </div>
 
     <life-poem
-      v-if="Screen.gt.xs"
+      v-if="Screen.gt.sm"
       style="width: 100%; max-width: 600px; margin: 0 auto;"
     ></life-poem>
   </div>
@@ -61,8 +61,6 @@ const headerHeight = computed(() => {
       height: "42vh",
     },
   ];
-
-  console.log({ height: Screen.height });
 
   return heights.find(
     ({ min, max }) => min <= Screen.width && Screen.width <= max

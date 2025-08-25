@@ -38,6 +38,23 @@ class OnlineResourcesController extends Controller
         return response()->json($publications);
     }
 
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $perPage = $request->input('per_page', 10);
+        $searchTerm = $request->input('search', '');
+
+        $query = OnlineResourceLink::with('online_resource');
+
+        // Add search filter if search term exists
+        if ($searchTerm) {
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        $finds = $query->paginate($perPage);
+
+        return response()->json($finds);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
