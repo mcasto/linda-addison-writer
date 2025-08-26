@@ -71,7 +71,7 @@
       "@php artisan config:cache",
       "@php artisan route:cache",
       "@php artisan view:cache",
-      "chmod 0744 synlink.sh",
+      "chmod 0744 symlink.sh",
       "./symlink.sh"
     ]
   },

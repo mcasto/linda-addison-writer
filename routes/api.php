@@ -22,11 +22,6 @@ use App\Http\Controllers\SocialsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::get('/login', function () {
-    // this is just to catch Sanctum's autoredirect to [login]
-    return response()->json('Invalid token', 401);
-})->name('login');
-
 Route::get('/site-data', [SiteData::class, 'pull'])
     ->name('site-data');
 
@@ -49,7 +44,7 @@ Route::controller(HomeController::class)
 
         Route::delete('/admin/covers/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-cover-update');
+            ->name('admin-cover-destroy');
 
         Route::post('/admin/covers/upload/{id}', 'uploadImage')
             ->middleware('auth:admin')
@@ -96,11 +91,11 @@ Route::controller(NewsController::class)
 
         Route::post('/admin/news/{id}', 'store')
             ->middleware('auth:admin')
-            ->name('admin-news-update');
+            ->name('admin-news-store');
 
         Route::delete('/admin/news/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-news-update');
+            ->name('admin-news-destroy');
     });
 
 Route::controller(EventsController::class)
@@ -179,7 +174,7 @@ Route::controller(ContactController::class)
 
         Route::delete('/admin/contact/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-contact-delete');
+            ->name('admin-contact-destroy');
     });
 
 Route::controller(LessonsBlessingsController::class)
@@ -207,7 +202,7 @@ Route::controller(FreebiesController::class)
 
         Route::delete('/admin/freebies/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-freebies-delete');
+            ->name('admin-freebies-destroy');
     });
 
 Route::controller(OnlineResourcesController::class)
@@ -263,7 +258,7 @@ Route::controller(BiblioController::class)
 
         Route::delete('/admin/biblio/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-biblio-delete');
+            ->name('admin-biblio-destroy');
     });
 
 
@@ -282,11 +277,11 @@ Route::controller(AwardsController::class)
 
         Route::post('/admin/awards', 'store')
             ->middleware('auth:admin')
-            ->name('admin-awards-update');
+            ->name('admin-awards-store');
 
         Route::delete('/admin/awards/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-awards-update');
+            ->name('admin-awards-destroy');
     });
 
 
@@ -305,11 +300,11 @@ Route::controller(HonorsController::class)
 
         Route::post('/admin/honors/{id}', 'store')
             ->middleware('auth:admin')
-            ->name('admin-honors-update');
+            ->name('admin-honors-store');
 
         Route::delete('/admin/honors/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-honors-update');
+            ->name('admin-honors-destroy');
     });
 
 
@@ -328,11 +323,11 @@ Route::controller(LifePoemsController::class)
 
         Route::post('/admin/life-poems/{id}', 'store')
             ->middleware('auth:admin')
-            ->name('admin-life-poems-update');
+            ->name('admin-life-poems-store');
 
         Route::delete('/admin/life-poems/{id}', 'destroy')
             ->middleware('auth:admin')
-            ->name('admin-life-poems-update');
+            ->name('admin-life-poems-destroy');
     });
 
 Route::controller(SocialsController::class)
