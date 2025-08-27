@@ -118,7 +118,7 @@ const createType = async (type) => {
     model.value.form = response.pub;
   }
 
-  console.log({ response });
+  newType.value = null;
 };
 
 const submitForm = async () => {

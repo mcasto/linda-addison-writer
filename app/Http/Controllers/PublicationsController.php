@@ -43,18 +43,38 @@ class PublicationsController extends Controller
         return response()->json(['pubTypes' => $pubTypes, 'publications' => $pubs]);
     }
 
+    public function adminUpdatetype(string $id, Request $request)
+    {
+        $pubType = PublicationType::findOrFail($id);
+        $pubType->name = $request->name;
+        $pubType->save();
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    public function adminDestroyType(string $id)
+    {
+        $pub = PublicationType::findOrFail($id);
+        $pub->delete();
+
+        return response()->json(['status' => 'ok']);
+    }
+
     public function adminCreateType(Request $request)
     {
-        $pub = Publication::find($request->pub['id']);
         $pubType = PublicationType::create(['name' => $request->type]);
-        $pub->publication_type_id = $pubType->id;
-        $pub->save();
 
-        $pub->publication_type = $pubType;
-        $pub->contents = $request->pub['contents'];
+        if (isset($request->pub)) {
+            $pub = Publication::find($request->pub['id']);
+            $pub->publication_type_id = $pubType->id;
+            $pub->save();
+
+            $pub->publication_type = $pubType;
+            $pub->contents = $request->pub['contents'];
+        }
 
         return response()->json([
-            'pub' => $pub,
+            'pub' => $pub ?? null,
             'pubTypes' => PublicationType::orderBy('name')->get()
         ]);
     }

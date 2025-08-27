@@ -38,7 +38,6 @@
 </template>
 
 <script setup>
-import { random } from "lodash-es";
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 import { computed, ref } from "vue";

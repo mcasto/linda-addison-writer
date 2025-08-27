@@ -23,7 +23,7 @@
             </q-input>
           </div>
 
-          <div class="col-3">
+          <div class="col-3 q-px-md">
             <q-select
               v-model="selectedType"
               :options="store.admin.pubTypes"
@@ -32,7 +32,20 @@
               dense
               option-label="name"
               clearable
-            />
+            >
+              <template #before>
+                <q-btn
+                  icon="mdi-cogs"
+                  flat
+                  round
+                  :to="{ name: 'admin-manage-pub-types' }"
+                >
+                  <q-tooltip>
+                    Manage Publication Types
+                  </q-tooltip>
+                </q-btn>
+              </template>
+            </q-select>
           </div>
 
           <div class="col-3">

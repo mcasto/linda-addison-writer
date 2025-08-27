@@ -78,6 +78,14 @@ Route::controller(PublicationsController::class)
         Route::post('/admin/publications/create-type', 'adminCreateType')
             ->middleware('auth:admin')
             ->name('admin-publications-create-type');
+
+        Route::put('/admin/publications/update-type/{id}', 'adminUpdateType')
+            ->middleware('auth:admin')
+            ->name('admin-publications-update-type');
+
+        Route::delete('/admin/publications/destroy-type/{id}', 'adminDestroyType')
+            ->middleware('auth:admin')
+            ->name('admin-publications-destroy-type');
     });
 
 Route::controller(NewsController::class)

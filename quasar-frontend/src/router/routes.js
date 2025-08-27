@@ -528,6 +528,23 @@ const routes = [
         },
       },
       {
+        path: "manage-pub-types",
+        component: () => import("pages/admin/AdminMangePubTypes.vue"),
+        beforeEnter: async () => {
+          const store = useStore();
+          store.pubTypes = await callApi({
+            path: "/publications",
+            method: "get",
+          });
+        },
+        name: "admin-manage-pub-types",
+        meta: {
+          order: 13.5,
+          icon: "mdi-cogs",
+          tip: "Manage Publication Types",
+        },
+      },
+      {
         path: "reviews",
         component: () => import("pages/admin/AdminReviews.vue"),
         name: "admin-reviews",
