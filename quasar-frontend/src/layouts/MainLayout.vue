@@ -31,9 +31,9 @@
           </div>
 
           <div>
-            <router-link to="admin" class="text-white" target="_blank"
-              >Admin</router-link
-            >
+            <router-link to="admin" class="text-white" target="_blank">
+              <q-icon name="settings"></q-icon>
+            </router-link>
           </div>
 
           <div>
