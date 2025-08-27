@@ -1,1 +1,7 @@
-☐ build controllers
+☐ Create a model & migration for broken links
+    - table
+    - id
+    - url
+☐ LinksCheckCommand writes to that table
+☐ Build an admin interface to view and manage broken links
+☐ User can confirm as broken, set as unbroken, or fix with a new URL

@@ -36,4 +36,9 @@ class Cover extends Model
     {
         return asset('storage/' . $this->image);
     }
+
+    public function brokenLink() // Singular method name
+    {
+        return $this->morphOne(BrokenLink::class, 'linkable', 'table_name', 'table_id');
+    }
 }

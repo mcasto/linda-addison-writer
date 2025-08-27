@@ -120,6 +120,11 @@ class PublicationsController extends Controller
         $rec['md_file'] = "publications/$id.md";
 
         $pub = Publication::findOrFail($id);
+        if ($pub->url != $request->url) {
+            if (!is_null($pub->brokenLink)) {
+                $pub->brokenLink->delete();
+            }
+        }
         $pub->update($rec);
 
         return response()->json(['status' => 'ok']);

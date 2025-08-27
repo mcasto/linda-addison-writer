@@ -87,11 +87,18 @@ class SeeHearReadController extends Controller
     public function update(Request $request, string $id)
     {
         $find = Find::find($id);
+        $url = $find->url;
         $find->title = $request->title ?? '';
         $find->url = $request->url ?? '';
         $find->date = $request->date ?? '';
         $find->find_type_id = $request->find_type['id'];
         $find->save();
+
+        if ($url != $request->url) {
+            if (!is_null($find->brokenLink)) {
+                $find->brokenLink->delete();
+            }
+        }
 
         $mdFile = $find->md_file;
         Storage::disk('local')->put($mdFile, $request->raw ?? '');

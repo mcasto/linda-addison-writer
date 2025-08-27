@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Exception;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,7 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // 
+        Relation::morphMap([
+            'events' => \App\Models\Event::class,
+            'covers' => \App\Models\Cover::class,
+            'finds' => \App\Models\Find::class,
+            'publications' => \App\Models\Publication::class,
+            'online_resource_links' => \App\Models\OnlineResourceLink::class,
+            'socials' => \App\Models\Social::class,
+        ]);
     }
 
     public static function getSeedData($table)

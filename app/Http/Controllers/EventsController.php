@@ -84,6 +84,7 @@ class EventsController extends Controller
     public function update(Request $request, string $id)
     {
         $rec = Event::find($id);
+        $url = $rec->url;
         $rec->name = $request->name ?? '';
         $rec->schedule = $request->schedule ?? '';
         $rec->start_date = $request->start_date;
@@ -94,6 +95,12 @@ class EventsController extends Controller
         $rec->tz = $request->tz;
         $rec->md_file = 'events/' . $rec->id . '.md';
         $rec->save();
+
+        if ($url != $request->url) {
+            if (!is_null($rec->brokenLink)) {
+                $rec->brokenLink->delete();
+            }
+        }
 
         Storage::disk('local')->put($rec->md_file, $request->raw ?? '');
 

@@ -101,10 +101,19 @@ class HomeController extends Controller
 
         // update db rec
         $cover = Cover::find($id);
+        $url = $cover->purchase_url;
         $cover->title = $request->title;
         $cover->purchase_url = $request->purchase_url;
         $cover->sort_order = $request->sort_order;
         $cover->save();
+
+        if ($url != $request->purchase_url) {
+            // look for broken link
+            if (!is_null($cover->brokenLink)) {
+                // if found, delete because we assume they've changed the url to a valid one
+                $cover->brokenLink->delete();
+            }
+        }
 
         // update md file
         $mdFile = $cover->md_file;

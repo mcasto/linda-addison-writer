@@ -31,4 +31,9 @@ class Event extends Model
     {
         return Storage::disk('local')->get($this->md_file);
     }
+
+    public function brokenLink() // Singular method name
+    {
+        return $this->morphOne(BrokenLink::class, 'linkable', 'table_name', 'table_id');
+    }
 }
