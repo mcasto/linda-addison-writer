@@ -74,6 +74,10 @@ Route::controller(PublicationsController::class)
         Route::delete('/admin/publications/{id}', 'destroy')
             ->middleware('auth:admin')
             ->name('admin-publications-destroy');
+
+        Route::post('/admin/publications/create-type', 'adminCreateType')
+            ->middleware('auth:admin')
+            ->name('admin-publications-create-type');
     });
 
 Route::controller(NewsController::class)

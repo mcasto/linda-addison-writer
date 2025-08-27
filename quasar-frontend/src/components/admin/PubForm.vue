@@ -29,7 +29,30 @@
             outlined
             class="q-mb-md"
             option-label="name"
-          />
+          >
+            <template #after>
+              <q-btn label="New Type" color="primary">
+                <q-popup-edit
+                  v-model="newType"
+                  auto-save
+                  title="New Type"
+                  buttons
+                  @save="createType"
+                  v-slot="scope"
+                >
+                  <q-input
+                    type="text"
+                    v-model="scope.value"
+                    label="New Type"
+                    dense
+                    outlined
+                    autofocus
+                    :validate="(v) => trim(v) != '' && v !== null"
+                  ></q-input>
+                </q-popup-edit>
+              </q-btn>
+            </template>
+          </q-select>
 
           <q-input
             v-model="model.form.url"
@@ -61,11 +84,42 @@
 import { useStore } from "src/stores/store";
 import MarkdownEditor from "../MarkdownEditor.vue";
 import callApi from "src/assets/call-api";
-import { Notify } from "quasar";
+import { Notify, uid } from "quasar";
+import { ref } from "vue";
+import { trim } from "lodash-es";
+import { sortBy } from "lodash-es";
 
 const model = defineModel();
 
 const store = useStore();
+
+const newType = ref(null);
+
+const createType = async (type) => {
+  if (!model.value.form.id) {
+    const newTypeObj = { name: type, id: uid() };
+    store.pubTypes.push(newTypeObj);
+    store.pubTypes = sortBy(store.pubTypes, "name");
+
+    model.value.form.publication_type = newTypeObj;
+
+    return;
+  }
+
+  const response = await callApi({
+    path: "/admin/publications/create-type",
+    method: "post",
+    payload: { pub: model.value.form, type },
+    useAuth: true,
+  });
+
+  if (response) {
+    store.pubTypes = response.pubTypes;
+    model.value.form = response.pub;
+  }
+
+  console.log({ response });
+};
 
 const submitForm = async () => {
   // format for submission
@@ -73,6 +127,7 @@ const submitForm = async () => {
     year: model.value.form.year,
     title: model.value.form.title,
     publication_type_id: model.value.form.publication_type.id,
+    publication_type: model.value.form.publication_type,
     url: model.value.form.url,
     md: model.value.form.contents,
   };

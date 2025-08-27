@@ -43,6 +43,22 @@ class PublicationsController extends Controller
         return response()->json(['pubTypes' => $pubTypes, 'publications' => $pubs]);
     }
 
+    public function adminCreateType(Request $request)
+    {
+        $pub = Publication::find($request->pub['id']);
+        $pubType = PublicationType::create(['name' => $request->type]);
+        $pub->publication_type_id = $pubType->id;
+        $pub->save();
+
+        $pub->publication_type = $pubType;
+        $pub->contents = $request->pub['contents'];
+
+        return response()->json([
+            'pub' => $pub,
+            'pubTypes' => PublicationType::orderBy('name')->get()
+        ]);
+    }
+
     public function getPublicationsByType($typeId, Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 10);
@@ -76,6 +92,21 @@ class PublicationsController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->publication_type) {
+            $exists = PublicationType::where('name', $request->publication_type['name'])
+                ->first();
+
+            if ($exists) {
+                $request->merge(['publication_type_id' => $exists->id]);
+            } else {
+                $newPubType = PublicationType::create([
+                    'name' => $request->publication_type['name']
+                ]);
+
+                $request->merge(['publication_type_id' => $newPubType->id]);
+            }
+        }
+
         $valid = $request->validate([
             'year' => 'required|integer',
             'title' => 'required|string|max:255',
