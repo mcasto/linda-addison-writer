@@ -246,6 +246,14 @@ Route::controller(ReviewsQuotesController::class)
     ->group(function () {
         Route::get('/reviews-quotes', 'index')
             ->name('reviews-quotes-index');
+
+        Route::put('/admin/reviews-quotes', 'update')
+            ->middleware('auth:admin')
+            ->name('reviews-quotes-admin-update');
+
+        Route::post('/admin/reviews-quotes', 'store')
+            ->middleware('auth:admin')
+            ->name('review-quotes-admin-store');
     });
 
 Route::controller(BiblioController::class)

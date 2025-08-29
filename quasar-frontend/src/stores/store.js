@@ -20,6 +20,7 @@ export const useStore = defineStore(
         online_resources: null,
         publications: null,
         pubTypes: null,
+        reviews: null,
       }),
       awards: ref(null),
       biblio: ref(null),

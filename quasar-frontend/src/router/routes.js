@@ -547,19 +547,18 @@ const routes = [
       {
         path: "reviews",
         component: () => import("pages/admin/AdminReviews.vue"),
+        beforeEnter: async () => {
+          const store = useStore();
+          store.admin.reviews = await callApi({
+            path: "/reviews-quotes",
+            method: "get",
+          });
+        },
         name: "admin-reviews",
         meta: {
           order: 14,
           icon: "star",
           tip: "Reviews",
-        },
-        beforeEnter: async () => {
-          // const store = useStore();
-          // store.admin.latest_news = await callApi({
-          //   path: "/admin/life-poems",
-          //   method: "get",
-          //   useAuth: true,
-          // });
         },
       },
       {
