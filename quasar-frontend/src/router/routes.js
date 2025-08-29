@@ -299,6 +299,12 @@ const routes = [
         meta: { order: 1, icon: "mdi-view-dashboard", tip: "Dashboard" },
       },
       {
+        path: "import-csv",
+        component: () => import("pages/admin/ImportCsv.vue"),
+        name: "admin-import-csv",
+        meta: { order: 1.5, icon: "fa-solid fa-file-csv", tip: "Import CSV" },
+      },
+      {
         path: "awards",
         component: () => import("pages/admin/AdminAwards.vue"),
         name: "admin-awards",
@@ -579,11 +585,28 @@ const routes = [
         },
       },
       {
+        path: "broken-links",
+        component: () => import("pages/admin/BrokenLinks.vue"),
+        beforeEnter: async () => {
+          const store = useStore();
+          // store.admin.socials = await callApi({
+          //   path: "/socials",
+          //   method: "get",
+          // });
+        },
+        name: "admin-broken-links",
+        meta: {
+          order: 16,
+          icon: "mdi-link-off",
+          tip: "Broken Links",
+        },
+      },
+      {
         path: "users",
         component: () => import("pages/admin/AdminUsers.vue"),
         name: "admin-users",
         meta: {
-          order: 16,
+          order: 17,
           icon: "mdi-account-cog-outline",
           tip: "Users",
         },

@@ -10,7 +10,7 @@
       </q-header>
 
       <q-drawer persistent :model-value="true" bordered>
-        <q-list separator>
+        <q-list separator class="q-mb-xl">
           <q-item
             v-for="tab of tabs"
             :key="`tab-${tab.name}`"
