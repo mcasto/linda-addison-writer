@@ -17,7 +17,14 @@ export default defineConfig((/* ctx */) => {
     css: ["app.scss"],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
-    extras: ["roboto-font", "material-icons", "fontawesome-v6", "mdi-v7"],
+    extras: [
+      "roboto-font",
+      "eva-icons",
+      "material-icons",
+      "themify",
+      "fontawesome-v6",
+      "mdi-v7",
+    ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
@@ -52,7 +59,6 @@ export default defineConfig((/* ctx */) => {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
-      port: "52471",
       open: {
         app: {
           name: "google chrome",

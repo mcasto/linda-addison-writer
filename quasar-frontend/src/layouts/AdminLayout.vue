@@ -4,6 +4,7 @@
       <q-header class="bg-accent">
         <q-toolbar>
           <q-toolbar-title> Admin&mdash;{{ pageName }} </q-toolbar-title>
+          <q-btn icon="home" flat round to="/"></q-btn>
           <q-btn icon="logout" flat round @click="logout"></q-btn>
         </q-toolbar>
       </q-header>

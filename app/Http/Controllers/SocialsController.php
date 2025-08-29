@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BrokenLink;
 use App\Models\Social;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,35 +18,26 @@ class SocialsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        // mc-todo: add validation
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        // get sortOrder
+        $sortOrder = Social::max('sort_order');
+        $sortOrder++;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        // create social rec
+        $social = Social::create([
+            'icon' => $request->icon,
+            'url' => $request->url,
+            'sort_order' => $sortOrder
+        ]);
+
+        // return social rec
+
+        return response()->json(['social' => $social]);
     }
 
     /**
@@ -53,7 +45,27 @@ class SocialsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // mc-todo: when updating, check if url differs from request->url. if it does, check for related brokenLink & delete it if it exists
+        $valid = $request->validate([
+            'icon' => 'required|string|max:255',
+            'url' => 'required|string|max:255',
+            'sort_order' => 'required|integer'
+        ]);
+
+        // when updating, check if url differs from request->url. if it does, check for related brokenLink & delete it if it exists
+        $social = Social::findOrFail($id);
+        if ($social->url != $request->url) {
+            $broken = BrokenLink::where('table_name', 'socials')
+                ->where('table_id', $social->id)
+                ->first();
+
+            if ($broken) {
+                $broken->delete();
+            }
+        }
+
+        $social->update($valid);
+
+        return response()->json(['existing' => $social]);
     }
 
     /**
@@ -61,6 +73,7 @@ class SocialsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $social = Social::find($id)->delete();
+        return response()->json(['destroy' => $id, 'item' => $social]);
     }
 }

@@ -21,6 +21,7 @@ export const useStore = defineStore(
         publications: null,
         pubTypes: null,
         reviews: null,
+        socials: null,
       }),
       awards: ref(null),
       biblio: ref(null),

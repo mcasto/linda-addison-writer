@@ -354,6 +354,18 @@ Route::controller(SocialsController::class)
     ->group(function () {
         Route::get('/socials', 'index')
             ->name('socials-index');
+
+        Route::post('/admin/socials', 'store')
+            ->middleware('auth:admin')
+            ->name('admin-socials-store');
+
+        Route::put('/admin/socials/{id}', 'update')
+            ->middleware('auth:admin')
+            ->name('admin-socials-update');
+
+        Route::delete('/admin/socials/{id}', 'destroy')
+            ->middleware('auth:admin')
+            ->name('admin-socials-destroy');
     });
 
 Route::controller(DesignCreditsController::class)

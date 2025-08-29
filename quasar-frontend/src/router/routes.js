@@ -564,19 +564,18 @@ const routes = [
       {
         path: "socials",
         component: () => import("pages/admin/AdminSocials.vue"),
+        beforeEnter: async () => {
+          const store = useStore();
+          store.admin.socials = await callApi({
+            path: "/socials",
+            method: "get",
+          });
+        },
         name: "admin-socials",
         meta: {
           order: 15,
           icon: "fa-solid fa-comment",
           tip: "Socials",
-        },
-        beforeEnter: async () => {
-          const store = useStore();
-          // store.admin.life_poems = await callApi({
-          //   path: "/admin/life-poems",
-          //   method: "get",
-          //   useAuth: true,
-          // });
         },
       },
       {
