@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AwardsController;
 use App\Http\Controllers\BiblioController;
 use App\Http\Controllers\BioController;
+use App\Http\Controllers\BrokenLinkController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DesignCreditsController;
 use App\Http\Controllers\EventsController;
@@ -394,4 +395,13 @@ Route::controller(AuthController::class)
         Route::post('/admin/validate-token', 'validate')
             ->middleware('auth:admin')
             ->name('admin-validate');
+    });
+
+Route::controller(BrokenLinkController::class)
+    ->group(function () {
+        Route::get('/broken-links', 'index')
+            ->name('broken-links-index');
+
+        Route::put('/admin/broken-links/{id}', 'update')
+            ->name('broken-links-update');
     });

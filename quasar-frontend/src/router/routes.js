@@ -1,4 +1,3 @@
-import { get } from "lodash-es";
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 
@@ -6,6 +5,13 @@ const routes = [
   {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: async () => {
+      const store = useStore();
+      store.admin.brokenLinks = await callApi({
+        path: "/broken-links",
+        method: "get",
+      });
+    },
     children: [
       {
         path: "",
@@ -589,10 +595,10 @@ const routes = [
         component: () => import("pages/admin/BrokenLinks.vue"),
         beforeEnter: async () => {
           const store = useStore();
-          // store.admin.socials = await callApi({
-          //   path: "/socials",
-          //   method: "get",
-          // });
+          store.admin.brokenLinks = await callApi({
+            path: "/broken-links",
+            method: "get",
+          });
         },
         name: "admin-broken-links",
         meta: {

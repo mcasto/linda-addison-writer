@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,7 +22,7 @@ class BrokenLink extends Model
     protected $casts = [
         'confirmed_broken' => 'boolean',
         'confirmed_working' => 'boolean',
-        'confirmed_date' => 'date'
+        'confirmed_date' => 'date:Y-m-d'
     ];
 
     /**
