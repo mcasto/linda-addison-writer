@@ -6,3 +6,9 @@
 .zebra-table tbody tr:nth-child(even) {
     background-color: #ffffff;
 }
+
+.broken-info {
+    background-color: var(--q-info);
+    padding: 1rem;
+    ;
+}

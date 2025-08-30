@@ -12,7 +12,8 @@ class BrokenLinkController extends Controller
      */
     public function index()
     {
-        return response()->json(BrokenLink::orderBy('updated_at')
+        return response()->json($brokenLinks = BrokenLink::orderBy('updated_at', 'desc')
+            ->orderBy('confirmed_working')
             ->with('linkable')
             ->get());
     }
@@ -51,9 +52,9 @@ class BrokenLinkController extends Controller
 
         $response = ['status' => 'ok', 'deleteRec' => !!$rec->confirmed_working];
 
-        if ($response['deleteRec']) {
-            $rec->delete();
-        }
+        // if ($response['deleteRec']) {
+        //     $rec->delete();
+        // }
 
         return response()->json($response);
     }

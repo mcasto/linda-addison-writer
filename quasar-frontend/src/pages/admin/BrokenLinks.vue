@@ -15,6 +15,41 @@
       :pagination="{ rowsPerPage: 0 }"
       :columns="columns[tableName]"
     >
+      <template #top>
+        <q-btn
+          icon="info"
+          flat
+          round
+          class="absolute-top-right"
+          color="primary"
+          @click="showInfo = !showInfo"
+        ></q-btn>
+        <div class="column broken-info" v-if="showInfo">
+          <p>
+            If you change a URL, you must <em>also</em> confirm it as working by
+            clicking the checkmark button.
+          </p>
+          <p>
+            A schedule task runs at midnight (Phoenix Time Zone) on the 1st of
+            each month and looks for broken links. Since some sites like
+            facebook have very aggressive bot detection, they return a "broken"
+            result to my script even though thye're not technically broken. This
+            is why it's necessary to confirm them as working.
+          </p>
+          <p>
+            Confirmations only stay in place for 3 months. After that they
+            "expire" and will be removed from this list. In the following month,
+            if the script determines that the link is "broken" it will need to
+            be reconfirmed one way or the other.
+          </p>
+          <p>
+            I know this is sort of tedious, that's why it's only necessary 3
+            times / year, but it's the only way I could figure out how to add
+            any automation to this process.
+          </p>
+        </div>
+      </template>
+
       <template #body-cell-icon="props">
         <q-td class="text-center">
           <q-icon :name="props.value" size="sm"></q-icon>
@@ -94,6 +129,7 @@ import { computed, onMounted, ref } from "vue";
 const store = useStore();
 
 const tableName = ref(null);
+const showInfo = ref(false);
 
 const universalColumns = [
   { label: "Status", name: "status", align: "left" },
@@ -245,12 +281,16 @@ const updateRec = async (row, setting) => {
       ? formatISO9075(new Date(), { representation: "date" })
       : null;
 
-  await callApi({
+  const response = await callApi({
     path: `/admin/broken-links/${row.id}`,
     method: "put",
     payload: clone(row),
     useAuth: true,
   });
+
+  // if (!!response.deleteRec) {
+  //   remove(store.admin.brokenLinks, ({ id }) => id == row.id);
+  // }
 };
 
 onMounted(() => {
