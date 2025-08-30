@@ -288,9 +288,12 @@ const updateRec = async (row, setting) => {
     useAuth: true,
   });
 
-  // if (!!response.deleteRec) {
-  //   remove(store.admin.brokenLinks, ({ id }) => id == row.id);
-  // }
+  if (!!response.deleteRec) {
+    store.admin.brokenLinks = await callApi({
+      path: "/broken-links",
+      method: "get",
+    });
+  }
 };
 
 onMounted(() => {

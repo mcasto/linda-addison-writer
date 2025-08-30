@@ -12,9 +12,9 @@ class BrokenLinkController extends Controller
      */
     public function index()
     {
-        return response()->json($brokenLinks = BrokenLink::orderBy('updated_at', 'desc')
+        return response()->json($brokenLinks = BrokenLink::with('linkable')
             ->orderBy('confirmed_working')
-            ->with('linkable')
+            ->orderBy('updated_at', 'desc')
             ->get());
     }
 
