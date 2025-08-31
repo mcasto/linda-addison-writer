@@ -1,12 +1,4 @@
 Admin section:
-    users admin:
-        ☐ create
-        update:
-            ☐ name
-            ☐ email
-            ☐ password
-        ☐ delete
-
     ☐ manage profile
 
     ☐ import csv
