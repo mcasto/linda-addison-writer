@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('admin-token')->plainTextToken;
 
-        return response()->json(['token' => $token]);
+        return response()->json(['token' => $token, 'user' => $user]);
     }
 
     /**
@@ -50,6 +50,6 @@ class AuthController extends Controller
      */
     public function validate(Request $request)
     {
-        return response()->json(['status' => 'ok']);
+        return response()->json(['status' => 'ok', 'user' => $request->user()]);
     }
 }

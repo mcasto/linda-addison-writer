@@ -72,6 +72,7 @@ const login = async () => {
     return;
   }
 
+  store.user = response.user;
   store.token = response.token;
 
   store.router.push({ name: "admin-dashboard" });

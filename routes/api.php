@@ -20,6 +20,7 @@ use App\Http\Controllers\ReviewsQuotesController;
 use App\Http\Controllers\SeeHearReadController;
 use App\Http\Controllers\SiteData;
 use App\Http\Controllers\SocialsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -403,5 +404,12 @@ Route::controller(BrokenLinkController::class)
             ->name('broken-links-index');
 
         Route::put('/admin/broken-links/{id}', 'update')
-            ->name('broken-links-update');
+            ->name('admin-broken-links-update');
     });
+
+Route::controller(UserController::class)
+    ->group(function () {
+        Route::get('/admin/users', 'index')
+            ->name('admin-users-index');
+    })
+    ->middleware('auth:admin');

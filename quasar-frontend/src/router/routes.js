@@ -615,14 +615,19 @@ const routes = [
           order: 17,
           icon: "mdi-account-cog-outline",
           tip: "Users",
+          requirePermissions: true,
         },
         beforeEnter: async () => {
-          // const store = useStore();
-          // store.admin.latest_news = await callApi({
-          //   path: "/admin/life-poems",
-          //   method: "get",
-          //   useAuth: true,
-          // });
+          const store = useStore();
+          if (!store.user.permissions == 1) {
+            return;
+          }
+
+          store.admin.users = await callApi({
+            path: "/admin/users",
+            method: "get",
+            useAuth: true,
+          });
         },
       },
     ],

@@ -23,6 +23,7 @@ export const useStore = defineStore(
         pubTypes: null,
         reviews: null,
         socials: null,
+        users: null,
       }),
       awards: ref(null),
       biblio: ref(null),
@@ -46,6 +47,7 @@ export const useStore = defineStore(
       reviews: ref(null),
       socials: ref(null),
       token: ref(null),
+      user: ref(null),
     };
     const getters = {};
     const actions = {

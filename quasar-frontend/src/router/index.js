@@ -57,6 +57,8 @@ export default defineRouter(function (/* { store, ssrContext } */) {
       if (!valid) {
         return { name: "admin-login" };
       }
+
+      store.user = valid.user;
     }
 
     store.design = await callApi({ path: "/design-credits", method: "get" });
