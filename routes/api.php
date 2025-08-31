@@ -420,5 +420,8 @@ Route::controller(UserController::class)
 
         Route::delete('/admin/users/{id}', 'destroy')
             ->name('admin-users-destroy');
+
+        Route::get('/admin/user', 'show')
+            ->name('admin-user-show');
     })
     ->middleware('auth:admin');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -13,6 +14,12 @@ class UserController extends Controller
             User::orderBy('name')
                 ->get()
         );
+    }
+
+    public function show()
+    {
+        return response()->json(['request' => Auth::guard('admin')
+            ->user()]);
     }
 
     public function store(Request $request)

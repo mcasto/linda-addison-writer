@@ -630,6 +630,25 @@ const routes = [
           });
         },
       },
+      {
+        path: "profile",
+        component: () => import("pages/admin/AdminProfile.vue"),
+        name: "admin-profile",
+        meta: {
+          order: 1.25,
+          icon: "mdi-account-cog-outline",
+          tip: "User Profile",
+        },
+        beforeEnter: async () => {
+          const store = useStore();
+
+          store.admin.profile = await callApi({
+            path: "/admin/user",
+            method: "get",
+            useAuth: true,
+          });
+        },
+      },
     ],
   },
 

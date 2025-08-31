@@ -19,6 +19,7 @@ export const useStore = defineStore(
         latest_news: null,
         life_poems: null,
         online_resources: null,
+        profile: null,
         publications: null,
         pubTypes: null,
         reviews: null,
