@@ -412,7 +412,13 @@ Route::controller(UserController::class)
         Route::get('/admin/users', 'index')
             ->name('admin-users-index');
 
+        Route::post('/admin/users', 'store')
+            ->name('admin-users-store');
+
         Route::put('/admin/users/{id}', 'update')
             ->name('admin-users-update');
+
+        Route::delete('/admin/users/{id}', 'destroy')
+            ->name('admin-users-destroy');
     })
     ->middleware('auth:admin');

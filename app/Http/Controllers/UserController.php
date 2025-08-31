@@ -15,6 +15,21 @@ class UserController extends Controller
         );
     }
 
+    public function store(Request $request)
+    {
+        $valid = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'string|max:255|required',
+            'permissions' => 'required|boolean'
+        ]);
+
+        $user = User::create($valid);
+        $user->permissions = $user->permissions ? 1 : 0;  // makes new user display properly in front end
+
+        return response()->json(['status' => 'ok', 'user' => $user]);
+    }
+
     public function update(int $id, Request $request)
     {
         $valid = $request->validate([
@@ -30,6 +45,18 @@ class UserController extends Controller
         }
 
         $user->update($valid);
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    public function destroy(int $id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'User not found.']);
+        }
+
+        $user->delete();
 
         return response()->json(['status' => 'ok']);
     }
