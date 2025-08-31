@@ -18,8 +18,8 @@ class UserController extends Controller
 
     public function show()
     {
-        return response()->json(['request' => Auth::guard('admin')
-            ->user()]);
+        return response()->json(Auth::guard('admin')
+            ->user());
     }
 
     public function store(Request $request)

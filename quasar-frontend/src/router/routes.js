@@ -613,7 +613,7 @@ const routes = [
         name: "admin-users",
         meta: {
           order: 17,
-          icon: "mdi-account-cog-outline",
+          icon: "mdi-account-group-outline",
           tip: "Users",
           requirePermissions: true,
         },
@@ -637,7 +637,7 @@ const routes = [
         meta: {
           order: 1.25,
           icon: "mdi-account-cog-outline",
-          tip: "User Profile",
+          tip: "User Account",
         },
         beforeEnter: async () => {
           const store = useStore();
