@@ -411,5 +411,8 @@ Route::controller(UserController::class)
     ->group(function () {
         Route::get('/admin/users', 'index')
             ->name('admin-users-index');
+
+        Route::put('/admin/users/{id}', 'update')
+            ->name('admin-users-update');
     })
     ->middleware('auth:admin');

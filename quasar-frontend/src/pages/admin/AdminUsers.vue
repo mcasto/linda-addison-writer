@@ -6,6 +6,10 @@
       :pagination="{ rowsPerPage: 0 }"
       hide-bottom
     >
+      <template #top-right>
+        <q-btn icon="add" round color="primary" size="sm"></q-btn>
+      </template>
+
       <template #body-cell-name="props">
         <q-td class="text-left cursor-pointer">
           {{ props.row.name }}
@@ -46,7 +50,19 @@
 
       <template #body-cell-password="props">
         <q-td class="text-center">
-          <q-btn icon="mdi-lock-reset" round flat></q-btn>
+          <q-btn
+            icon="mdi-lock-reset"
+            round
+            flat
+            @click="
+              passwordDialog = {
+                visible: true,
+                password: null,
+                confirm: null,
+                row: props.row,
+              }
+            "
+          ></q-btn>
         </q-td>
       </template>
 
@@ -56,18 +72,34 @@
             v-model="props.row.permissions"
             :true-value="1"
             :false-value="0"
+            @update:model-value="updateUser(props.row)"
           ></q-checkbox>
         </q-td>
       </template>
     </q-table>
+
+    <admin-user-password
+      v-model="passwordDialog"
+      @update="updateUser"
+    ></admin-user-password>
   </page-container>
 </template>
 
 <script setup>
+import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
+import AdminUserPassword from "src/components/admin/AdminUserPassword.vue";
+import { ref } from "vue";
 
 const store = useStore();
+
+const passwordDialog = ref({
+  visible: false,
+  password: null,
+  confirm: null,
+  row: null,
+});
 
 const columns = [
   {
@@ -95,7 +127,18 @@ const columns = [
   },
 ];
 
-const updateUser = async (row) => {
-  console.log({ update: row });
+const updateUser = async (row = null) => {
+  row = row || {
+    ...passwordDialog.value.row,
+    password: passwordDialog.value.password,
+  };
+
+  const response = await callApi({
+    path: `/admin/users/${row.id}`,
+    method: "put",
+    payload: row,
+  });
+
+  passwordDialog.value.visible = false;
 };
 </script>

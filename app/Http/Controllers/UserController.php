@@ -14,4 +14,23 @@ class UserController extends Controller
                 ->get()
         );
     }
+
+    public function update(int $id, Request $request)
+    {
+        $valid = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'string|max:255|sometimes',
+            'permissions' => 'required|boolean'
+        ]);
+
+        $user = User::find($id);
+        if (!$user) {
+            return response(['status' => 'error', 'message' => 'User not found.']);
+        }
+
+        $user->update($valid);
+
+        return response()->json(['status' => 'ok']);
+    }
 }
