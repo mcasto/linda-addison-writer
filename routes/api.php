@@ -11,6 +11,7 @@ use App\Http\Controllers\EventsController;
 use App\Http\Controllers\FreebiesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HonorsController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\LessonsBlessingsController;
 use App\Http\Controllers\LifePoemsController;
 use App\Http\Controllers\NewsController;
@@ -425,3 +426,10 @@ Route::controller(UserController::class)
             ->name('admin-user-show');
     })
     ->middleware('auth:admin');
+
+Route::controller(ImportController::class)
+    ->group(function () {
+        Route::post('/admin/import-excel', 'store')
+            ->name('admin-import-excel');
+    })
+    ->middleware(('auth:admin'));

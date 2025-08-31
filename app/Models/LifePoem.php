@@ -48,7 +48,6 @@ class LifePoem extends Model
                 $rec->save();
 
                 if ($rec->date == Carbon::now()) {
-                    logger()->debug('here');
                     $poem = $rec;
                 }
 

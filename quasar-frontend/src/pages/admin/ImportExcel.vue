@@ -1,6 +1,6 @@
 <template>
   <page-container>
-    Import CSV
+    Import Excel
   </page-container>
 </template>
 

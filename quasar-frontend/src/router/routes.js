@@ -305,10 +305,14 @@ const routes = [
         meta: { order: 1, icon: "mdi-view-dashboard", tip: "Dashboard" },
       },
       {
-        path: "import-csv",
-        component: () => import("pages/admin/ImportCsv.vue"),
-        name: "admin-import-csv",
-        meta: { order: 1.5, icon: "fa-solid fa-file-csv", tip: "Import CSV" },
+        path: "import-excel",
+        component: () => import("src/pages/admin/ImportExcel.vue"),
+        name: "admin-import-excel",
+        meta: {
+          order: 1.5,
+          icon: "fa-solid fa-file-excel",
+          tip: "Import Excel",
+        },
       },
       {
         path: "awards",
