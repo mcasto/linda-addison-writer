@@ -401,7 +401,9 @@ Route::controller(AuthController::class)
 
 Route::controller(BrokenLinkController::class)
     ->group(function () {
-        Route::get('/broken-links', 'index')
+        Route::get('/broken-links', function () {
+            return response()->json(['status' => 'ok']);
+        })
             ->name('broken-links-index');
 
         Route::put('/admin/broken-links/{id}', 'update')
