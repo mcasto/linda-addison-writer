@@ -12,6 +12,8 @@ class BrokenLinkController extends Controller
      */
     public function index()
     {
+        file_put_contents(__DIR__ . '/broken-output.txt', date("Y-m-d H:i:s"));
+
         return response()->json($brokenLinks = BrokenLink::with('linkable')
             ->orderBy('confirmed_working')
             ->orderBy('updated_at', 'desc')

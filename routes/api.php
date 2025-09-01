@@ -405,6 +405,7 @@ Route::controller(BrokenLinkController::class)
             ->name('broken-links-index');
 
         Route::put('/admin/broken-links/{id}', 'update')
+            ->middleware('auth:admin')
             ->name('admin-broken-links-update');
     });
 
