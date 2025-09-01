@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Award;
+use App\Models\Find;
+use App\Models\FindType;
 use App\Models\Honor;
 use App\Models\LatestNews;
 use App\Models\Publication;
 use App\Models\PublicationType;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Shuchkin\SimpleXLSX;
@@ -24,7 +27,9 @@ class ImportController extends Controller
         $header_values = $rows = [];
         foreach ($this->xl->rows($index) as $k => $r) {
             if ($k === 0) {
-                $header_values = $r;
+                $header_values = array_map(function ($header) {
+                    return trim($header);
+                }, $r);
                 continue;
             }
             $rows[] = array_combine($header_values, $r);
@@ -35,6 +40,7 @@ class ImportController extends Controller
 
     private function insertAwards($data)
     {
+        $output = [];
         foreach ($data as $item) {
             $rec = [
                 'year' => $item['Year'],
@@ -48,13 +54,16 @@ class ImportController extends Controller
 
             $award->md_file = $mdFile;
             $award->save();
+
+            $output[] = $award;
         }
 
-        return $data;
+        return $output;
     }
 
     private function insertHonors($data)
     {
+        $output = [];
         foreach ($data as $item) {
             $rec = [
                 'year' => $item['Year'],
@@ -69,13 +78,16 @@ class ImportController extends Controller
 
             $honor->md_file = $mdFile;
             $honor->save();
+
+            $output[] = $honor;
         }
 
-        return $data;
+        return $output;
     }
 
     private function insertNews($data)
     {
+        $output = [];
         foreach ($data as $item) {
             $rec = [
                 'date' => $item['Date'],
@@ -89,13 +101,16 @@ class ImportController extends Controller
 
             $news->md_file = $mdFile;
             $news->save();
+
+            $output[] = $news;
         }
 
-        return $data;
+        return $output;
     }
 
     private function insertPublications($data)
     {
+        $output = [];
         foreach ($data as $item) {
             $type = PublicationType::where('name', strtolower($item['Type']))
                 ->first();
@@ -117,23 +132,72 @@ class ImportController extends Controller
 
             $pub->md_file = $mdFile;
             $pub->save();
+
+            $output[] = $pub;
         }
 
-        return $data;
+        return $output;
     }
 
     private function insertReviewsQuotes($data)
     {
-        return $data;
+        $output = [];
+        foreach ($data as $item) {
+            $maxSortOrder = Review::max('sort_order');
+
+            $rec = [
+                'md_file' => '',
+                'sort_order' => $maxSortOrder + 1,
+            ];
+
+            $reviewText = $item['Text of Review/Quote'] . "\n\n&mdash; " . $item['Attribution'];
+
+            $review = Review::create($rec);
+            $mdFile = "reviews/" . $review->id . ".md";
+            Storage::disk('local')
+                ->put($mdFile, $reviewText);
+
+            $review->md_file = $mdFile;
+            $review->save();
+
+            $output[] = $review;
+        }
+
+        return $output;
     }
 
     private function insertSeeHearRead($data)
     {
-        return $data;
+        $output = [];
+        foreach ($data as $item) {
+            $type = FindType::where('name', strtolower($item['Type']))
+                ->first();
+            $rec = [
+                'title' => $item['Text (highlighted as link to URL)'],
+                'url' => $item['URL'],
+                'date' => $item['Date'],
+                'md_file' => '',
+                'find_type_id' => $type->id
+            ];
+
+            $find = Find::create($rec);
+            $mdFile = "finds/" . $find->id . ".md";
+            Storage::disk('local')
+                ->put($mdFile, $item['Note (follows highlighted Text)']);
+
+            $find->md_file = $mdFile;
+            $find->save();
+
+            $output[] = $find;
+        }
+
+        return $output;
     }
 
     public function store(Request $request)
     {
+        logger()->info('import-controller-store');
+
         if (!$request->hasFile('excelFile')) {
             return response()->json(['status' => 'error', 'message' => 'No excel file uploaded.']);
         }

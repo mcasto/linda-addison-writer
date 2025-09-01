@@ -1,6 +1,7 @@
 Admin section:
-    ☐ import csv
+    import excel:
+        ✔ Upload file @done(25-09-01 12:27)
+        ✔ Receive output from backend import process @done(25-09-01 12:27)
+        ☐ Display output
 
     ☐ dashboard
-
-☐ For events, specify set Event Model so it provides UTC to frontend, then javascript can display the event time in the user's local time. Also display original time & timezone [probably as UTC offset] in the event details

@@ -12,6 +12,15 @@ class Event extends Model
 
     protected $appends = ['contents', 'raw'];
 
+    // mc-note: this would cast these fields in UTC, but it would require more formatting on the frontend to deal with what it receives
+
+    // protected $casts = [
+    //     'start_date' => 'datetime:Y-m-d\TH:i:s.v\Z', // UTC format
+    //     'end_date' => 'datetime:Y-m-d\TH:i:s.v\Z',   // UTC format
+    //     'start_time' => 'datetime:H:i:s\Z',          // UTC time format
+    //     'end_time' => 'datetime:H:i:s\Z',            // UTC time format
+    // ];
+
     protected static function booted()
     {
         static::deleting(function ($model) {
