@@ -2,69 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Award;
+use App\Models\Honor;
+use App\Models\LatestNews;
+use App\Models\Publication;
+use App\Models\PublicationType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Shuchkin\SimpleXLSX;
+use Illuminate\Support\Str;
 
 class ImportController extends Controller
 {
     private $sheetList;
     private $xl;
-    private $maps = [
-        'Awards' => [
-            'table' => 'awards',
-            'special' => 'false',
-            'columns' => [
-                'Year' => 'year',
-                'Award Description' => 'md_file'
-            ]
-        ],
-        'Honors' => [
-            'table' => 'honors',
-            'special' => 'false',
-            'columns' => [
-                'Year' => 'year',
-                'Description of Honor' => 'md_file',
-                'Number of Honors Received' => 'num'
-            ]
-        ],
-        'News' => [
-            'table' => 'latest_news',
-            'special' => 'false',
-            'columns' => [
-                'Date' => 'date',
-                'News' => 'md_file'
-            ]
-        ],
-        'Publications' => [
-            'table' => 'publications',
-            'special' => 'false',
-            'columns' => [
-                'Type' => 'publication_type_id',
-                'Year' => 'year',
-                'Title' => 'title',
-                'Description' => 'md_file',
-                'URL' => 'url'
-            ]
-        ],
-        'Reviews& Quotes' => [
-            'table' => 'reviews',
-            'special' => true,
-            'columns' => [
-                'Text of Review/Quote' => 'md_file',
-                'Attribution' => 'md_file'
-            ]
-        ],
-        'See-Hear-Read' => [
-            'table' => 'finds',
-            'columns' => [
-                'Text (highlighted as link to URL' => 'title',
-                'URL' => 'url',
-                'Date' => 'date',
-                'Note (follows highlighted text)' => 'md_file',
-                'Type' => 'find_type_id'
-            ]
-        ]
-    ];
+
 
     private function getSheetData($index)
     {
@@ -81,10 +33,103 @@ class ImportController extends Controller
         return $rows;
     }
 
-    private function insertData($index, $sheetName)
+    private function insertAwards($data)
     {
-        $map = $this->maps[$sheetName];
-        return ['map' => $map];
+        foreach ($data as $item) {
+            $rec = [
+                'year' => $item['Year'],
+                'md_file' => ''
+            ];
+
+            $award = Award::create($rec);
+            $mdFile = "awards/" . $award->id . ".md";
+            Storage::disk('local')
+                ->put($mdFile, $item['Award Description']);
+
+            $award->md_file = $mdFile;
+            $award->save();
+        }
+
+        return $data;
+    }
+
+    private function insertHonors($data)
+    {
+        foreach ($data as $item) {
+            $rec = [
+                'year' => $item['Year'],
+                'md_file' => '',
+                'num' => $item['Number of Honors Received']
+            ];
+
+            $honor = Honor::create($rec);
+            $mdFile = "honor/" . $honor->id . ".md";
+            Storage::disk('local')
+                ->put($mdFile, $item['Description of Honor']);
+
+            $honor->md_file = $mdFile;
+            $honor->save();
+        }
+
+        return $data;
+    }
+
+    private function insertNews($data)
+    {
+        foreach ($data as $item) {
+            $rec = [
+                'date' => $item['Date'],
+                'md_file' => '',
+            ];
+
+            $news = LatestNews::create($rec);
+            $mdFile = "latest-news/" . $news->id . ".md";
+            Storage::disk('local')
+                ->put($mdFile, $item['News']);
+
+            $news->md_file = $mdFile;
+            $news->save();
+        }
+
+        return $data;
+    }
+
+    private function insertPublications($data)
+    {
+        foreach ($data as $item) {
+            $type = PublicationType::where('name', strtolower($item['Type']))
+                ->first();
+            if (!$type) {
+                $type = PublicationType::create(['name' => strtolower($item['Type'])]);
+            }
+            $rec = [
+                'publication_type_id' => $type->id,
+                'year' => $item['Year'],
+                'title' => $item['Title'],
+                'md_file' => '',
+                'url' => $item['URL']
+            ];
+
+            $pub = Publication::create($rec);
+            $mdFile = "publications/" . $pub->id . ".md";
+            Storage::disk('local')
+                ->put($mdFile, $item['Description']);
+
+            $pub->md_file = $mdFile;
+            $pub->save();
+        }
+
+        return $data;
+    }
+
+    private function insertReviewsQuotes($data)
+    {
+        return $data;
+    }
+
+    private function insertSeeHearRead($data)
+    {
+        return $data;
     }
 
     public function store(Request $request)
@@ -109,7 +154,15 @@ class ImportController extends Controller
                 continue;
             }
 
-            $output[$sheetName] = $this->insertData($index, $sheetName);
+            $fnName = 'insert' . Str::studly(str_replace('&', '', $sheetName));
+            if (!method_exists($this, $fnName)) {
+                return response()->json(['status' => 'error', 'message' => 'Undefined method: ' . $fnName]);
+            }
+
+            $data = $this->getSheetData($index);
+
+
+            $output[$sheetName] = count($data) > 0 ? $this->{$fnName}($data) : [];
         }
 
         return response()->json(['data' => $output]);
