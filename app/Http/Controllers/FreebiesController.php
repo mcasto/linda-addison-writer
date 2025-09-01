@@ -26,8 +26,8 @@ class FreebiesController extends Controller
         $final = Freebie::orderBy('end_date', 'desc')
             ->first();
 
-        $startDate = new Carbon($final->end_date . " + 1 day")->toDateString();
-        $endDate = new Carbon($startDate . " + 6 days")->toDateString();
+        $startDate = (new Carbon($final->end_date . " + 1 day"))->toDateString();
+        $endDate = (new Carbon($startDate . " + 6 days"))->toDateString();
 
         $freebie = [
             'title' => $request->title ?? 'New Freebie',
