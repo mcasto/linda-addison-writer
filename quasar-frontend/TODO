@@ -5,3 +5,8 @@ Admin section:
         ☐ Display output
 
     ☐ dashboard
+
+
+☐ figure out why broken links aren't displaying on production site
+☐ figure out how to speed up page load
+        ☐ cache the pages in the store, only use synch loading if it's *not* in the store
