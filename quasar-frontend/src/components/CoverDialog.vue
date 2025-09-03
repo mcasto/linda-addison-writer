@@ -14,6 +14,9 @@
           </div>
         </div>
       </q-card-section>
+      <q-card-actions class="justify-end">
+        <q-btn color="primary" label="Purchase" @click="openLink"></q-btn>
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -21,4 +24,8 @@
 <script setup>
 const model = defineModel();
 const props = defineProps(["cover"]);
+
+const openLink = () => {
+  window.open(props.cover.purchase_url, "_blank");
+};
 </script>

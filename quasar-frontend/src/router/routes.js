@@ -81,10 +81,28 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
+          const past = await callApi({
+            path: "/events/past?per_page=10",
+            method: "get",
+          });
+
+          const future = await callApi({
+            path: "/events/future?per_page=10",
+            method: "get",
+          });
+
+          const current = await callApi({
+            path: "/events/current?per_page=10",
+            method: "get",
+          });
+
           store.events = {
-            past: await callApi({ path: "/events/past?per_page=10" }),
-            current: await callApi({ path: "/events/current?per_page=10" }),
+            past: past.data.length > 0 ? past : null,
+            future: future.data.length > 0 ? future : null,
+            current: current.data.length > 0 ? current : null,
           };
+
+          console.log({ events: store.events });
           // await store.getData(store.events.past, "/events/past?per_page=10");
           // await store.getData(
           //   store.events.future,
@@ -284,7 +302,7 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          store.honors = await callApi({ path: "/honors", method: "gt" });
+          store.honors = await callApi({ path: "/honors", method: "get" });
           // await store.getData(store.honors, "/honors");
         },
       },

@@ -13,7 +13,7 @@
         <template #top>
           <div class="row items-center q-px-xs full-width">
             <div class="col-12 col-md-4 text-h6 text-center q-px-xs">
-              Publications
+              Anthologies / Magazines
             </div>
             <div class="col-12 col-sm-6 col-md-4 q-px-xs">
               <q-select
