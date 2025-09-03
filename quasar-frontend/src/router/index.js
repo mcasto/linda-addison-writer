@@ -61,9 +61,13 @@ export default defineRouter(function (/* { store, ssrContext } */) {
       store.user = valid.user;
     }
 
-    await store.getData(store.design, "/design-credits");
-    await store.getData(store.life_poem, "/life-poem");
-    await store.getData(store.socials, "/socials");
+    store.design = await callApi({ path: "/design-credits", method: "get" });
+    store.life_poem = await callApi({ path: "/life-poem", method: "get" });
+    store.socials = await callApi({ path: "/socials", method: "get" });
+
+    // await store.getData(store.design, "/design-credits");
+    // await store.getData(store.life_poem, "/life-poem");
+    // await store.getData(store.socials, "/socials");
   });
 
   return Router;

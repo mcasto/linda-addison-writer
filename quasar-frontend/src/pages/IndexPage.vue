@@ -7,7 +7,7 @@
         :key="`cover-${cover.id}`"
         @click="coverDialog = { show: true, cover }"
       >
-        <q-img :src="cover.image_url" height="50vh" fit="cover"> </q-img>
+        <q-img :src="cover.image_url" height="50vh" fit="contain"> </q-img>
         <div class="text-center bg-white">
           {{ cover.title }}
         </div>

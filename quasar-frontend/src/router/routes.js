@@ -8,7 +8,12 @@ const routes = [
     beforeEnter: async () => {
       const store = useStore();
 
-      await store.getData(store.admin.brokenLinks, "/broken-links");
+      store.admin.brokenLinks = await callApi({
+        path: "/broken-links",
+        method: "get",
+      });
+
+      // await store.getData(store.admin.brokenLinks, "/broken-links");
     },
     children: [
       {
@@ -20,8 +25,9 @@ const routes = [
         },
         beforeEnter: async () => {
           const store = useStore();
+          store.covers = await callApi({ path: "/home", method: "get" });
 
-          await store.getData(store.covers, "/home");
+          // await store.getData(store.covers, "/home");
         },
       },
       {
@@ -42,7 +48,12 @@ const routes = [
 
           const defaultType = pubTypes[0].id;
 
-          await store.getData(store.pubs, `/publications/${defaultType}`);
+          store.pubs = await callApi({
+            path: `/publications/${defaultType}`,
+            method: "get",
+          });
+
+          // await store.getData(store.pubs, `/publications/${defaultType}`);
         },
       },
       {
@@ -55,7 +66,9 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          await store.getData(store.latest_news, "/news");
+          store.latest_news = await callApi({ path: "/news", method: "get" });
+
+          // await store.getData(store.latest_news, "/news");
         },
       },
       {
@@ -68,15 +81,19 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          await store.getData(store.events.past, "/events/past?per_page=10");
-          await store.getData(
-            store.events.future,
-            "/events/future?per_page=10"
-          );
-          await store.getData(
-            store.events.current,
-            "/events/current?per_page=10"
-          );
+          store.events = {
+            past: await callApi({ path: "/events/past?per_page=10" }),
+            current: await callApi({ path: "/events/current?per_page=10" }),
+          };
+          // await store.getData(store.events.past, "/events/past?per_page=10");
+          // await store.getData(
+          //   store.events.future,
+          //   "/events/future?per_page=10"
+          // );
+          // await store.getData(
+          //   store.events.current,
+          //   "/events/current?per_page=10"
+          // );
         },
       },
       {
@@ -98,7 +115,11 @@ const routes = [
 
           const defaultType = findTypes[0].id;
 
-          await store.getData(store.finds, `/finds/${defaultType}`);
+          store.finds = await callApi({
+            path: `/finds/${defaultType}`,
+            method: "get",
+          });
+          // await store.getData(store.finds, `/finds/${defaultType}`);
         },
       },
       {
@@ -111,7 +132,9 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          await store.getData(store.bio, "/bio");
+          store.bio = await callApi({ path: "/bio", method: "get" });
+
+          // await store.getData(store.bio, "/bio");
         },
       },
       {
@@ -133,10 +156,15 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          await store.getData(
-            store.lessons_blessings,
-            "/lessons-and-blessings"
-          );
+          store.lessons_blessings = await callApi({
+            path: "/lessons-and-blessings",
+            method: "get",
+          });
+
+          // await store.getData(
+          //   store.lessons_blessings,
+          //   "/lessons-and-blessings"
+          // );
         },
       },
       {
@@ -150,7 +178,9 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          await store.getData(store.freebie, "/freebies");
+          store.freebie = await callApi({ path: "/freebies", method: "get" });
+
+          // await store.getData(store.freebie, "/freebies");
         },
       },
       {
@@ -173,10 +203,15 @@ const routes = [
 
           store.resourceTypes = types;
 
-          await store.getData(
-            store.resourceLinks,
-            `/online-resources/${defaultType}`
-          );
+          store.resourceLinks = await callApi({
+            path: `/online-resources/${defaultType}`,
+            method: "get",
+          });
+
+          // await store.getData(
+          //   store.resourceLinks,
+          //   `/online-resources/${defaultType}`
+          // );
         },
       },
       {
@@ -190,7 +225,11 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          await store.getData(store.reviews, "/reviews-quotes");
+          store.reviews = await callApi({
+            path: "/reviews-quotes",
+            method: "get",
+          });
+          // await store.getData(store.reviews, "/reviews-quotes");
         },
       },
       {
@@ -213,7 +252,11 @@ const routes = [
 
           store.biblioTypes = types;
 
-          await store.getData(store.biblio, `/biblio/${defaultType}`);
+          store.biblio = await callApi({
+            path: `/biblio/${defaultType}`,
+            method: "get",
+          });
+          // await store.getData(store.biblio, `/biblio/${defaultType}`);
         },
       },
       {
@@ -226,7 +269,8 @@ const routes = [
         },
         beforeEnter: async () => {
           const store = useStore();
-          await store.getData(store.awards, "/awards");
+          store.awards = await callApi({ path: "/awards", method: "get" });
+          // await store.getData(store.awards, "/awards");
         },
       },
       {
@@ -240,7 +284,8 @@ const routes = [
         beforeEnter: async () => {
           const store = useStore();
 
-          await store.getData(store.honors, "/honors");
+          store.honors = await callApi({ path: "/honors", method: "gt" });
+          // await store.getData(store.honors, "/honors");
         },
       },
     ],

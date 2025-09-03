@@ -4,6 +4,7 @@ import { useStore } from "../store";
 async function refreshData(storeVar, path) {
   const response = await callApi({ path, method: "get" });
   storeVar = response.data;
+  return;
 }
 
 export default async (storeVar, path) => {
@@ -16,5 +17,7 @@ export default async (storeVar, path) => {
       // Silent fail - we already have data
     });
     return storeVar;
+  } else {
+    storeVar = await callApi({ path, method: "get" });
   }
 };
