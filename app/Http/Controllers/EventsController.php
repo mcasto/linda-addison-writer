@@ -17,6 +17,7 @@ class EventsController extends Controller
         return response()->json(
             Event::where('end_date', '<=', Carbon::now())
                 ->orderBy('start_date', 'desc')
+                ->with('brokenLink')
                 ->paginate($perPage)
         );
     }
@@ -28,6 +29,7 @@ class EventsController extends Controller
         return response()->json(
             Event::where('start_date', '>=', Carbon::now())
                 ->orderBy('start_date', 'desc')
+                ->with('brokenLink')
                 ->paginate($perPage)
         );
     }
@@ -41,6 +43,7 @@ class EventsController extends Controller
                 ->orderBy('start_date', 'desc')
                 ->where('end_date', '>=', Carbon::now())
                 ->orderBy('start_date', 'desc')
+                ->with('brokenLink')
                 ->paginate($perPage)
         );
     }

@@ -51,9 +51,10 @@
             </q-item-section>
             <q-item-section>
               <q-item-label>
-                <a :href="resource.url" target="_blank">
-                  {{ resource.name }}
-                </a>
+                <handle-url
+                  :row="resource"
+                  table-name="online_resource_links"
+                ></handle-url>
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -69,6 +70,7 @@ import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";
+import HandleUrl from "src/components/HandleUrl.vue";
 
 const store = useStore();
 

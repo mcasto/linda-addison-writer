@@ -97,13 +97,7 @@
               style="width: 70vw; max-width: 70vw;"
             >
               <div class="ellipsis" style="width: 100%;">
-                <a
-                  :href="props.row.url"
-                  target="_blank"
-                  class="text-primary text-subtitle1"
-                >
-                  {{ props.row.title }}
-                </a>
+                <handle-url :row="props.row" table-name="finds"></handle-url>
               </div>
             </q-td>
             <q-td key="date" :props="props" class="text-subtitle1">
@@ -130,7 +124,7 @@ import { format, parseISO } from "date-fns";
 import { Screen } from "quasar";
 import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
-import SeeHearReadCard from "src/components/SeeHearReadCard.vue";
+import HandleUrl from "src/components/HandleUrl.vue";
 
 import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";

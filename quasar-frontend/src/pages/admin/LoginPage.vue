@@ -52,8 +52,8 @@ import { ref } from "vue";
 
 const store = useStore();
 
-const email = ref("castoware@gmail.com");
-const password = ref("!OrTyTTAC609e$tsWKB@");
+const email = ref(null);
+const password = ref();
 const showPassword = ref(false);
 
 const login = async () => {

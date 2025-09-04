@@ -60,17 +60,7 @@
           </q-td>
           <q-td key="name" :props="props" style="width: 70vw; max-width: 70vw;">
             <div class="ellipsis" style="width: 100%;">
-              <div v-if="key == 'past'">
-                {{ props.row.name }}
-              </div>
-              <a
-                :href="props.row.url"
-                target="_blank"
-                class="text-primary text-subtitle1"
-                v-else
-              >
-                {{ props.row.name }}
-              </a>
+              <handle-url :row="props.row" table-name="events"></handle-url>
             </div>
           </q-td>
           <q-td key="schedule" :props="props" class="text-subtitle1">
@@ -96,6 +86,7 @@ import { Screen } from "quasar";
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 import { computed, ref, watch } from "vue";
+import HandleUrl from "./HandleUrl.vue";
 
 const store = useStore();
 

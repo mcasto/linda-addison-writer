@@ -37,15 +37,21 @@
           </div>
 
           <div>
-            <a
+            <template
               v-for="social of store.socials"
               :key="`social-${social.id}`"
-              :href="social.url"
-              target="_blank"
-              class="text-white"
             >
-              <q-btn :icon="social.icon" flat round></q-btn>
-            </a>
+              <a :href="social.url" target="_blank" class="text-white">
+                <q-btn
+                  :icon="social.icon"
+                  flat
+                  round
+                  :disable="
+                    social.broken_link && !social.broken_link?.confirmed_working
+                  "
+                ></q-btn>
+              </a>
+            </template>
           </div>
         </div>
       </q-footer>
@@ -66,6 +72,8 @@ import { useStore } from "src/stores/store";
 import { ref } from "vue";
 
 const store = useStore();
+
+console.log({ socials: store.socials });
 
 const showDesignCredits = ref(false);
 </script>

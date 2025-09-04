@@ -26,7 +26,8 @@ class OnlineResourcesController extends Controller
         $searchTerm = $request->input('search', '');
 
         $query = OnlineResourceLink::where('online_resource_id', $typeId)
-            ->orderBy('name');
+            ->orderBy('name')
+            ->with('brokenLink');
 
         // Add search filter if search term exists
         if ($searchTerm) {

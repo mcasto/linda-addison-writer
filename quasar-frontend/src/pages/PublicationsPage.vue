@@ -98,13 +98,10 @@
               style="width: 70vw; max-width: 70vw;"
             >
               <div class="ellipsis" style="width: 100%;">
-                <a
-                  :href="props.row.url"
-                  target="_blank"
-                  class="text-primary text-subtitle1"
-                >
-                  {{ props.row.title }}
-                </a>
+                <handle-url
+                  :row="props.row"
+                  table-name="publications"
+                ></handle-url>
               </div>
             </q-td>
             <q-td key="year" :props="props" class="text-subtitle1">
@@ -132,6 +129,7 @@ import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";
+import HandleUrl from "src/components/HandleUrl.vue";
 
 const store = useStore();
 const pubType = ref(store.pubTypes[0]);

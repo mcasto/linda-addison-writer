@@ -48,7 +48,7 @@ const store = useStore();
 const tab = ref("admin-dashboard");
 
 const tabs = computed(() => {
-  const hasPermissions = store.user.permissions == 1;
+  const hasPermissions = store.user?.permissions == 1;
 
   return store.router
     .getRoutes()

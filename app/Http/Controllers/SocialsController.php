@@ -14,7 +14,9 @@ class SocialsController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Social::orderBy('sort_order')->get());
+        return response()->json(Social::orderBy('sort_order')
+            ->with('brokenLink')
+            ->get());
     }
 
     /**

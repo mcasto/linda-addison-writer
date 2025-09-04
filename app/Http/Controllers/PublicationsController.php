@@ -85,7 +85,8 @@ class PublicationsController extends Controller
         $searchTerm = $request->input('search', '');
 
         $query = Publication::where('publication_type_id', $typeId)
-            ->orderBy('year', 'desc');
+            ->orderBy('year', 'desc')
+            ->with('brokenLink');
 
         // Add search filter if search term exists
         if ($searchTerm) {
