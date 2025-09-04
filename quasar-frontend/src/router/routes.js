@@ -12,8 +12,7 @@ const routes = [
         path: "/broken-links",
         method: "get",
       });
-
-      // await store.getData(store.admin.brokenLinks, "/broken-links");
+      // await store.getData('admin.brokenLinks', "/broken-links");
     },
     children: [
       {

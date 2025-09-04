@@ -2,8 +2,10 @@ import callApi from "src/assets/call-api";
 import { useStore } from "../store";
 
 async function refreshData(storeVar, path) {
+  const store = useStore();
+
   const response = await callApi({ path, method: "get" });
-  storeVar = response.data;
+  store[storeVar] = response;
   return;
 }
 
@@ -16,8 +18,8 @@ export default async (storeVar, path) => {
     refreshData(storeVar, path).catch(() => {
       // Silent fail - we already have data
     });
-    return storeVar;
+    return store[storeVar];
   } else {
-    storeVar = await callApi({ path, method: "get" });
+    store[storeVar] = await callApi({ path, method: "get" });
   }
 };
