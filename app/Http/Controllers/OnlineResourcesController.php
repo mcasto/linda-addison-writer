@@ -78,8 +78,6 @@ class OnlineResourcesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // mc-todo: when building this, check for change in url & delete related brokenLink if it exists
-
         $broken = BrokenLink::where('table_name', 'online_resource_links')
             ->where('table_id', $id)
             ->first();
