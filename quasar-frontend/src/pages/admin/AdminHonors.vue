@@ -112,8 +112,6 @@ const deleteHonor = async (honor) => {
             return;
           }
 
-          console.log({ response });
-
           Loading.hide();
 
           Notify.create({

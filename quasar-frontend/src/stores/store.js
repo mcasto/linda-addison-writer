@@ -60,9 +60,10 @@ export const useStore = defineStore(
     return { ...state, ...getters, ...actions };
   },
   {
-    persist: {
-      key: "lindaaddisonwriter.com",
-      path: ["token"],
-    },
+    persist: false,
+    // persist: {
+    //   key: "lindaaddisonwriter.com",
+    //   path: ["token"],
+    // },
   }
 );

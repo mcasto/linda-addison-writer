@@ -159,8 +159,6 @@ const save = async (poem) => {
     window.location.reload();
     return;
   }
-
-  console.log({ response });
 };
 
 const deletePoem = async (poem) => {

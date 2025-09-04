@@ -57,7 +57,7 @@ const save = async () => {
     window.location.reload();
     return;
   }
-  console.log({ response });
+
   Loading.hide();
   Notify.create({
     type: "negative",

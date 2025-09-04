@@ -91,8 +91,6 @@ const deleteFreebie = async (freebie) => {
             return;
           }
 
-          console.log({ response });
-
           Loading.hide();
 
           Notify.create({

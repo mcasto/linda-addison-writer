@@ -57,35 +57,19 @@ class OnlineResourcesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        $valid = $request->validate([
+            'name' => 'required|string|max:255',
+            'url' => 'required|string'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $valid['online_resource_id'] = $request->online_resource['id'];
+        $resource = OnlineResourceLink::create($valid);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -94,6 +78,16 @@ class OnlineResourcesController extends Controller
     public function update(Request $request, string $id)
     {
         // mc-todo: when building this, check for change in url & delete related brokenLink if it exists
+
+        $valid = $request->validate([
+            'name' => 'required|string|max:255',
+            'url' => 'required|string'
+        ]);
+
+        $valid['online_resource_id'] = $request->online_resource['id'];
+        OnlineResourceLink::find($id)->update($valid);
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
@@ -101,6 +95,7 @@ class OnlineResourcesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        OnlineResourceLink::find($id)->delete();
+        return response()->json(['status' => 'ok']);
     }
 }

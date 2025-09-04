@@ -1,7 +1,7 @@
 <template>
   <page-container>
     <div class="text-h6">
-      Dashbaord
+      Dashboard
     </div>
     <div>
       &mdash; I don't know what to put here so I'm leaving it blank for now

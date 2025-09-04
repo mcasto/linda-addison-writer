@@ -128,8 +128,6 @@ const biblioPath = computed(() => {
   return path;
 });
 
-console.log(cloneDeep(store.biblio.data));
-
 watch([type, filter], async () => {
   pagination.value.page = 1;
 

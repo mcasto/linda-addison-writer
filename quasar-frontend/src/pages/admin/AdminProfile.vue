@@ -89,8 +89,6 @@ const updateUser = async () => {
     useAuth: true,
   });
 
-  console.log({ response });
-
   if (response.status == "ok") {
     Notify.create({
       type: "positive",

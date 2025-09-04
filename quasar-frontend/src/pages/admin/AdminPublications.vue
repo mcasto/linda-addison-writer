@@ -110,8 +110,6 @@ import { Notify } from "quasar";
 
 const store = useStore();
 
-console.log({ publications: store.admin.publications });
-
 const filter = ref(null);
 const selectedType = ref(null);
 const selectedYear = ref(null);
@@ -134,8 +132,6 @@ const newPublication = () => {
 };
 
 const editPublication = (pub) => {
-  console.log({ pub });
-
   showForm.value = {
     visible: true,
     form: { ...pub },

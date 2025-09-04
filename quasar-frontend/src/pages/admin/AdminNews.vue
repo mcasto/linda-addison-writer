@@ -61,8 +61,6 @@ import { ref } from "vue";
 
 const store = useStore();
 
-console.log(store.admin.latest_news);
-
 const editDialog = ref({
   visible: false,
   news: null,
@@ -92,8 +90,6 @@ const deleteNews = async (news) => {
             method: "delete",
             useAuth: true,
           });
-
-          console.log({ response });
 
           if (response.status == "ok") {
             window.location.reload();

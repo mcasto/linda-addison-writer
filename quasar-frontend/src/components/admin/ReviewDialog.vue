@@ -83,7 +83,6 @@ const onDialogShow = () => {
   // Use nextTick to ensure the editor is rendered
   setTimeout(() => {
     isEditorReady.value = true;
-    console.log("Editor should be ready now:", editorRef.value);
   }, 100);
 };
 

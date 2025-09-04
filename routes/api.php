@@ -236,11 +236,11 @@ Route::controller(OnlineResourcesController::class)
             ->middleware('auth:admin')
             ->name('admin-online-resources-store');
 
-        Route::put('/admin/online-resources', 'update')
+        Route::put('/admin/online-resources/{id}', 'update')
             ->middleware('auth:admin')
             ->name('admin-online-resources-update');
 
-        Route::delete('/admin/online-resources', 'destroy')
+        Route::delete('/admin/online-resources/{id}', 'destroy')
             ->middleware('auth:admin')
             ->name('admin-online-resources-destroy');
     });

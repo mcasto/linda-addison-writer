@@ -186,7 +186,5 @@ const submitForm = async () => {
       model.value.visible = false;
     }
   }
-
-  console.log("Form submitted:", response);
 };
 </script>

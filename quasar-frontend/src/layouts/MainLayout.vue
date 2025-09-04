@@ -73,7 +73,5 @@ import { ref } from "vue";
 
 const store = useStore();
 
-console.log({ socials: store.socials });
-
 const showDesignCredits = ref(false);
 </script>

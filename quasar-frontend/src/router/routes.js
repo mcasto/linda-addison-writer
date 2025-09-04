@@ -101,7 +101,6 @@ const routes = [
             current: current.data.length > 0 ? current : null,
           };
 
-          console.log({ events: store.events });
           // await store.getData(store.events.past, "/events/past?per_page=10");
           // await store.getData(
           //   store.events.future,

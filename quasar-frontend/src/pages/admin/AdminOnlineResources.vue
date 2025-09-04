@@ -109,7 +109,9 @@
             color="primary"
             round
             flat
-            @click="editDialog = { visible: true, resource: props.row }"
+            @click="
+              editDialog = { visible: true, resource: cloneDeep(props.row) }
+            "
           ></q-btn>
         </q-td>
       </template>
@@ -123,6 +125,7 @@
 </template>
 
 <script setup>
+import { cloneDeep } from "lodash-es";
 import { clone } from "lodash-es";
 import { Notify, uid } from "quasar";
 import callApi from "src/assets/call-api";
@@ -132,9 +135,6 @@ import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";
 
 const store = useStore();
-
-console.log(store.admin.online_resources.data[0]);
-console.log(store.resourceTypes);
 
 const filter = ref(null);
 const loading = ref(false);
@@ -197,16 +197,15 @@ const deleteResource = async (resource) => {
       {
         label: "Yes",
         handler: async () => {
-          console.log({ delete: resource });
-          // const response = await callApi({
-          //   path: `/admin/online-resources/${resource.id}`,
-          //   method: "delete",
-          //   useAuth: true,
-          // });
+          const response = await callApi({
+            path: `/admin/online-resources/${resource.id}`,
+            method: "delete",
+            useAuth: true,
+          });
 
-          // if (response.status == "ok") {
-          //   window.location.reload();
-          // }
+          if (response.status == "ok") {
+            window.location.reload();
+          }
         },
       },
     ],

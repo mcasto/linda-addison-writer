@@ -92,8 +92,6 @@ const save = async () => {
     return;
   }
 
-  console.log({ response });
-
   Loading.hide();
 
   Notify.create({
