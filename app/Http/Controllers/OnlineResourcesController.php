@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BrokenLink;
 use App\Models\OnlineResource;
 use App\Models\OnlineResourceLink;
 use Illuminate\Http\JsonResponse;
@@ -78,6 +79,12 @@ class OnlineResourcesController extends Controller
     public function update(Request $request, string $id)
     {
         // mc-todo: when building this, check for change in url & delete related brokenLink if it exists
+
+        $broken = BrokenLink::where('table_name', 'online_resource_links')
+            ->where('table_id', $id)
+            ->first();
+
+        $broken->delete();
 
         $valid = $request->validate([
             'name' => 'required|string|max:255',
