@@ -27,12 +27,20 @@ class LessonsBlessing extends Model
 
     public function getHeaderAttribute()
     {
-        return Storage::disk('local')->get($this->header_file);
+        try {
+            return Storage::disk('local')->get($this->header_file);
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     public function getPoemAttribute()
     {
-        $poem = Storage::disk('local')->get($this->poem_file);
-        return Markdown::convert($poem)->getContent();
+        try {
+            $markdown = Storage::disk('local')->get($this->poem_file);
+            return Markdown::convert($markdown)->getContent();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 }

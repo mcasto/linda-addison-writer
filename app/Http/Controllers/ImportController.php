@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Award;
+use App\Models\Event;
 use App\Models\Find;
 use App\Models\FindType;
 use App\Models\Honor;
 use App\Models\LatestNews;
+use App\Models\LifePoem;
 use App\Models\Publication;
 use App\Models\PublicationType;
 use App\Models\Review;
@@ -19,6 +21,16 @@ class ImportController extends Controller
 {
     private $sheetList;
     private $xl;
+    private $tableMap = [
+        'seeHearRead' => 'See / Hear Read',
+        'awards' => 'Awards',
+        'events' => 'Events',
+        'honors' => 'Honors',
+        'latestNews' => 'Latest News',
+        'publications' => 'Publications',
+        'reviewsQuotes' => 'Reviews & Quotes',
+        'lifePoems' => 'Life Poems'
+    ];
 
 
     private function getSheetData($index)
@@ -43,14 +55,14 @@ class ImportController extends Controller
         $output = [];
         foreach ($data as $item) {
             $rec = [
-                'year' => $item['Year'],
+                'year' => $item['year'],
                 'md_file' => ''
             ];
 
             $award = Award::create($rec);
             $mdFile = "awards/" . $award->id . ".md";
             Storage::disk('local')
-                ->put($mdFile, $item['Award Description']);
+                ->put($mdFile, $item['text']);
 
             $award->md_file = $mdFile;
             $award->save();
@@ -66,15 +78,15 @@ class ImportController extends Controller
         $output = [];
         foreach ($data as $item) {
             $rec = [
-                'year' => $item['Year'],
+                'year' => $item['year'],
                 'md_file' => '',
-                'num' => $item['Number of Honors Received']
+                'num' => $item['num']
             ];
 
             $honor = Honor::create($rec);
             $mdFile = "honor/" . $honor->id . ".md";
             Storage::disk('local')
-                ->put($mdFile, $item['Description of Honor']);
+                ->put($mdFile, $item['text']);
 
             $honor->md_file = $mdFile;
             $honor->save();
@@ -90,14 +102,14 @@ class ImportController extends Controller
         $output = [];
         foreach ($data as $item) {
             $rec = [
-                'date' => $item['Date'],
+                'date' => $item['date'],
                 'md_file' => '',
             ];
 
             $news = LatestNews::create($rec);
             $mdFile = "latest-news/" . $news->id . ".md";
             Storage::disk('local')
-                ->put($mdFile, $item['News']);
+                ->put($mdFile, $item['news']);
 
             $news->md_file = $mdFile;
             $news->save();
@@ -112,23 +124,23 @@ class ImportController extends Controller
     {
         $output = [];
         foreach ($data as $item) {
-            $type = PublicationType::where('name', strtolower($item['Type']))
+            $type = PublicationType::where('name', strtolower($item['type']))
                 ->first();
             if (!$type) {
-                $type = PublicationType::create(['name' => strtolower($item['Type'])]);
+                $type = PublicationType::create(['name' => strtolower($item['type'])]);
             }
             $rec = [
                 'publication_type_id' => $type->id,
-                'year' => $item['Year'],
-                'title' => $item['Title'],
+                'year' => $item['year'],
+                'title' => $item['title'],
                 'md_file' => '',
-                'url' => $item['URL']
+                'url' => $item['url']
             ];
 
             $pub = Publication::create($rec);
             $mdFile = "publications/" . $pub->id . ".md";
             Storage::disk('local')
-                ->put($mdFile, $item['Description']);
+                ->put($mdFile, $item['text']);
 
             $pub->md_file = $mdFile;
             $pub->save();
@@ -150,7 +162,7 @@ class ImportController extends Controller
                 'sort_order' => $maxSortOrder + 1,
             ];
 
-            $reviewText = $item['Text of Review/Quote'] . "\n\n&mdash; " . $item['Attribution'];
+            $reviewText = $item['text'] . "\n\n&mdash; " . $item['attribution'];
 
             $review = Review::create($rec);
             $mdFile = "reviews/" . $review->id . ".md";
@@ -170,12 +182,12 @@ class ImportController extends Controller
     {
         $output = [];
         foreach ($data as $item) {
-            $type = FindType::where('name', strtolower($item['Type']))
+            $type = FindType::where('name', strtolower($item['type']))
                 ->first();
             $rec = [
-                'title' => $item['Text (highlighted as link to URL)'],
-                'url' => $item['URL'],
-                'date' => $item['Date'],
+                'title' => $item['text'],
+                'url' => $item['url'],
+                'date' => $item['date'],
                 'md_file' => '',
                 'find_type_id' => $type->id
             ];
@@ -183,7 +195,7 @@ class ImportController extends Controller
             $find = Find::create($rec);
             $mdFile = "finds/" . $find->id . ".md";
             Storage::disk('local')
-                ->put($mdFile, $item['Note (follows highlighted Text)']);
+                ->put($mdFile, $item['note']);
 
             $find->md_file = $mdFile;
             $find->save();
@@ -196,8 +208,6 @@ class ImportController extends Controller
 
     public function store(Request $request)
     {
-        logger()->info('import-controller-store');
-
         if (!$request->hasFile('excelFile')) {
             return response()->json(['status' => 'error', 'message' => 'No excel file uploaded.']);
         }
@@ -220,13 +230,17 @@ class ImportController extends Controller
 
             $fnName = 'insert' . Str::studly(str_replace('&', '', $sheetName));
             if (!method_exists($this, $fnName)) {
-                return response()->json(['status' => 'error', 'message' => 'Undefined method: ' . $fnName]);
+                logger()->error('Undefined method: ' . $fnName);
+                continue;
             }
 
             $data = $this->getSheetData($index);
 
-
-            $output[$sheetName] = count($data) > 0 ? $this->{$fnName}($data) : [];
+            foreach ($data as $item) {
+                if (method_exists($this, $fnName)) {
+                    $output[$this->tableMap[$sheetName]] = $this->{$fnName}($data);
+                }
+            }
         }
 
         return response()->json(['data' => $output]);

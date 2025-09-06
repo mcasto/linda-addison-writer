@@ -25,12 +25,14 @@
       <q-card>
         <q-toolbar class="bg-grey-5">
           <q-toolbar-title>
-            Imported Data
+            Summary of Imported Data
           </q-toolbar-title>
         </q-toolbar>
         <q-separator></q-separator>
         <q-card-section>
-          {{ uploadResponse }}
+          <template v-for="key of Object.keys(uploadResponse.data)" :key="key">
+            <div>{{ key }}: {{ uploadResponse.data[key].length }}</div>
+          </template>
         </q-card-section>
       </q-card>
     </div>
@@ -38,7 +40,6 @@
 </template>
 
 <script setup>
-import { Notify } from "quasar";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import { ref } from "vue";

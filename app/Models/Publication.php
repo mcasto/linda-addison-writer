@@ -22,8 +22,12 @@ class Publication extends Model
 
     public function getContentsAttribute()
     {
-        $markdown = Storage::disk('local')->get($this->md_file);
-        return Markdown::convert($markdown)->getContent();
+        try {
+            $markdown = Storage::disk('local')->get($this->md_file);
+            return Markdown::convert($markdown)->getContent();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     public function publication_type(): BelongsTo

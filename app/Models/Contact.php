@@ -12,7 +12,11 @@ class Contact extends Model
 
     public function getMdMessageAttribute()
     {
-        $markdown = $this->message;
-        return Markdown::convert($markdown)->getContent();
+        try {
+            $markdown = $this->message;
+            return Markdown::convert($markdown)->getContent();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 }
