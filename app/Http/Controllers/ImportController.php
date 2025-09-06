@@ -236,10 +236,8 @@ class ImportController extends Controller
 
             $data = $this->getSheetData($index);
 
-            foreach ($data as $item) {
-                if (method_exists($this, $fnName)) {
-                    $output[$this->tableMap[$sheetName]] = $this->{$fnName}($data);
-                }
+            if (method_exists($this, $fnName)) {
+                $output[$this->tableMap[$sheetName]] = $this->{$fnName}($data);
             }
         }
 
