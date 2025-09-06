@@ -17,7 +17,6 @@ class SeeHearReadController extends Controller
     {
         // get all find types without finds
         $publicationTypes = FindType::orderBy('sort_order')
-            ->with('brokenLink')
             ->get();
 
         return response()->json($publicationTypes);
