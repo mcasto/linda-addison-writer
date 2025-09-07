@@ -9,7 +9,7 @@
         </q-toolbar>
       </q-header>
 
-      <q-drawer persistent :model-value="true" bordered>
+      <q-drawer persistent v-model="showDrawer" bordered>
         <q-list separator class="q-mb-xl">
           <q-item
             v-for="tab of tabs"
@@ -70,10 +70,15 @@ const logout = async () => {
   });
 
   store.token = null;
+  store.user = null;
   store.router.push("/admin/login");
 };
 
 const isActive = (tab) => {
   return store.router.currentRoute.value.name == tab.name;
 };
+
+const showDrawer = computed(() => {
+  return !!store.user;
+});
 </script>
