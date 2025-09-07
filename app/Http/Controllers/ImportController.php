@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Award;
+use App\Models\Biblio;
+use App\Models\BiblioPub;
+use App\Models\BiblioType;
 use App\Models\Event;
 use App\Models\Find;
 use App\Models\FindType;
@@ -242,5 +245,71 @@ class ImportController extends Controller
         }
 
         return response()->json(['data' => $output]);
+    }
+
+    public function importBiblioText(Request $request)
+    {
+        if (!$request->hasFile('textFile')) {
+            return response()->json(['status' => 'error', 'message' => 'No excel file uploaded.']);
+        }
+
+        $file = $request->textFile;
+        $lines = file($file);
+
+        $lineType = 0;
+        $lineTypes = [
+            'biblio',
+            'publication'
+        ];
+        $output = [];
+        $biblio = [];
+        $biblioPub = [];
+        foreach ($lines as  $line) {
+            if (trim($line) === "") {
+                continue;
+            }
+
+            if (preg_match("/(POETRY|FICTION|NONFICTION)/", trim($line), $m)) {
+                $type = strtolower($m[1]);
+                $typeId = BiblioType::where('type', trim($type))
+                    ->first()
+                    ->id;
+                continue;
+            }
+
+            $recType = $lineTypes[$lineType];
+            $lineType = $lineType == 0 ? 1 : 0;
+
+            if ($recType == 'biblio') {
+                $biblio['biblio_type_id'] = $typeId;
+                $biblio['type'] = $type;
+                $biblio['title'] = trim($line);
+            }
+
+            if ($recType == 'publication') {
+                preg_match("/(.*)\s\((.*)\)/", $line, $m);
+                $date = strtotime($m[2]);
+
+                $biblioPub = [
+                    'publication' => $m[1],
+                    'pub_date' => date("Y-m-d", $date),
+                    'display_date' => $m[2]
+                ];
+
+                $biblio['sort_date'] = $biblioPub['pub_date'];
+
+                // at this point, based on the layout of the text file, the biblio & biblioPub recs should be ready for creation
+
+                $output[] = [
+                    'id' => uniqid(),
+                    'biblio' => $biblio,
+                    'biblioPub' => $biblioPub
+                ];
+                $biblio = [];
+                $biblioPub = [];
+            }
+        }
+
+        return response()->json($output);
     }
 }

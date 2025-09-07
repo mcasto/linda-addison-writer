@@ -330,8 +330,18 @@ const routes = [
         name: "admin-import-excel",
         meta: {
           order: 1.5,
-          icon: "fa-solid fa-file-excel",
+          icon: "fa-solid fa-file-lines",
           tip: "Import Excel",
+        },
+      },
+      {
+        path: "import-biblio",
+        component: () => import("src/pages/admin/ImportBiblio.vue"),
+        name: "admin-import-biblio",
+        meta: {
+          order: 1.75,
+          icon: "fa-solid fa-file-excel",
+          tip: "Import Biblio Text",
         },
       },
       {

@@ -432,5 +432,8 @@ Route::controller(ImportController::class)
     ->group(function () {
         Route::post('/admin/import-excel', 'store')
             ->name('admin-import-excel');
+
+        Route::post('/admin/import-biblio-text', 'importBiblioText')
+            ->name('admin-import-biblio-text');
     })
     ->middleware(('auth:admin'));
