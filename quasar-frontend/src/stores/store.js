@@ -10,6 +10,7 @@ export const useStore = defineStore(
       admin: ref({
         awards: null,
         biblio: null,
+        biblioImported: null,
         biblioTypes: null,
         brokenLinks: null,
         contacts: null,

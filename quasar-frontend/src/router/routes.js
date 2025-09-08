@@ -345,6 +345,11 @@ const routes = [
         },
       },
       {
+        path: "edit-biblio/:id",
+        component: () => import("src/pages/admin/EditBiblio.vue"),
+        name: "admin-edit-biblio",
+      },
+      {
         path: "awards",
         component: () => import("pages/admin/AdminAwards.vue"),
         name: "admin-awards",

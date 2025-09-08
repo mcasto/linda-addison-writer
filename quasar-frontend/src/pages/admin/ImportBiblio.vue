@@ -15,13 +15,14 @@
     ></q-uploader>
 
     <div
-      v-if="uploadResponse?.status == 'error'"
+      v-if="store.admin.biblioImported?.status == 'error'"
       class="q-mt-xl q-pa-md bg-red-3 text-h6"
     >
-      <span class="text-h5">Error:</span> {{ uploadResponse.message }}
+      <span class="text-h5">Error:</span>
+      {{ store.admin.biblioImported.message }}
     </div>
 
-    <div v-if="uploadResponse" class="q-mt-xl">
+    <div v-if="store.admin.biblioImported" class="q-mt-xl">
       <q-card>
         <q-toolbar class="bg-grey-5">
           <q-toolbar-title>
@@ -30,7 +31,15 @@
         </q-toolbar>
         <q-separator></q-separator>
         <q-card-section>
-          <q-table :columns="columns" :rows="uploadResponse">
+          <q-table :columns="columns" :rows="store.admin.biblioImported">
+            <template #body-cell-biblioType="props">
+              <q-td class="text-center">
+                <q-icon :name="typeIcon(props.value)"></q-icon>
+                <q-tooltip>
+                  {{ props.value }}
+                </q-tooltip>
+              </q-td>
+            </template>
             <template #body-cell-title="props">
               <q-td style="max-width: 15vw;" class="ellipsis">
                 {{ props.value }}
@@ -49,8 +58,18 @@
             </template>
             <template #body-cell-tools="props">
               <q-td>
-                <q-btn icon="delete" flat round></q-btn>
-                <q-btn icon="edit" flat round></q-btn>
+                <q-btn
+                  icon="delete"
+                  flat
+                  round
+                  @click="deleteRec(props.row)"
+                ></q-btn>
+                <q-btn
+                  icon="edit"
+                  flat
+                  round
+                  :to="`/admin/edit-biblio/${props.row.id}`"
+                ></q-btn>
               </q-td>
             </template>
           </q-table>
@@ -61,13 +80,13 @@
 </template>
 
 <script setup>
+import { remove } from "lodash-es";
+import { Notify } from "quasar";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import { ref } from "vue";
 
 const store = useStore();
-
-const uploadResponse = ref(null);
 
 const uploadHeaders = [
   {
@@ -75,6 +94,16 @@ const uploadHeaders = [
     value: `Bearer ${store.token}`,
   },
 ];
+
+const typeIcon = (type) => {
+  const icons = {
+    poetry: "fa-solid fa-feather-pointed",
+    fiction: "fa-solid fa-jedi",
+    nonfiction: "fa-solid fa-book-atlas",
+  };
+
+  return icons[type];
+};
 
 const columns = [
   {
@@ -117,11 +146,25 @@ const columns = [
     name: "tools",
   },
 ];
-const rows = ref([]);
 
 const displayResponse = ({ xhr }) => {
-  const data = JSON.parse(xhr.response);
+  store.admin.biblioImported = JSON.parse(xhr.response);
+};
 
-  uploadResponse.value = data;
+const deleteRec = (rec) => {
+  Notify.create({
+    type: "warning",
+    message: `Are you sure you want to delete<br />${rec.biblio.title}`,
+    html: true,
+    actions: [
+      { label: "No" },
+      {
+        label: "Yes",
+        handler: () => {
+          remove(store.admin.biblioImported, ({ id }) => id == rec.id);
+        },
+      },
+    ],
+  });
 };
 </script>
