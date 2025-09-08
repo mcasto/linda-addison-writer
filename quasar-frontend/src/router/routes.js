@@ -347,6 +347,16 @@ const routes = [
       {
         path: "edit-biblio/:id",
         component: () => import("src/pages/admin/EditBiblio.vue"),
+        beforeEnter: async () => {
+          const store = useStore();
+          const response = await callApi({
+            path: "/admin/biblio",
+            method: "get",
+            useAuth: true,
+          });
+
+          store.admin.biblioTypes = response;
+        },
         name: "admin-edit-biblio",
       },
       {
