@@ -17,6 +17,7 @@ use App\Models\PublicationType;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Shuchkin\SimpleXLSX;
 use Illuminate\Support\Str;
 
@@ -311,5 +312,43 @@ class ImportController extends Controller
         }
 
         return response()->json($output);
+    }
+
+    public function finishImportBiblioText(Request $request)
+    {
+        $data = $request->all();
+
+        foreach ($data as $key => $entry) {
+            $validated = Validator::make(
+                $entry,
+                [
+                    'biblio.biblio_type_id' => 'required|integer',
+                    'biblio.title' => 'required|string',
+                    'biblio.sort_date' => 'required|date',
+                    'biblioPub.publication' => 'required|string',
+                    'biblioPub.pub_date' => 'required|date',
+                    'biblioPub.display_date' => 'required|string'
+                ]
+            )->validated();
+
+            $biblioRec = [
+                'biblio_type_id' => $validated['biblio']['biblio_type_id'],
+                'title' => $validated['biblio']['title'],
+                'sort_date' => $validated['biblio']['sort_date']
+            ];
+
+            $biblio = Biblio::create($biblioRec);
+
+            $biblioPubRec = [
+                'biblio_id' => $biblio->id,
+                'publication' => $validated['biblioPub']['publication'],
+                'pub_date' => $validated['biblioPub']['pub_date'],
+                'display_date' => $validated['biblioPub']['display_date']
+            ];
+
+            $pub = BiblioPub::create($biblioPubRec);
+        }
+
+        return response()->json(['status' => 'ok']);
     }
 }

@@ -28,6 +28,11 @@
           <q-toolbar-title>
             Data For Import
           </q-toolbar-title>
+          <q-btn icon="mdi-import" color="accent" @click="finishImport">
+            <q-tooltip>
+              Finish Import
+            </q-tooltip>
+          </q-btn>
         </q-toolbar>
         <q-separator></q-separator>
         <q-card-section>
@@ -80,8 +85,10 @@
 </template>
 
 <script setup>
+import { cloneDeep } from "lodash-es";
 import { remove } from "lodash-es";
 import { Notify } from "quasar";
+import callApi from "src/assets/call-api";
 import PageContainer from "src/components/PageContainer.vue";
 import { useStore } from "src/stores/store";
 import { ref } from "vue";
@@ -166,5 +173,24 @@ const deleteRec = (rec) => {
       },
     ],
   });
+};
+
+const finishImport = async () => {
+  const payload = cloneDeep(store.admin.biblioImported);
+
+  const response = await callApi({
+    path: "/admin/finish-import-biblio-text",
+    method: "post",
+    payload,
+    useAuth: true,
+  });
+
+  if (response.status == "ok") {
+    store.admin.biblioImported = null;
+    Notify.create({
+      type: "positive",
+      message: "Data successfully imported",
+    });
+  }
 };
 </script>

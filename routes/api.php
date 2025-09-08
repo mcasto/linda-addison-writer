@@ -435,5 +435,8 @@ Route::controller(ImportController::class)
 
         Route::post('/admin/import-biblio-text', 'importBiblioText')
             ->name('admin-import-biblio-text');
+
+        Route::post('/admin/finish-import-biblio-text', 'finishImportBiblioText')
+            ->name('admin-finish-import-biblio-text');
     })
     ->middleware(('auth:admin'));
