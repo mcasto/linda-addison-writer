@@ -3,7 +3,7 @@
     <q-table
       grid
       :rows="store.awards"
-      :pagination="{ rowsPerPage: -1 }"
+      :pagination="{ rowsPerPage: 0 }"
       hide-bottom
       class="bg-white q-mx-xl"
     >

@@ -18,7 +18,7 @@
                 :to="item.path"
                 class="text-white text-uppercase"
                 :active="item.path == store.router.currentRoute.value.path"
-                active-class="bg-blue-grey-7 text-black"
+                active-class="bg-blue-grey-7 text-white"
               >
                 <q-item-section>
                   <q-item-label>
@@ -43,7 +43,13 @@
     <q-drawer v-model="drawer" dark>
       <q-list dark separator dense>
         <template v-for="item in navList" :key="item.id">
-          <q-item clickable class="text-uppercase">
+          <q-item
+            clickable
+            class="text-uppercase"
+            :to="item.path"
+            exact
+            exact-active-class="bg-blue-grey-7 text-white"
+          >
             <q-item-section>
               <q-item-label>
                 {{ item.label }}
@@ -64,7 +70,7 @@
           </q-item-section>
         </q-item>
         <template v-for="item of moreList" :key="item.id">
-          <q-item clickable class="text-uppercase">
+          <q-item clickable class="text-uppercase" :to="item.path">
             <q-item-section side>
               &nbsp;
             </q-item-section>

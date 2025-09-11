@@ -4,7 +4,7 @@
       :rows="store.admin.events.data"
       :columns="columns"
       row-key="id"
-      :pagination="pagination"
+      :pagination="{...pagination, rowsPerPage: 0}"
       :loading="loading"
       hide-pagination
       dense

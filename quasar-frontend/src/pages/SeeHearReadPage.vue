@@ -4,10 +4,10 @@
       <q-table
         :rows="store.finds.data"
         row-key="id"
-        :pagination="pagination"
         :loading="loading"
         hide-pagination
         :columns="columns"
+        :pagination="{ ...pagination, rowsPerPage: 0 }"
       >
         <template #top>
           <div class="bg-white full-width">
@@ -128,6 +128,7 @@ import HandleUrl from "src/components/HandleUrl.vue";
 
 import { useStore } from "src/stores/store";
 import { computed, onMounted, ref, watch } from "vue";
+import { cloneDeep } from "lodash-es";
 
 const store = useStore();
 

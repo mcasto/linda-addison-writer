@@ -3,7 +3,7 @@
     <q-table
       :rows="store.admin.online_resources.data"
       row-key="id"
-      :pagination="pagination"
+      :pagination="{ ...pagination, rowsPerPage: 0 }"
       :loading="loading"
       hide-pagination
       :columns="columns"

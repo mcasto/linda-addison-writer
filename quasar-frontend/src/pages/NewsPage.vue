@@ -14,7 +14,6 @@
         swipeable
         animated
         control-color="black"
-        navigation
         padding
         arrows
         height="300px"

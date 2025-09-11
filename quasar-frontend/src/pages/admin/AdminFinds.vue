@@ -4,7 +4,7 @@
       <q-table
         :rows="store.admin.finds.data"
         row-key="id"
-        :pagination="pagination"
+        :pagination="{...pagination, rowsPerPage: 0}"
         :loading="loading"
         hide-pagination
         :columns="columns"

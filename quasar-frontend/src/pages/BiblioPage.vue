@@ -91,8 +91,6 @@ import { useStore } from "src/stores/store";
 import { computed, ref, watch } from "vue";
 import BiblioDialog from "src/components/BiblioDialog.vue";
 import callApi from "src/assets/call-api";
-import { clone } from "lodash-es";
-import { cloneDeep } from "lodash-es";
 
 const store = useStore();
 const filter = ref(null);
