@@ -65,6 +65,7 @@ export const useStore = defineStore(
     persist: {
       key: "lindaaddisonwriter.com",
       path: ["token"],
+      omit: ["sending"],
     },
   }
 );
