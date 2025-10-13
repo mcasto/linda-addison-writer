@@ -159,7 +159,7 @@ const columns = [
     align: "center",
   },
   {
-    label: "Permissions",
+    label: "Admin",
     name: "permissions",
     field: "permissions",
     align: "center",

@@ -38,15 +38,6 @@
             "
           ></q-btn>
         </div>
-
-        <div class="col text-center">
-          <q-checkbox
-            label="Permissions"
-            v-model="store.admin.profile.permissions"
-            :true-value="1"
-            :false-value="0"
-          ></q-checkbox>
-        </div>
       </div>
 
       <q-separator spaced></q-separator>

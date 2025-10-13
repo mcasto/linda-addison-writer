@@ -19,6 +19,7 @@
               v-model="fields.first_name"
               required
               name="first_name"
+              :disable="store.sending"
             ></q-input>
           </div>
 
@@ -32,6 +33,7 @@
               v-model="fields.last_name"
               required
               name="last_name"
+              :disable="store.sending"
             ></q-input>
           </div>
 
@@ -45,6 +47,7 @@
               v-model="fields.email"
               required
               name="email"
+              :disable="store.sending"
             ></q-input>
           </div>
 
@@ -59,6 +62,7 @@
               required
               name="message"
               input-style="height:15rem"
+              :disable="store.sending"
             ></q-input>
           </div>
         </div>
@@ -71,6 +75,7 @@
               label="Download Linda's Press Kit"
               :size="Screen.xs ? 'xs' : ''"
               color="positive"
+              :disable="store.sending"
             ></q-btn>
           </a>
 
@@ -80,6 +85,7 @@
             :size="Screen.xs ? 'xs' : ''"
             color="black"
             @click="store.sendContact(fields)"
+            :disable="store.sending"
           ></q-btn>
         </div>
       </q-form>

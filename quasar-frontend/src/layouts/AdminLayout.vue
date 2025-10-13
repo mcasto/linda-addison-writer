@@ -50,12 +50,14 @@ const tab = ref("admin-dashboard");
 const tabs = computed(() => {
   const hasPermissions = store.user?.permissions == 1;
 
-  return store.router
+  const tabs = store.router
     .getRoutes()
     .filter(({ path }) => path.includes("/admin"))
-    .filter(({ name }) => !["admin-section", "admin-login"].includes(name))
+    .filter(({ meta }) => !meta.navHide)
     .filter(({ meta }) => !meta.requirePermissions || hasPermissions)
     .sort((a, b) => (a.meta.order > b.meta.order ? 1 : -1));
+
+  return tabs;
 });
 
 const pageName = computed(() => {

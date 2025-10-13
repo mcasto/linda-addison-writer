@@ -4,7 +4,9 @@ import { Loading, Notify } from "quasar";
 import callApi from "src/assets/call-api";
 
 const send = async (payload) => {
-  Loading.show();
+  const store = useStore();
+
+  store.sending = true;
 
   const response = await callApi({
     path: "/contact",
@@ -12,16 +14,27 @@ const send = async (payload) => {
     payload,
   });
 
-  if (response.status == 202) {
+  if (response.status == "success") {
     Notify.create({
       type: "positive",
       message: "Contact message sent",
+      position: "center",
+      timeout: 1500,
     });
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+  } else {
+    Notify.create({
+      type: "negative",
+      message: response.message,
+      position: "center",
+      timeout: 1500,
+    });
+    return;
   }
+
+  setTimeout(() => {
+    store.sending = false;
+    window.location.reload();
+  }, 1500);
 };
 
 export default async (contact) => {

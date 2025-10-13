@@ -16,7 +16,7 @@
       >
         <q-card class="full-height">
           <q-card-actions class="justify-between">
-            {{ honor.year }}
+            {{ honor.year }} :: {{ honor.num }} won
             <div class="flex">
               <q-btn
                 icon="delete"
@@ -108,16 +108,17 @@ const deleteHonor = async (honor) => {
           });
 
           if (response.status == "ok") {
-            window.location.reload();
-            return;
+            setTimeout(() => {
+              Loading.hide();
+              window.location.reload();
+              return;
+            }, 500);
+          } else {
+            Notify.create({
+              type: "negative",
+              message: "Unable to delete record.",
+            });
           }
-
-          Loading.hide();
-
-          Notify.create({
-            type: "negative",
-            message: "Unable to delete record.",
-          });
         },
       },
     ],

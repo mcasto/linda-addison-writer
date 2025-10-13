@@ -1,5 +1,4 @@
 import { useStore } from "src/stores/store";
-import { Notify } from "quasar";
 import wretch from "wretch";
 
 export default ({

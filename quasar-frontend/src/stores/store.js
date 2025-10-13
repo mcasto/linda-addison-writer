@@ -48,6 +48,7 @@ export const useStore = defineStore(
       resourceTypes: ref(null),
       resourceLinks: ref(null),
       reviews: ref(null),
+      sending: ref(false),
       socials: ref(null),
       token: ref(null),
       user: ref(null),

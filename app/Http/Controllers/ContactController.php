@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactMailer;
 use App\Models\Contact;
-use App\Providers\AppServiceProvider;
-use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
@@ -21,33 +23,33 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
-            'message' => 'nullable'
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'string|required',
+            'last_name' => 'string|required',
+            'email' => 'email|required',
+            'message' => 'string|required'
         ]);
 
-        $contact = Contact::create($validated);
+        if ($validator->fails()) {
+            return ['status' => 'error', 'message' => 'Invalid contact information'];
+        }
 
-        $contactTimestamp = Carbon::now()->toString();
+        $contact = Contact::create($validator->valid());
 
-        $from = env('CONTACT_FROM');
-        $sgResponse = AppServiceProvider::sendEmail(
-            from: $from,
-            fromName: 'Website Contact',
-            subject: 'Website Contact - ' . $contactTimestamp,
-            replyToName: $validated['first_name'] . ' ' . $validated['last_name'],
-            replyToEmail: $validated['email'],
-            message: $validated['message']
-        );
+        // send email about contact
+        if (config('app.env') == 'production') {
+            try {
+                Mail::to(config('mail.to'))
+                    ->send(new ContactMailer($contact));
+            } catch (Exception $e) {
+                return ['status' => 'error', 'message' => $e->getMessage()];
+            }
+        }
 
-        $contact->sendgrid_response = $sgResponse;
-        $contact->save();
-
-        return response()->json(['status' => $sgResponse['statusCode']]);
+        return ['status' => 'success'];
     }
 
     /**

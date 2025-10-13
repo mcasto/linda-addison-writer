@@ -311,12 +311,13 @@ const routes = [
     path: "/admin",
     component: () => import("layouts/AdminLayout.vue"),
     name: "admin-section",
+    meta: { navHide: true },
     children: [
       {
         path: "login",
         component: () => import("pages/admin/LoginPage.vue"),
         name: "admin-login",
-        meta: { public: true },
+        meta: { public: true, navHide: true },
       },
       {
         path: "",
@@ -358,6 +359,7 @@ const routes = [
           store.admin.biblioTypes = response;
         },
         name: "admin-edit-biblio",
+        meta: { navHide: true },
       },
       {
         path: "awards",
