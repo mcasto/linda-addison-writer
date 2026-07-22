@@ -432,6 +432,23 @@ const routes = [
         },
       },
       {
+        path: "bio",
+        component: () => import("pages/admin/AdminBio.vue"),
+        beforeEnter: async () => {
+          const store = useStore();
+          store.admin.bio = await callApi({
+            path: "/bio",
+            method: "get",
+          });
+        },
+        name: "admin-bio",
+        meta: {
+          order: 5.5,
+          icon: "mdi-account-details",
+          tip: "Bio",
+        },
+      },
+      {
         path: "events",
         component: () => import("pages/admin/AdminEvents.vue"),
         name: "admin-events",
@@ -641,6 +658,7 @@ const routes = [
           tip: "Socials",
         },
       },
+
       {
         path: "broken-links",
         component: () => import("pages/admin/BrokenLinks.vue"),

@@ -172,6 +172,11 @@ Route::controller(BioController::class)
     ->group(function () {
         Route::get('/bio', 'index')
             ->name('bio-index');
+
+        Route::put('/admin/bio/{id}', 'update')
+            ->middleware('auth:admin')
+            ->whereIn('id', ['shortest', 'short', 'longer'])
+            ->name('admin-bio-update');
     });
 
 Route::controller(ContactController::class)

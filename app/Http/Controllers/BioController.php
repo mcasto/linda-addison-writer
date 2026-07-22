@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,9 +14,9 @@ class BioController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'longer' => Markdown::convert(Storage::disk('local')->get('bio/longer.md'))->getContent(),
-            'short' => Markdown::convert(Storage::disk('local')->get('bio/short.md'))->getContent(),
-            'shortest' => Markdown::convert(Storage::disk('local')->get('bio/shortest.md'))->getContent(),
+            'longer' => Storage::disk('local')->get('bio/longer.html'),
+            'short' => Storage::disk('local')->get('bio/short.html'),
+            'shortest' => Storage::disk('local')->get('bio/shortest.html'),
         ]);
     }
 
@@ -58,7 +57,13 @@ class BioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $valid = $request->validate([
+            'contents' => 'required|string',
+        ]);
+
+        Storage::disk('local')->put("bio/{$id}.html", $valid['contents']);
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**

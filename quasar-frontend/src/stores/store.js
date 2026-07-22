@@ -12,6 +12,7 @@ export const useStore = defineStore(
         biblio: null,
         biblioImported: null,
         biblioTypes: null,
+        bio: null,
         brokenLinks: null,
         contacts: null,
         covers: null,
